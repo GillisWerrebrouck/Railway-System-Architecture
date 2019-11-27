@@ -16,4 +16,5 @@ public interface StaffMembersRepository extends MongoRepository<StaffMember, Str
 	List<StaffMember> findStaffMemberByLastName(String lastName);
 	
 	List<StaffMember> findByStaffMemberType(StaffMemberType staffMemberType);
+	
 }

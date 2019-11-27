@@ -66,12 +66,6 @@ public class ScheduleRecord {
 		return id;
 	}
 	
-	@Override
-	public String toString() {
-		return "StaffSchedule [id=" + id + ", startDate=" + startDate + ", endDate=" + endDate + ", booked=" + booked
-				+ ", staffMemberType=" + staffMemberType + "]";
-	}
-
 	public String getScheduleRecordId() {
 		return scheduleRecordId;
 	}
@@ -80,4 +74,9 @@ public class ScheduleRecord {
 		this.scheduleRecordId = scheduleRecordId;
 	}
 	
+	@Override
+	public String toString() {
+		return "StaffSchedule [id=" + id + ", startDate=" + startDate + ", endDate=" + endDate + ", booked=" + booked
+				+ ", staffMemberType=" + staffMemberType + "]";
+	}
 }

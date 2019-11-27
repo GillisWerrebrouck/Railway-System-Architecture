@@ -1,7 +1,5 @@
 package com.railway.staff_service.domain;
 
-import java.util.List;
-
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceConstructor;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -12,7 +10,6 @@ public class StaffMember {
 	
 	@Id
 	private String id;
-	
 	private String staffMemberId;
 	
 	@Field("fName")
@@ -20,10 +17,7 @@ public class StaffMember {
 	
 	private String lastName;
 	private Integer age;
-	
 	private StaffMemberType staffMemberType;
-	
-	private List<HourSet> workHours;
 	
 	public StaffMember() {
 		this.firstName = null;
@@ -78,13 +72,5 @@ public class StaffMember {
 	
 	public StaffMemberType getStaffMemberType() {
 		return staffMemberType;
-	}
-
-	public List<HourSet> getWorkHours() {
-		return workHours;
-	}
-
-	public void setWorkHours(List<HourSet> workHours) {
-		this.workHours = workHours;
 	}
 }
