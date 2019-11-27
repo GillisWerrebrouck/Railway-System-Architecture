@@ -23,27 +23,6 @@ public class HourSet {
 			throw new HourSetException(startDate,endDate);
 		}
 	}
-	
-	public boolean isInBetween(LocalDate startDate, LocalDate endDate) {
-		if(startDate.isBefore(endDate)) {
-			return (startDate.isAfter(this.startDate) || startDate.equals(this.startDate)) && 
-					(endDate.isBefore(this.endDate) || endDate.equals(this.endDate));
-		}
-		return false;
-	}
-	
-	public boolean isInBetween(HourSet hourSet) {
-		return (hourSet.startDate.isAfter(this.startDate) || hourSet.startDate.equals(this.startDate)) && 
-				(hourSet.endDate.isBefore(this.endDate) || hourSet.endDate.equals(this.endDate));
-	}
-	
-	public boolean setWorking(HourSet hourset) {
-		if(isInBetween(hourset)) {
-			this.available=false;
-			return true;
-		}
-		return false;
-	}
 
 	public boolean isAvailable() {
 		return available;

@@ -1,6 +1,5 @@
 package com.railway.staff_service.domain;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
@@ -25,6 +24,13 @@ public class StaffMember {
 	private StaffMemberType staffMemberType;
 	
 	private List<HourSet> workHours;
+	
+	public StaffMember() {
+		this.firstName = null;
+		this.lastName = null;
+		this.age = null;
+		this.staffMemberType = null;
+	}
 	
 	@PersistenceConstructor
 	public StaffMember(String firstName, String lastName, int age,StaffMemberType staffMemberType) {
@@ -72,32 +78,6 @@ public class StaffMember {
 	
 	public StaffMemberType getStaffMemberType() {
 		return staffMemberType;
-	}
-	
-	public boolean safelyInsertHours(HourSet hourset) throws HourSetException, InvalidHoursException {
-		//check if hours are already presented but not filled in with work yet
-		for(HourSet hours: workHours) {
-			if(hours.isInBetween(hourset) && hours.isAvailable()==true) {
-				return hours.setWorking(hourset);
-			} else if(hours.isInBetween(hourset) && hours.isAvailable()==false) {
-				throw new InvalidHoursException(hours,hourset);
-			}
-		}
-		//if hours are not present then simply add them
-		return workHours.add(hourset);
-	}
-	
-	public boolean addWorkHours(LocalDate startDate, LocalDate endDate) throws HourSetException, InvalidHoursException {
-		HourSet hourset = new HourSet(startDate,endDate);
-		//directly assign work
-		hourset.setAvailable(false);
-		//throws an exception if the hours are already filled with work
-		return safelyInsertHours(hourset);
-		
-	}
-	
-	public boolean addWorkHours(HourSet hourset) throws InvalidHoursException, HourSetException {
-		return safelyInsertHours(hourset);
 	}
 
 	public List<HourSet> getWorkHours() {

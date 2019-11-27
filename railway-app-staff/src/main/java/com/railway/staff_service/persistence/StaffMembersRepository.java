@@ -9,11 +9,11 @@ import com.railway.staff_service.domain.StaffMemberType;
 
 public interface StaffMembersRepository extends MongoRepository<StaffMember, String> {
 	
-	public List<StaffMember> findByStaffMemberId(String StaffMemberId);
+	List<StaffMember> findByStaffMemberId(String staffMemberId);
 	
-	public List<StaffMember> findStaffMemberByFirstName(String name);
+	List<StaffMember> findStaffMemberByFirstName(String firstName);
 	
-	public List<StaffMember> findStaffMemberByLastName(String name);
+	List<StaffMember> findStaffMemberByLastName(String lastName);
 	
-	public List<StaffMember> findByStaffMemberType(StaffMemberType type);
+	List<StaffMember> findByStaffMemberType(StaffMemberType staffMemberType);
 }
