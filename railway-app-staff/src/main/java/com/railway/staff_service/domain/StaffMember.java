@@ -17,17 +17,13 @@ public class StaffMember {
 	
 	@Id
 	private String id;
-	
 	private String staffMemberId;
 	
 	@Field("fName")
 	private String firstName;
-	
 	private String lastName;
 	private Integer age;
-	
 	private StaffMemberType staffMemberType;
-	
 	private List<Pair<LocalDate,LocalDate>> availability;
 	
 	@PersistenceConstructor
