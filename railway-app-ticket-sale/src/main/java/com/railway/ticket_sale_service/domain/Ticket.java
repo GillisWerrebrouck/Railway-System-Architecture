@@ -13,7 +13,7 @@ public class Ticket {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private Long id;
     private String startStation;
     private String endStation;
     private LocalDateTime validOn;

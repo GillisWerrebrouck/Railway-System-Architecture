@@ -24,8 +24,8 @@ public class TicketRestController {
         return ticketRepository.findAll();
     }
 
-    @GetMapping("/id")
-    public Ticket getTicketById(@PathVariable("id") String id){
+    @GetMapping("/{id}")
+    public Ticket getTicketById(@PathVariable("id") Long id){
         return ticketRepository.findById(id).orElse(null);
     }
 }

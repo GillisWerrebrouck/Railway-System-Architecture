@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDateTime;
 
 @Repository
-public interface TicketRepository extends CrudRepository<Ticket, String> {
+public interface TicketRepository extends CrudRepository<Ticket, Long> {
 
     @Query("SELECT t FROM Ticket t WHERE type = com.railway.ticket_sale_service.domain.TicketType.GROUP")
     Iterable<Ticket> getAllGroupTickets();
