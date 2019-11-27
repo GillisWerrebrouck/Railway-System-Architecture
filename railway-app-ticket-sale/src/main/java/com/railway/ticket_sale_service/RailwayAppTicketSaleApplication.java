@@ -33,6 +33,7 @@ public class RailwayAppTicketSaleApplication {
 			ticketRepository.save(singleTicket1);
 			ticketRepository.save(groupTicket1);
 
+			ticketRepository.findAll().forEach(t -> logger.info(t.toString()));
 		};
 	}
 }
