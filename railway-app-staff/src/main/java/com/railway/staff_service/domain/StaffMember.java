@@ -5,26 +5,26 @@ import java.util.List;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceConstructor;
-import org.springframework.data.mongodb.core.index.CompoundIndex;
-import org.springframework.data.mongodb.core.index.CompoundIndexes;
-import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
-import org.springframework.data.util.Pair;
 
 @Document
 public class StaffMember {
 	
 	@Id
 	private String id;
+	
 	private String staffMemberId;
 	
 	@Field("fName")
 	private String firstName;
+	
 	private String lastName;
 	private Integer age;
+	
 	private StaffMemberType staffMemberType;
-	private List<Pair<LocalDate,LocalDate>> availability;
+	
+	private List<HourSet> workHours;
 	
 	@PersistenceConstructor
 	public StaffMember(String firstName, String lastName, int age,StaffMemberType staffMemberType) {
@@ -70,22 +70,41 @@ public class StaffMember {
 		return id;
 	}
 	
-	public List<Pair<LocalDate,LocalDate>> getAvailability() {
-		return availability;
-	}
-
-	public void setAvailability(List<Pair<LocalDate,LocalDate>> availability) {
-		this.availability = availability;
-	}
-	
 	public StaffMemberType getStaffMemberType() {
 		return staffMemberType;
 	}
+	
+	public boolean safelyInsertHours(HourSet hourset) throws HourSetException, InvalidHoursException {
+		//check if hours are already presented but not filled in with work yet
+		for(HourSet hours: workHours) {
+			if(hours.isInBetween(hourset) && hours.isAvailable()==true) {
+				return hours.setWorking(hourset);
+			} else if(hours.isInBetween(hourset) && hours.isAvailable()==false) {
+				throw new InvalidHoursException(hours,hourset);
+			}
+		}
+		//if hours are not present then simply add them
+		return workHours.add(hourset);
+	}
+	
+	public boolean addWorkHours(LocalDate startDate, LocalDate endDate) throws HourSetException, InvalidHoursException {
+		HourSet hourset = new HourSet(startDate,endDate);
+		//directly assign work
+		hourset.setAvailable(false);
+		//throws an exception if the hours are already filled with work
+		return safelyInsertHours(hourset);
+		
+	}
+	
+	public boolean addWorkHours(HourSet hourset) throws InvalidHoursException, HourSetException {
+		return safelyInsertHours(hourset);
+	}
 
-	@Override
-	public String toString() {
-		return "StaffMember [id=" + id + ", staffMemberId=" + staffMemberId + ", firstName=" + firstName + ", lastName="
-				+ lastName + ", age=" + age + ", staffMemberType=" + staffMemberType + ", availability=" + availability
-				+ "]";
+	public List<HourSet> getWorkHours() {
+		return workHours;
+	}
+
+	public void setWorkHours(List<HourSet> workHours) {
+		this.workHours = workHours;
 	}
 }
