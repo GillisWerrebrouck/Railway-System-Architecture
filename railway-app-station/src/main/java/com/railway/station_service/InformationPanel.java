@@ -1,21 +1,34 @@
 package com.railway.station_service;
 
+import javax.persistence.*;
+import javax.persistence.Entity;
+
+import org.hibernate.annotations.*;
+
+@Entity
 public class InformationPanel {
 
+	@Id
+	@GeneratedValue
+	private int id;
+	
+	private String currentinfo;
 
-	int id;
-	String currentinfo;
+	@ManyToOne
+	private Platform platform;
 	
 	
 	public InformationPanel() {
-		super();
 	}
+	
+
 	
 	public InformationPanel(String currentinfo) {
-		super();
 		this.currentinfo = currentinfo;
 	}
-	
+
+
+
 	public int getId() {
 		return id;
 	}
@@ -31,6 +44,7 @@ public class InformationPanel {
 	public void setCurrentinfo(String currentinfo) {
 		this.currentinfo = currentinfo;
 	}
+
 	
 	
 }

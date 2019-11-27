@@ -1,28 +1,42 @@
 package com.railway.station_service;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import javax.persistence.*;
+
+@Entity
 public class Station {
 
-	int id;
-	Address address;
-	ArrayList<Platform> platforms;
-	ArrayList<InformationPanel> informationpanels;
+	@Id
+	@GeneratedValue (strategy = GenerationType.IDENTITY)
+	private int id;
+	
+	private String name;
+
+	@OneToOne(
+			mappedBy = "station",
+			cascade = CascadeType.ALL,
+			orphanRemoval = true,
+			fetch = FetchType.LAZY )
+	private Address address;
+	
+
+	@OneToMany(mappedBy = "station", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Platform> platforms = new ArrayList<>();;
 	
 	
-	public Station(Address address, ArrayList<Platform> platforms,
-			ArrayList<InformationPanel> informationpanels) {
-		super();
+	public Station() {
+	}
+	
+	public Station(String name, Address address, List<Platform> platforms) {
 		this.address = address;
 		this.platforms = platforms;
-		this.informationpanels = informationpanels;
+		this.name = name;
 	}
+	
 
-	public Station() {
-		super();
-	}
-
-	public ArrayList<Platform> getPlatforms() {
+	public List<Platform> getPlatforms() {
 		return platforms;
 	}
 	
@@ -45,14 +59,14 @@ public class Station {
 	public void setAddress(Address address) {
 		this.address = address;
 	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 	
-	public ArrayList<InformationPanel> getInformationpanels() {
-		return informationpanels;
-	}
-
-	public void setInformationpanels(ArrayList<InformationPanel> informationpanels) {
-		this.informationpanels = informationpanels;
-	}
-
 	
 }
