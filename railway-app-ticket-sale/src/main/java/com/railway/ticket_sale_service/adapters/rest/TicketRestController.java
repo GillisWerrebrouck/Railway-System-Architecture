@@ -1,4 +1,4 @@
-package com.railway.ticket_sale_service.adapters;
+package com.railway.ticket_sale_service.adapters.rest;
 
 import com.railway.ticket_sale_service.domain.Ticket;
 import com.railway.ticket_sale_service.persistence.TicketRepository;
