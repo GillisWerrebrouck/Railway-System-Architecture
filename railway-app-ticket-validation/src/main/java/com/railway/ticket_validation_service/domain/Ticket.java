@@ -8,7 +8,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
 @Entity
-public class TicketValidation {
+public class Ticket {
 
     @Id
     private UUID id;
@@ -18,9 +18,9 @@ public class TicketValidation {
     private int amount;
     private boolean used;
 
-    private TicketValidation() {};
+    private Ticket() {};
 
-    public TicketValidation(UUID id, String startStation, String endStation, LocalDate validOn, int amount) {
+    public Ticket(UUID id, String startStation, String endStation, LocalDate validOn, int amount) {
         this.id = id;
         this.startStation = startStation;
         this.endStation = endStation;
