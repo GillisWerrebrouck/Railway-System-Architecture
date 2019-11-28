@@ -9,14 +9,14 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(path="ticket-validation")
+@RequestMapping(path="ticket")
 public class TicketRestController {
 
     private TicketRepository ticketRepository;
 
     @Autowired
-    public TicketRestController(TicketRepository ticketValidationRepository) {
-        this.ticketRepository = ticketValidationRepository;
+    public TicketRestController(TicketRepository ticketRepository) {
+        this.ticketRepository = ticketRepository;
     }
 
     @GetMapping()
@@ -29,12 +29,16 @@ public class TicketRestController {
         return ticketRepository.findById(id).orElse(null);
     }
 
-    @PostMapping("/{id}")
-    @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    public void validateTicket(@PathVariable("id") UUID id){
-        Ticket ticket = ticketRepository.findById(id).orElse(null);
-        ticket.setUsed(true);
-        ticketRepository.save(ticket);
+    @GetMapping("/validate/{id}")
+    public Ticket validateTicket(@PathVariable("id") UUID id){
+        Ticket t = ticketRepository.findById(id).orElse(null);
+        if(t != null) {
+            t.validate();
+            ticketRepository.save(t);
+        }
+        return t;
     }
+
+
 
 }
