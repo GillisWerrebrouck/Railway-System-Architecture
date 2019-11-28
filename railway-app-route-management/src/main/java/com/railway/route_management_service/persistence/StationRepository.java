@@ -16,4 +16,7 @@ public interface StationRepository extends Neo4jRepository<Station, Long> {
 	
 	@Query("MATCH (n:Station) RETURN n")
     Collection<Station> findAllStations();
+	
+	@Query("CREATE (n:Station {name : {name}}) RETURN n")
+	Station createStation(String name);
 }

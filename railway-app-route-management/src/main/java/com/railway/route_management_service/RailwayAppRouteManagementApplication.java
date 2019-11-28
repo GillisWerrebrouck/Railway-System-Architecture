@@ -52,6 +52,14 @@ public class RailwayAppRouteManagementApplication {
 
 			@SuppressWarnings("unused")
 			Connection con08 = new Connection(station03, station04, 17L);
+			@SuppressWarnings("unused")
+			Connection con09 = new Connection(station03, station05, 23L);
+
+			@SuppressWarnings("unused")
+			Connection con10 = new Connection(station04, station06, 29L);
+
+			@SuppressWarnings("unused")
+			Connection con11 = new Connection(station06, station07, 21L);
 			
 			logger.info(station01.toString());
 			
