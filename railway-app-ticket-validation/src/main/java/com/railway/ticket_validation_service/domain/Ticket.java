@@ -81,24 +81,6 @@ public class Ticket {
         this.isUsed = used;
     }
 
-    public boolean isValid() {
-        return isValid;
-    }
-
-
-    /**
-     * when ticket is not used and is still not validated and the validOnDate is the same as the scanDate (=today)
-     * it will set isValid and isUsed on true because the ticket is valid and it is used once scanned
-     * if the ticket isUsed, and it is scanned again it will not be valid anymore.
-     */
-    public void validate(){
-        if(!isUsed && !isValid && validOnDate.compareTo(LocalDate.now()) == 0){
-            isValid = true;
-            isUsed = true;
-        }else if(isUsed){
-            isValid = false;
-        }
-    }
 
     @Override
     public String toString() {

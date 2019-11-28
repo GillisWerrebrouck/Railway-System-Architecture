@@ -32,10 +32,6 @@ public class TicketRestController {
     @GetMapping("/validate/{id}")
     public Ticket validateTicket(@PathVariable("id") UUID id){
         Ticket t = ticketRepository.findById(id).orElse(null);
-        if(t != null) {
-            t.validate();
-            ticketRepository.save(t);
-        }
         return t;
     }
 
