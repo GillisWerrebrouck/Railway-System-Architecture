@@ -4,12 +4,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.text.MessageFormat;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
-/**
- *
- */
 @Entity
 public class Ticket {
 
@@ -22,7 +18,8 @@ public class Ticket {
     private boolean isUsed;
     private boolean isValid;
 
-    private Ticket() {};
+    @SuppressWarnings("unused")
+	private Ticket() {};
 
     public Ticket(UUID id, String startStation, String endStation, LocalDate validOnDate, int amountOfSeats) {
         this.id = id;
@@ -81,12 +78,21 @@ public class Ticket {
         this.isUsed = used;
     }
 
+    // check if the due date of the ticket hasn't passed and that the ticket hasn't been used before
+    public boolean isValid() {	
+        return !isUsed && validOnDate.compareTo(LocalDate.now()) <= 0;
+    }
+
+    public void validate(){	
+        if(isValid) {
+            isUsed = true;
+        }
+    }
 
     @Override
     public String toString() {
         return MessageFormat.format("id: {0}\t startStation: {1}\t endStation: {2}" +
-                        "\t amountOfSeats: {4}\t", this.id, this.startStation, this.endStation,
-                this.amountOfSeats);
+        							"\t amountOfSeats: {4}\t", this.id, this.startStation, this.endStation, this.amountOfSeats);
     }
 
 }
