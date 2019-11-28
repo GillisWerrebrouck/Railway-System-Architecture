@@ -2,19 +2,22 @@ package com.railway.station_service;
 
 import javax.persistence.*;
 import javax.persistence.Entity;
-
-import org.hibernate.annotations.*;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
+@JsonIgnoreProperties({"platform"})
 public class InformationPanel {
 
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
+	
 	
 	private String currentinfo;
 
-	@ManyToOne
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "platform_id")
 	private Platform platform;
 	
 	
@@ -22,11 +25,10 @@ public class InformationPanel {
 	}
 	
 
-	
-	public InformationPanel(String currentinfo) {
+	public InformationPanel(String currentinfo, Platform platform) {
 		this.currentinfo = currentinfo;
+		this.platform = platform;
 	}
-
 
 
 	public int getId() {
@@ -45,6 +47,13 @@ public class InformationPanel {
 		this.currentinfo = currentinfo;
 	}
 
-	
-	
+
+	public Platform getPlatform() {
+		return platform;
+	}
+
+
+	public void setPlatform(Platform platform) {
+		this.platform = platform;
+	}
 }

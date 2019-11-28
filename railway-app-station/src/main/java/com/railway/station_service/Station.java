@@ -2,7 +2,6 @@ package com.railway.station_service;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.persistence.*;
 
 @Entity
@@ -10,26 +9,26 @@ public class Station {
 
 	@Id
 	@GeneratedValue (strategy = GenerationType.IDENTITY)
+	@Column(name = "station_id")
 	private int id;
+	
 	
 	private String name;
 
-	@OneToOne(
-			mappedBy = "station",
-			cascade = CascadeType.ALL,
-			orphanRemoval = true,
-			fetch = FetchType.LAZY )
+	
+	@Embedded
 	private Address address;
 	
 
-	@OneToMany(mappedBy = "station", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<Platform> platforms = new ArrayList<>();;
+	@OneToMany(mappedBy = "station", cascade = CascadeType.ALL)
+	private List<Platform> platforms;
 	
 	
 	public Station() {
 	}
 	
-	public Station(String name, Address address, List<Platform> platforms) {
+	
+	public Station(String name, Address address, ArrayList<Platform> platforms) {
 		this.address = address;
 		this.platforms = platforms;
 		this.name = name;
@@ -67,6 +66,4 @@ public class Station {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
-	
 }

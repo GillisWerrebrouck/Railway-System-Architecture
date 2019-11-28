@@ -2,20 +2,21 @@ package com.railway.station_service;
 
 import javax.persistence.*;
 
-@Entity
+//@Entity
+@Embeddable
 public class Address {
 	
-	@Id
+	/*@Id
 	@GeneratedValue
-	private int id;
+	private int id;*/
 	private String street;
 	private String city;
 	private String province;
 	private String country;
-	
+	/*
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "station_id")
-	private Station station;
+	private Station station;*/
 	
 
 	public Address() {
@@ -27,7 +28,7 @@ public class Address {
 		this.province = province;
 		this.country = country;
 	}
-
+/*
 	public int getId() {
 		return id;
 	}
@@ -35,7 +36,7 @@ public class Address {
 	public void setId(int id) {
 		this.id = id;
 	}
-	
+	*/
 	public String getStreet() {
 		return street;
 	}

@@ -12,8 +12,5 @@ import org.springframework.stereotype.Repository;
 public interface StationRepository extends CrudRepository<Station, Integer>{
 
 	List<Station> findByName(@Param("name") String name);
-	/*
-	@Query("select * from Station")
-	Collection<Station> findAllStations();
-	*/
+
 }
