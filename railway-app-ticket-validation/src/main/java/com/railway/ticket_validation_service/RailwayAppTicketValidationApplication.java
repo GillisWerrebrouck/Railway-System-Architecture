@@ -22,11 +22,11 @@ public class RailwayAppTicketValidationApplication {
 	}
 
 	@Bean
-	public CommandLineRunner populateDatabase(TicketRepository ticketValidationRepository) {
+	public CommandLineRunner populateDatabase(TicketRepository ticketRepository) {
 		return (args) -> {
 			logger.info("Create some tickets to test the repository ...");
 
-			ticketValidationRepository.deleteAll();
+			ticketRepository.deleteAll();
 
 			Ticket singleTicket = new Ticket(UUID.fromString("2b3962ae-11e7-11ea-9858-f5f73fbce6aa"),
 					"Gent", "Brussel", LocalDate.now(), 1);
@@ -34,11 +34,10 @@ public class RailwayAppTicketValidationApplication {
 			Ticket groupTicket = new Ticket(UUID.fromString("2b3962af-11e7-11ea-9858-cf905512618f"),
 					"Oudenaarde", "Brussel", LocalDate.now(), 16);
 
+			ticketRepository.save(singleTicket);
+			ticketRepository.save(groupTicket);
 
-			ticketValidationRepository.save(singleTicket);
-			ticketValidationRepository.save(groupTicket);
-
-			ticketValidationRepository.findAll().forEach(t -> logger.info(t.toString()));
+			ticketRepository.findAll().forEach(t -> logger.info(t.toString()));
 		};
 	}
 }
