@@ -7,6 +7,9 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
+/**
+ *
+ */
 @Entity
 public class Ticket {
 
@@ -82,6 +85,12 @@ public class Ticket {
         return isValid;
     }
 
+
+    /**
+     * when ticket is not used and is still not validated and the validOnDate is the same as the scanDate (=today)
+     * it will set isValid and isUsed on true because the ticket is valid and it is used once scanned
+     * if the ticket isUsed, and it is scanned again it will not be valid anymore.
+     */
     public void validate(){
         if(!isUsed && !isValid && validOnDate.compareTo(LocalDate.now()) == 0){
             isValid = true;
@@ -98,5 +107,4 @@ public class Ticket {
                 this.amountOfSeats);
     }
 
-    public
 }
