@@ -1,6 +1,5 @@
 package com.railway.route_management_service.adapters.rest;
 
-import java.util.Collection;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
