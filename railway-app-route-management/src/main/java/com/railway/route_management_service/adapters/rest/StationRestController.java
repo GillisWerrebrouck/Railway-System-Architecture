@@ -42,7 +42,7 @@ public class StationRestController extends RouteRestController{
 	// create a new station node
 	@PostMapping
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
-	public void createStation(@RequestBody Station station){
+	public void createStation(@RequestBody Station station) throws QueryFailedException {
 		try {
 			this.stationRepository.createStation(station.getName());
 		} catch (Exception e) {

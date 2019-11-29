@@ -32,7 +32,7 @@ public class Station {
 		this.name = name;
 	}
 	
-	// Neo4j doesn't have bi-directional relationships.
+	// Neo4j doesn't have bidirectional relationships.
 	// UNDIRECTED means it will ignore the direction of the relationship when querying.
 	@Relationship(type = "CONNECTED_WITH", direction = Relationship.UNDIRECTED)
 	public Set<Connection> connections = new HashSet<Connection>();

@@ -37,6 +37,10 @@ public class Connection {
 		this.stationX.getConnections().add(this);
 		this.stationY.getConnections().add(this);
 	}
+	
+	public Long getId() {
+		return id;
+	}
 
 	public Station getStationX() {
 		return stationX;

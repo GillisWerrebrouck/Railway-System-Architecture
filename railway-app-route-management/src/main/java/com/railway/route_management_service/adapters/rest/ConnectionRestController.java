@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -35,7 +36,7 @@ public class ConnectionRestController extends RouteRestController {
 	// create a new (direct) connection between two stations
 	@PostMapping
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
-	public void connectStations(@RequestBody Connection connection){
+	public void connectStations(@RequestBody Connection connection) throws SelfReferentialNodeException, QueryFailedException {
 		if (connection.getStationX().getName().compareTo(connection.getStationY().getName()) == 0) {
 			String errorMessage = "Self-referential nodes are not allowed";
 			throw new SelfReferentialNodeException(errorMessage);
@@ -47,5 +48,17 @@ public class ConnectionRestController extends RouteRestController {
 			String errorMessage = "Connection between " + connection.getStationX().getName() + " and " + connection.getStationY().getName() + " could not be created";
 			throw new QueryFailedException(errorMessage);
 		}
+	}
+
+	@PutMapping
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
+	public void getConnectionById(@RequestBody Connection connection) throws Exception {
+		System.out.println(connection.getId());
+		if (connection.getId() == null) {
+			String errorMessage = "No connection id specified";
+			throw new Exception(errorMessage);
+		}
+		
+		this.connectionRepository.save(connection);
 	}
 }
