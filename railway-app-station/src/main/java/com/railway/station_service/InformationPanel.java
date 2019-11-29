@@ -16,8 +16,7 @@ public class InformationPanel {
 	private String currentinfo;
 
 	
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "platform_id")
+	@ManyToOne
 	private Platform platform;
 	
 	
@@ -25,9 +24,8 @@ public class InformationPanel {
 	}
 	
 
-	public InformationPanel(String currentinfo, Platform platform) {
+	public InformationPanel(String currentinfo) {
 		this.currentinfo = currentinfo;
-		this.platform = platform;
 	}
 
 

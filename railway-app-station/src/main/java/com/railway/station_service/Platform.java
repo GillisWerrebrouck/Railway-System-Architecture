@@ -1,28 +1,31 @@
 package com.railway.station_service;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 
 @Entity
-public class Platform {
+@Inheritance(strategy = InheritanceType.JOINED)
+@JsonIgnoreProperties("station")
+public class Platform implements Serializable{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "platform_id")
-	int id;
+	private int id;
 	
 	
-	int platformNumber;
+	private int platformNumber;
 	
 	
-	@OneToMany(mappedBy = "platform", cascade = CascadeType.ALL)
-	private List<InformationPanel> informationpanels;
+	@OneToMany(mappedBy = "platform")
+	private List<InformationPanel> informationpanels = new ArrayList<InformationPanel>();
 	
 	
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "station_id")
+    @ManyToOne
 	private Station station;
     
 	
@@ -30,9 +33,8 @@ public class Platform {
 	}
 	
 
-    public Platform(int platformNumber, Station station) {
+    public Platform(int platformNumber) {
 		this.platformNumber = platformNumber;
-		this.station = station;
 	}
 
 
@@ -59,4 +61,13 @@ public class Platform {
 	public void setInformationpanels(ArrayList<InformationPanel> informationpanels) {
 		this.informationpanels = informationpanels;
 	}
+	
+	public Station getStation() {
+		return station;
+	}
+
+	public void setStation(Station station) {
+		this.station = station;
+	}
+	
 }

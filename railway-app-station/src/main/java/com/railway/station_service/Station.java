@@ -1,15 +1,16 @@
 package com.railway.station_service;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.*;
 
 @Entity
-public class Station {
+@Table(name = "station")
+public class Station implements Serializable {
 
 	@Id
-	@GeneratedValue (strategy = GenerationType.IDENTITY)
-	@Column(name = "station_id")
+	@GeneratedValue (strategy = GenerationType.AUTO)
 	private int id;
 	
 	
@@ -20,18 +21,16 @@ public class Station {
 	private Address address;
 	
 
-	@OneToMany(mappedBy = "station", cascade = CascadeType.PERSIST)
-	//@RestResource(rel="platforms")
-	private List<Platform> platforms;
+	@OneToMany(mappedBy = "station")
+	private List<Platform> platforms = new ArrayList<Platform>();
 	
 	
 	private Station() {
 	}
 	
 	
-	public Station(String name, Address address, ArrayList<Platform> platforms) {
+	public Station(String name, Address address) {
 		this.address = address;
-		this.platforms = platforms;
 		this.name = name;
 	}
 	
