@@ -53,7 +53,6 @@ public class ConnectionRestController extends RouteRestController {
 	@PutMapping
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
 	public void getConnectionById(@RequestBody Connection connection) throws Exception {
-		System.out.println(connection.getId());
 		if (connection.getId() == null) {
 			String errorMessage = "No connection id specified";
 			throw new Exception(errorMessage);

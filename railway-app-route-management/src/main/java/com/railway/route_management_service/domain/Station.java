@@ -49,6 +49,10 @@ public class Station {
 						.map((c) -> c.getStationY().getName())
 						.collect(Collectors.toList());
 	}
+	
+	public Long getId() {
+		return id;
+	}
 
 	public String getName() {
 		return name;
