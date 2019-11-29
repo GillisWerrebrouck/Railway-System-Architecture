@@ -1,6 +1,5 @@
 package com.railway.route_management_service.persistence;
 
-import java.util.Collection;
 import java.util.List;
 
 import org.springframework.data.neo4j.annotation.Query;
@@ -14,9 +13,7 @@ import com.railway.route_management_service.domain.Station;
 public interface StationRepository extends Neo4jRepository<Station, Long> {
 	List<Station> findByName(@Param("name") String name);
 	
-	@Query("MATCH (n:Station) RETURN n")
-    Collection<Station> findAllStations();
-	
-	@Query("CREATE (n:Station {name : {name}}) RETURN n")
+	// creating a new station node with the merge clause, this will ensure that it is created only if it doesn't already exists
+	@Query("MERGE (n:Station {name : {name}}) RETURN n")
 	Station createStation(String name);
 }

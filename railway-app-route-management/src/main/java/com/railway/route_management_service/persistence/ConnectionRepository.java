@@ -15,12 +15,12 @@ public interface ConnectionRepository extends Neo4jRepository<Connection, Long> 
 			"RETURN COUNT(c)")
 	int connectStations(String station1, String station2, Long distance);
 
-	@Query("MATCH p =(x:Station)-[* { active:true }]-(y:Station)\r\n" + 
-			"WHERE x.name = {startStation} AND y.name = {endStation}\r\n" + 
+	@Query("MATCH p =(x:Station)-[:CONNECTED_WITH* { active:true }]-(y:Station)\r\n" + 
+			"WHERE LOWER(x.name) = LOWER({startStation}) AND LOWER(y.name) = LOWER({endStation})\r\n" + 
 			"RETURN p\r\n" +
 			"ORDER BY reduce(distance = 0, connection IN relationships(p) | distance + connection.distance) LIMIT 1")
 	Collection<Connection> findShortestPath(String startStation, String endStation);
 
-	@Query("MATCH p=(x:Station {name: {name}})-[c:CONNECTED_WITH]-(y:Station) RETURN p")
+	@Query("MATCH p=(x:Station)-[c:CONNECTED_WITH]-(y:Station) WHERE LOWER(x.name) = LOWER({name}) RETURN p")
 	Collection<Connection> findConnectionsByStationName(String name);
 }
