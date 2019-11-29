@@ -1,6 +1,7 @@
 package com.railway.route_management_service.adapters.rest;
 
 import java.util.Collection;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,7 +27,7 @@ public class RouteRestController {
 
 	// get the shortest (distance) route between two station nodes
 	@GetMapping("/route")
-	public Collection<Connection> getShortestPath(@RequestParam String startStation, @RequestParam String endStation){
+	public List<Connection> getShortestPath(@RequestParam String startStation, @RequestParam String endStation){
 		return this.connectionRepository.findShortestPath(startStation, endStation);
 	}
 }

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.railway.route_management_service.domain.Connection;
 import com.railway.route_management_service.domain.QueryFailedException;
+import com.railway.route_management_service.domain.SelfReferentialNodeException;
 import com.railway.route_management_service.persistence.ConnectionRepository;
 import com.railway.route_management_service.persistence.StationRepository;
 
@@ -35,6 +36,11 @@ public class ConnectionRestController extends RouteRestController {
 	@PostMapping
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
 	public void connectStations(@RequestBody Connection connection){
+		if (connection.getStationX().getName().compareTo(connection.getStationY().getName()) == 0) {
+			String errorMessage = "Self-referential nodes are not allowed";
+			throw new SelfReferentialNodeException(errorMessage);
+		}
+		
 		int result = this.connectionRepository.connectStations(connection.getStationX().getName(), connection.getStationY().getName(), connection.getDistance());
 		
 		if (result == 0) {

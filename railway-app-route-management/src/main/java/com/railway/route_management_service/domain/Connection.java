@@ -6,10 +6,13 @@ import org.neo4j.ogm.annotation.Id;
 import org.neo4j.ogm.annotation.RelationshipEntity;
 import org.neo4j.ogm.annotation.StartNode;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 @RelationshipEntity(type = "CONNECTED_WITH")
 public class Connection {
 	@Id
 	@GeneratedValue
+	@JsonProperty
     private Long id;
 
 	@StartNode

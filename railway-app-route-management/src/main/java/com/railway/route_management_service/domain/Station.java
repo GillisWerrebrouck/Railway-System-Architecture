@@ -12,11 +12,13 @@ import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @NodeEntity
 public class Station {
 	@Id
 	@GeneratedValue 
+	@JsonProperty
 	private Long id;
 	
 	private String name;
