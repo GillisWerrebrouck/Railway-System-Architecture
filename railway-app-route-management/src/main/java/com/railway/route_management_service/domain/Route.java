@@ -1,65 +1,52 @@
 package com.railway.route_management_service.domain;
 
-import java.util.Collections;
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.neo4j.ogm.annotation.GeneratedValue;
 import org.neo4j.ogm.annotation.Id;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.railway.route_management_service.helpers.Constants;
 
 @NodeEntity
-public class Station {
+public class Route {
 	@Id
 	@GeneratedValue 
 	@JsonProperty
 	private Long id;
-	
+
 	private String name;
-	
+
 	@SuppressWarnings("unused")
-	private Station() {
+	private Route() {
 		// Empty constructor required as of Neo4j API 2.0.5
 	}
 	
-	public Station(String name) {
+	public Route(String name) {
 		this.name = name;
 	}
-	
+
 	// Neo4j doesn't have bidirectional relationships.
 	// UNDIRECTED means it will ignore the direction of the relationship when querying.
-	@Relationship(type = Constants.INTER_STATION_RELATIONSHIP, direction = Relationship.UNDIRECTED)
-	public Set<Connection> connections = new HashSet<Connection>();
-	
-	@JsonIgnore
-	public Set<Connection> getConnections() {
-		return connections;
-	}
-	
-	public String toString() {
-		return this.name + ": connected stations => "
-			+ Optional.ofNullable(this.connections).orElse(
-					Collections.emptySet()).stream()
-						.map((c) -> c.getStationY().getName())
-						.collect(Collectors.toList());
-	}
-	
-	public Long getId() {
-		return id;
-	}
+	@Relationship(type = Constants.ROUTE_STATION_RELATIONSHIP, direction = Relationship.OUTGOING)
+	public Set<Station> stations = new HashSet<Station>();
 
 	public String getName() {
 		return name;
 	}
-
+	
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	public Set<Station> getStations() {
+		return stations;
+	}
+	
+	public void addStation(Station station) {
+		stations.add(station);
 	}
 }

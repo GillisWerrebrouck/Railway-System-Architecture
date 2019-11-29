@@ -7,8 +7,9 @@ import org.neo4j.ogm.annotation.RelationshipEntity;
 import org.neo4j.ogm.annotation.StartNode;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.railway.route_management_service.helpers.Constants;
 
-@RelationshipEntity(type = "CONNECTED_WITH")
+@RelationshipEntity(type = Constants.INTER_STATION_RELATIONSHIP)
 public class Connection {
 	@Id
 	@GeneratedValue

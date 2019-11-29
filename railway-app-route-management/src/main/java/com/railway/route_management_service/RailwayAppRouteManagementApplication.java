@@ -8,7 +8,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 import com.railway.route_management_service.domain.Connection;
+import com.railway.route_management_service.domain.Route;
 import com.railway.route_management_service.domain.Station;
+import com.railway.route_management_service.persistence.RouteRepository;
 import com.railway.route_management_service.persistence.StationRepository;
 
 @SpringBootApplication
@@ -20,7 +22,7 @@ public class RailwayAppRouteManagementApplication {
 	}
 	
 	@Bean
-	public CommandLineRunner populateDatabase(StationRepository stationRepository) {
+	public CommandLineRunner populateDatabase(StationRepository stationRepository, RouteRepository routeRepository) {
 		return (args) ->{
 			logger.info("Populating graph database with test data ...");
 
@@ -60,9 +62,7 @@ public class RailwayAppRouteManagementApplication {
 
 			@SuppressWarnings("unused")
 			Connection con11 = new Connection(station06, station07, 21L);
-			
-			logger.info(station01.toString());
-			
+						
 			stationRepository.save(station01);
 			stationRepository.save(station02);
 			stationRepository.save(station03);
@@ -70,6 +70,15 @@ public class RailwayAppRouteManagementApplication {
 			stationRepository.save(station05);
 			stationRepository.save(station06);
 			stationRepository.save(station07);
+			
+			
+			Route route01 = new Route("Kortrijk - Deinze");
+			route01.addStation(station03);
+			route01.addStation(station04);
+			route01.addStation(station06);
+			route01.addStation(station07);
+			
+			routeRepository.save(route01);
 		};
 	}
 }
