@@ -1,10 +1,13 @@
 package com.railway.route_management_service.domain;
 
+import org.hibernate.validator.internal.IgnoreForbiddenApisErrors;
 import org.neo4j.ogm.annotation.EndNode;
 import org.neo4j.ogm.annotation.GeneratedValue;
 import org.neo4j.ogm.annotation.Id;
 import org.neo4j.ogm.annotation.RelationshipEntity;
 import org.neo4j.ogm.annotation.StartNode;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @RelationshipEntity(type = "CONNECTED_WITH")
 public class Connection {
@@ -34,11 +37,11 @@ public class Connection {
 		this.stationX.getConnections().add(this);
 		this.stationY.getConnections().add(this);
 	}
-	
+
 	public Station getStationX() {
 		return stationX;
 	}
-	
+
 	public Station getStationY() {
 		return stationY;
 	}

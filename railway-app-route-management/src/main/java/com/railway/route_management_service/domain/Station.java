@@ -11,6 +11,8 @@ import org.neo4j.ogm.annotation.Id;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @NodeEntity
 public class Station {
 	@Id
@@ -33,6 +35,7 @@ public class Station {
 	@Relationship(type = "CONNECTED_WITH", direction = Relationship.UNDIRECTED)
 	public Set<Connection> connections = new HashSet<Connection>();
 	
+	@JsonIgnore
 	public Set<Connection> getConnections() {
 		return connections;
 	}
