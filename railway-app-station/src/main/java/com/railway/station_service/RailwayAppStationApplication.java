@@ -26,7 +26,7 @@ public class RailwayAppStationApplication {
 			ArrayList<InformationPanel> infopanels2 = new ArrayList<>();
 
 
-			Station s = new Station();
+			Station s = new Station("Gent-Sint-Pieters", a, null);
 			
 			Platform p1 = new Platform(7, s);
 			Platform p2 = new Platform(8, s);

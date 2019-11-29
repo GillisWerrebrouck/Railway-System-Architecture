@@ -26,11 +26,11 @@ public class Platform {
 	private Station station;
     
 	
-	public Platform() {
+    private Platform() {
 	}
 	
 
-	public Platform(int platformNumber, Station station) {
+    public Platform(int platformNumber, Station station) {
 		this.platformNumber = platformNumber;
 		this.station = station;
 	}

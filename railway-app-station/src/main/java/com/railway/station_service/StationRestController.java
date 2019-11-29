@@ -47,10 +47,5 @@ public class StationRestController {
 		return stationRepository.save(s);
 	}
 	
-/*
-	@GetMapping("/all")
-	public Collection<Station> getAllStations(){
-		return this.stationRepository.findAllStations();
-	}
-*/
+
 }

@@ -16,12 +16,12 @@ public class InformationPanel {
 	private String currentinfo;
 
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "platform_id")
 	private Platform platform;
 	
 	
-	public InformationPanel() {
+	private InformationPanel() {
 	}
 	
 

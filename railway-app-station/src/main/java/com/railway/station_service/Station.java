@@ -20,11 +20,12 @@ public class Station {
 	private Address address;
 	
 
-	@OneToMany(mappedBy = "station", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "station", cascade = CascadeType.PERSIST)
+	//@RestResource(rel="platforms")
 	private List<Platform> platforms;
 	
 	
-	public Station() {
+	private Station() {
 	}
 	
 	
