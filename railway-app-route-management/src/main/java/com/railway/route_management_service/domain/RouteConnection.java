@@ -34,6 +34,8 @@ public class RouteConnection {
 		this.route = route;
 		this.station = station;
 		this.connectionId = connectionId;
+		
+		route.getRouteConnections().add(this);
 	}
 	
 	public Long getId() {

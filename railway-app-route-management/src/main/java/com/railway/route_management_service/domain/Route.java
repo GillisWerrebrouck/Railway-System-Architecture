@@ -47,8 +47,4 @@ public class Route {
 	public Set<RouteConnection> getRouteConnections() {
 		return routeConnections;
 	}
-	
-	public void addRouteConnections(RouteConnection routeConnection) {
-		this.routeConnections.add(routeConnection);
-	}
 }
