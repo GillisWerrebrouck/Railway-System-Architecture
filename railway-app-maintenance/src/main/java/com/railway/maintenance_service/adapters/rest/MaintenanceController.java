@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.railway.maintenance_service.domain.ScheduleMaintenance;
+import com.railway.maintenance_service.domain.ScheduleItem;
 import com.railway.maintenance_service.persistence.MaintenanceRepository;
 
 @RestController
@@ -20,12 +20,12 @@ public class MaintenanceController {
 	}
 	
 	@GetMapping()
-    public Iterable<ScheduleMaintenance> getAllMaintenanceItems(){
+    public Iterable<ScheduleItem> getAllMaintenanceItems(){
 		return maintenanceRepository.findAll();
 	}
 	
 	@GetMapping("/{id}")
-	public ScheduleMaintenance getMaintenanceById(@PathVariable("id") Long id) {
+	public ScheduleItem getMaintenanceById(@PathVariable("id") Long id) {
 		return maintenanceRepository.findById(id).orElse(null);
 	}
 }

@@ -1,23 +1,32 @@
 package com.railway.maintenance_service.domain;
 
-public class Staff {
+import java.io.Serializable;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+@Entity
+public class Staff implements Serializable {
 	
-	private Long Id;
+	@Id @GeneratedValue(strategy = GenerationType.AUTO)
+	private Long id;
 	private String firstName;
 	private String lastName;
 	
-	public Staff(Long Id, String firstName, String lastName) {
-		this.Id = Id;
+	public Staff(Long id, String firstName, String lastName) {
+		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
 	}
 	
 	public Long getId() {
-		return this.Id;
+		return this.id;
 	}
 	
 	public void setId(Long Id) {
-		this.Id = Id;
+		this.id = Id;
 	}
 	
 	public String getFirstName() {
@@ -38,7 +47,7 @@ public class Staff {
 
 	@Override
 	public String toString() {
-		return "Staff [staffId=" + Id + ", firstName=" + firstName + ", lastName=" + lastName + "]";
+		return "Staff [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + "]";
 	}
 	
 }

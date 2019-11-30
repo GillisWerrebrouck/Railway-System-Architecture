@@ -1,34 +1,38 @@
 package com.railway.maintenance_service.domain;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-public class ScheduleMaintenance {
+public class ScheduleItem {
 	
 	@Id @GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	private LocalDateTime maintenanceDate;
-	//private List<Staff> staff;
+	
+	@ElementCollection(targetClass=Staff.class)
+	private List<Staff> staff;
 	private Status status;
 	private String comment;
-	private String train;
+	private Train train;
 	
 	@SuppressWarnings("unused")
-	private ScheduleMaintenance() {
-		this.maintenanceDate = null;
-		this.status = null;
-		this.comment = null;
+	private ScheduleItem() {
+		
 	}
 
-	public ScheduleMaintenance(LocalDateTime maintenanceDate, Status status, String comment) {
+	public ScheduleItem(LocalDateTime maintenanceDate, Status status, String comment) {
 		this.maintenanceDate = maintenanceDate;
 		this.status = status;
 		this.comment = comment;
+		this.staff= new ArrayList<>();
 	}
 	
 	public LocalDateTime getMaintenanceDate() {
@@ -38,7 +42,7 @@ public class ScheduleMaintenance {
 	public void setMaintenanceDate(LocalDateTime maintenanceDate) {
 		this.maintenanceDate = maintenanceDate;
 	}
-/*
+
 	public List<Staff> getStaff() {
 		return staff;
 	}
@@ -46,7 +50,7 @@ public class ScheduleMaintenance {
 	public void setStaff(List<Staff> staff) {
 		this.staff = staff;
 	}
-*/
+
 	public Status getStatus() {
 		return status;
 	}
@@ -63,11 +67,11 @@ public class ScheduleMaintenance {
 		this.comment = comment;
 	}
 
-	public String getTrain() {
+	public Train getTrain() {
 		return train;
 	}
 
-	public void setTrain(String train) {
+	public void setTrain(Train train) {
 		this.train = train;
 	}
 

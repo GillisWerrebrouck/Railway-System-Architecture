@@ -9,7 +9,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
-import com.railway.maintenance_service.domain.ScheduleMaintenance;
+import com.railway.maintenance_service.domain.ScheduleItem;
 import com.railway.maintenance_service.domain.Status;
 
 @SpringBootApplication
@@ -25,8 +25,8 @@ public class RailwayAppMaintenanceApplication {
 	public CommandLineRunner printOneScheduledMaintenance() {
 		return (args)->{
 			logger.info("Printing one maintenance:");
-			ScheduleMaintenance scheduleMaintenance = new ScheduleMaintenance(LocalDateTime.now(), Status.SCHEDULED, "train wrecked");
-			logger.info(scheduleMaintenance.toString());
+			ScheduleItem scheduleItem = new ScheduleItem(LocalDateTime.now(), Status.SCHEDULED, "train wrecked");
+			logger.info(scheduleItem.toString());
 		};
 	}
 

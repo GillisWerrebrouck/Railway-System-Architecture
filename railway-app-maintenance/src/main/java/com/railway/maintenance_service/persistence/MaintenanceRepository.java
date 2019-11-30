@@ -5,14 +5,14 @@ import java.util.List;
 
 import org.springframework.data.repository.CrudRepository;
 
-import com.railway.maintenance_service.domain.ScheduleMaintenance;
+import com.railway.maintenance_service.domain.ScheduleItem;
 
-public interface MaintenanceRepository extends CrudRepository<ScheduleMaintenance, Long> {
-	public List<ScheduleMaintenance> findScheduleMaintenanceByMaintenanceId(String maintenanceId);
+public interface MaintenanceRepository extends CrudRepository<ScheduleItem, Long> {
+	public List<ScheduleItem> findScheduleMaintenanceById(Long id);
 	
-	public List<ScheduleMaintenance> findScheduleMaintenanceByMaintenanceDate(LocalDate maintenanceDate);
+	public List<ScheduleItem> findScheduleMaintenanceByMaintenanceDate(LocalDate maintenanceDate);
 
-	public List<ScheduleMaintenance> findScheduleMaintenanceByStatus(String status);
+	public List<ScheduleItem> findScheduleMaintenanceByStatus(String status);
 
-	public List<ScheduleMaintenance> findScheduleMaintenanceByCommentStartsWith(String comment);
+	public List<ScheduleItem> findScheduleMaintenanceByCommentStartsWith(String comment);
 }
