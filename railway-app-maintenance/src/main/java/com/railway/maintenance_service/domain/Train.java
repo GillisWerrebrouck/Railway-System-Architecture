@@ -2,39 +2,35 @@ package com.railway.maintenance_service.domain;
 
 import java.io.Serializable;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.Embeddable;
 
-@Entity
+@Embeddable
 public class Train implements Serializable {
+	private Long trainId;
+	private TrainType type;
 	
-	@Id @GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
-	private String name;
+	@SuppressWarnings("unused")
+	private Train() {}
 	
-	
-	public Train(Long id, String name) {
-		super();
-		this.id = id;
-		this.name = name;
+	public Train(Long trainId, TrainType type) {
+		this.trainId = trainId;
+		this.type = type;
 	}
 
-	public Long getId() {
-		return id;
+	public Long getTrainId() {
+		return trainId;
 	}
 	
-	public String getName() {
-		return name;
+	public TrainType getType() {
+		return type;
 	}
 	
-	public void setName(String name) {
-		this.name = name;
+	public void setType(TrainType type) {
+		this.type = type;
 	}
 
 	@Override
 	public String toString() {
-		return "Train [id=" + id + ", name=" + name + "]";
+		return "Train [id=" + trainId + ", type=" + type + "]";
 	}
 }

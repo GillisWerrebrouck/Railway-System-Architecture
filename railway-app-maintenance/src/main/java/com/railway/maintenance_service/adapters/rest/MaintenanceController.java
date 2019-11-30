@@ -19,7 +19,7 @@ public class MaintenanceController {
 		this.maintenanceRepository = maintenanceRepository;
 	}
 	
-	@GetMapping()
+	@GetMapping
     public Iterable<ScheduleItem> getAllMaintenanceItems(){
 		return maintenanceRepository.findAll();
 	}

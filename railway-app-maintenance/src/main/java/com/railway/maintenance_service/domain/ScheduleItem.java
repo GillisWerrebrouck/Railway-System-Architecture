@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.ElementCollection;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -12,35 +13,48 @@ import javax.persistence.Id;
 
 @Entity
 public class ScheduleItem {
-	
-	@Id @GeneratedValue(strategy = GenerationType.AUTO)
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-	private LocalDateTime maintenanceDate;
+	private LocalDateTime startDate;
+	private LocalDateTime endDate;
 	
-	@ElementCollection(targetClass=Staff.class)
+	@ElementCollection
 	private List<Staff> staff;
 	private Status status;
 	private String comment;
+	@Embedded
 	private Train train;
 	
 	@SuppressWarnings("unused")
-	private ScheduleItem() {
-		
-	}
+	private ScheduleItem() {}
 
-	public ScheduleItem(LocalDateTime maintenanceDate, Status status, String comment) {
-		this.maintenanceDate = maintenanceDate;
+	public ScheduleItem(LocalDateTime startDate, LocalDateTime endDate, Status status, String comment) {
+		this.startDate = startDate;
+		this.endDate = endDate;
 		this.status = status;
 		this.comment = comment;
-		this.staff= new ArrayList<>();
-	}
-	
-	public LocalDateTime getMaintenanceDate() {
-		return maintenanceDate;
+		this.staff = new ArrayList<Staff>();
 	}
 
-	public void setMaintenanceDate(LocalDateTime maintenanceDate) {
-		this.maintenanceDate = maintenanceDate;
+	public Long getId() {
+		return id;
+	}
+	
+	public LocalDateTime getStartDate() {
+		return startDate;
+	}
+	
+	public void setStartDate(LocalDateTime startDate) {
+		this.startDate = startDate;
+	}
+	
+	public LocalDateTime getEndDate() {
+		return endDate;
+	}
+	
+	public void setEndDate(LocalDateTime endDate) {
+		this.endDate = endDate;
 	}
 
 	public List<Staff> getStaff() {
@@ -49,6 +63,10 @@ public class ScheduleItem {
 
 	public void setStaff(List<Staff> staff) {
 		this.staff = staff;
+	}
+
+	public void addStaff(Staff staff) {
+		this.staff.add(staff);
 	}
 
 	public Status getStatus() {
@@ -75,14 +93,8 @@ public class ScheduleItem {
 		this.train = train;
 	}
 
-	public Long getId() {
-		return id;
-	}
-
 	@Override
 	public String toString() {
-		return "ScheduleItem [id=" + id + ", maintenanceDate="
-				+ maintenanceDate + ", status=" + status + ", comment=" + comment + "]";
+		return "ScheduleItem [id=" + id + ", startDate=" + startDate + ", status=" + status + ", comment=" + comment + "]";
 	}
-	
 }
