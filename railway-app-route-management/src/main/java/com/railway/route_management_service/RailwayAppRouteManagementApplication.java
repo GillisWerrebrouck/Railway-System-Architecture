@@ -34,27 +34,39 @@ public class RailwayAppRouteManagementApplication {
 			Station station02 = new Station("Gent-Dampoort");
 			Station station03 = new Station("Kortrijk");
 			Station station04 = new Station("Waregem");
-			Station station05 = new Station("Gentbrugge");
+			Station station05 = new Station("Aalter");
 			Station station06 = new Station("De Pinte");
 			Station station07 = new Station("Deinze");
+			Station station08 = new Station("Eeklo");
+			Station station09 = new Station("Wondelgem");
+			Station station10 = new Station("Oudenaarde");
+			Station station11 = new Station("Zottegem");
+			Station station12 = new Station("Denderleeuw");
+			Station station13 = new Station("Brussel-Zuid");
 
 			Connection con01 = new Connection(station01, station02, 10L);
-			Connection con02 = new Connection(station01, station05, 18L);
-			Connection con03 = new Connection(station01, station06, 22L);
-			Connection con04 = new Connection(station01, station07, 27L);
+			Connection con02 = new Connection(station01, station05, 28L);
+			Connection con03 = new Connection(station01, station06, 14L);
+			Connection con04 = new Connection(station01, station08, 29L);
+			Connection con05 = new Connection(station01, station11, 38L);
+			Connection con06 = new Connection(station01, station12, 42L);
 
-			Connection con05 = new Connection(station02, station05, 20L);
-			Connection con06 = new Connection(station02, station06, 28L);
-			Connection con07 = new Connection(station02, station07, 32L);
+			Connection con07 = new Connection(station02, station09, 15L);
+			Connection con08 = new Connection(station02, station11, 28L);
 
-			Connection con08 = new Connection(station03, station04, 17L);
-			Connection con09 = new Connection(station03, station05, 23L);
+			Connection con09 = new Connection(station03, station04, 17L);
 
-			Connection con10 = new Connection(station04, station06, 29L);
-			Connection con11 = new Connection(station04, station07, 46L);
+			Connection con10 = new Connection(station04, station07, 36L);
 
-			Connection con12 = new Connection(station06, station07, 21L);
-						
+			Connection con11 = new Connection(station06, station07, 19L);
+			Connection con12 = new Connection(station06, station10, 27L);
+
+			Connection con13 = new Connection(station08, station09, 22L);
+
+			Connection con14 = new Connection(station11, station12, 20L);
+
+			Connection con15 = new Connection(station12, station13, 38L);
+			
 			stationRepository.save(station01);
 			stationRepository.save(station02);
 			stationRepository.save(station03);
@@ -62,21 +74,34 @@ public class RailwayAppRouteManagementApplication {
 			stationRepository.save(station05);
 			stationRepository.save(station06);
 			stationRepository.save(station07);
-			
+			stationRepository.save(station08);
+			stationRepository.save(station09);
+			stationRepository.save(station10);
+			stationRepository.save(station11);
+			stationRepository.save(station12);
+			stationRepository.save(station13);			
 			
 			Route route01 = new Route("Kortrijk - Deinze");
-			RouteConnection routeCon01 = new RouteConnection(route01, station03, con08.getId());
+			RouteConnection routeCon01 = new RouteConnection(route01, station03, con09.getId());
 			RouteConnection routeCon02 = new RouteConnection(route01, station04, con10.getId());
-			RouteConnection routeCon03 = new RouteConnection(route01, station06, con12.getId());
-			RouteConnection routeCon04 = new RouteConnection(route01, station07, null);
+			RouteConnection routeCon04 = new RouteConnection(route01, station07, con11.getId());
+			RouteConnection routeCon03 = new RouteConnection(route01, station06, null);
 			
-			Route route02 = new Route("Kortrijk - Deinze");
-			RouteConnection routeCon05 = new RouteConnection(route02, station03, con08.getId());
+			Route route02 = new Route("Kortrijk - De Pinte");
+			RouteConnection routeCon05 = new RouteConnection(route02, station03, con09.getId());
 			RouteConnection routeCon06 = new RouteConnection(route02, station04, con10.getId());
 			RouteConnection routeCon07 = new RouteConnection(route02, station07, null);
+			
+			Route route03 = new Route("Gent-Sint-Pieters - Brussel-Zuid");
+			RouteConnection routeCon08 = new RouteConnection(route03, station13, con15.getId());
+			RouteConnection routeCon09 = new RouteConnection(route03, station12, con14.getId());
+			RouteConnection routeCon10 = new RouteConnection(route03, station11, con08.getId());
+			RouteConnection routeCon11 = new RouteConnection(route03, station02, con01.getId());
+			RouteConnection routeCon12 = new RouteConnection(route03, station01, null);
 
 			routeRepository.save(route01);
 			routeRepository.save(route02);
+			routeRepository.save(route03);
 		};
 	}
 }
