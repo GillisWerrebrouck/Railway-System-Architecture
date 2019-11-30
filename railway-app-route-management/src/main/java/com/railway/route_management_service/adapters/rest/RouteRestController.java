@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -61,6 +62,23 @@ public class RouteRestController {
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
 	public void createRoute(@RequestBody Route route) throws QueryFailedException {
 		try {
+			if (route.getName().compareTo("") == 0) {
+				throw new Exception("Missing name attribute for route node");
+			}
+			this.routeRepository.save(route);
+		} catch (Exception e) {
+			String errorMessage = "Route with name \"" + route.getName() + "\" could not be created: " + e.getMessage();
+			throw new QueryFailedException(errorMessage);
+		}
+	}
+
+	@PutMapping("/route")
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
+	public void updateRoute(@RequestBody Route route) throws QueryFailedException {
+		try {
+			if (route.getName().compareTo("") == 0) {
+				throw new Exception("Missing name attribute for route node");
+			}
 			this.routeRepository.save(route);
 		} catch (Exception e) {
 			String errorMessage = "Route with name \"" + route.getName() + "\" could not be created: " + e.getMessage();
