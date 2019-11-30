@@ -14,14 +14,15 @@ import com.railway.route_management_service.domain.Connection;
 import com.railway.route_management_service.domain.QueryFailedException;
 import com.railway.route_management_service.domain.SelfReferentialNodeException;
 import com.railway.route_management_service.persistence.ConnectionRepository;
+import com.railway.route_management_service.persistence.RouteConnectionRepository;
 import com.railway.route_management_service.persistence.RouteRepository;
 import com.railway.route_management_service.persistence.StationRepository;
 
 @RestController
 @RequestMapping("/network/connection")
 public class ConnectionRestController extends RouteRestController {
-	public ConnectionRestController(StationRepository stationRepository, ConnectionRepository connectionRepository, RouteRepository routeRepository) {
-		super(stationRepository, connectionRepository, routeRepository);
+	public ConnectionRestController(StationRepository stationRepository, ConnectionRepository connectionRepository, RouteRepository routeRepository, RouteConnectionRepository routeConnectionRepository) {
+		super(stationRepository, connectionRepository, routeRepository, routeConnectionRepository);
 	}
 
 	@GetMapping
