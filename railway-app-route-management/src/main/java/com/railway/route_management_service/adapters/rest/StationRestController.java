@@ -16,13 +16,14 @@ import com.railway.route_management_service.domain.Connection;
 import com.railway.route_management_service.domain.QueryFailedException;
 import com.railway.route_management_service.domain.Station;
 import com.railway.route_management_service.persistence.ConnectionRepository;
+import com.railway.route_management_service.persistence.RouteRepository;
 import com.railway.route_management_service.persistence.StationRepository;
 
 @RestController
 @RequestMapping("/network/station")
 public class StationRestController extends RouteRestController{
-	public StationRestController(StationRepository stationRepository, ConnectionRepository connectionRepository) {
-		super(stationRepository, connectionRepository);
+	public StationRestController(StationRepository stationRepository, ConnectionRepository connectionRepository, RouteRepository routeRepository) {
+		super(stationRepository, connectionRepository, routeRepository);
 	}
 
 	@GetMapping
@@ -36,7 +37,7 @@ public class StationRestController extends RouteRestController{
 	}
 
 	@GetMapping("/{name}/connections")
-	public Collection<Connection> getConnectionsByStationName(@PathVariable("name") String name){
+	public Collection<Connection> getConnectionsByStationName(@PathVariable("name") String name) {
 		return this.connectionRepository.findConnectionsByStationName(name);
 	}
 

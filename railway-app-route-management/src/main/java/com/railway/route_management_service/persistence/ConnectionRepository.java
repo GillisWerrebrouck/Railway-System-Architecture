@@ -1,7 +1,6 @@
 package com.railway.route_management_service.persistence;
 
 import java.util.Collection;
-import java.util.List;
 
 import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
@@ -24,5 +23,8 @@ public interface ConnectionRepository extends Neo4jRepository<Connection, Long> 
 			"WHERE LOWER(x.name) = LOWER({startStation}) AND LOWER(y.name) = LOWER({endStation})\r\n" + 
 			"RETURN p\r\n" +
 			"ORDER BY reduce(distance = 0, connection IN relationships(p) | distance + connection.distance) LIMIT 1")
-	List<Connection> findShortestPath(String startStation, String endStation);
+	Collection<Connection> findShortestPath(String startStation, String endStation);
+
+	@Query("MATCH p=(r:Route)-[u:USES_STATION]-(s1:Station)-[c:CONNECTED_WITH]-(s2:Station) WHERE ID(r)={id} AND u.connectionId=ID(c) RETURN p")
+	Collection<Connection> findRouteById(Long id);
 }

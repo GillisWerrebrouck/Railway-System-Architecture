@@ -43,14 +43,6 @@ public class Station {
 		return connections;
 	}
 	
-	public String toString() {
-		return this.name + ": connected stations => "
-			+ Optional.ofNullable(this.connections).orElse(
-					Collections.emptySet()).stream()
-						.map((c) -> c.getStationY().getName())
-						.collect(Collectors.toList());
-	}
-	
 	public Long getId() {
 		return id;
 	}

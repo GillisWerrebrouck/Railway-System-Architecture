@@ -7,5 +7,5 @@ import com.railway.route_management_service.domain.Route;
 
 @Repository
 public interface RouteRepository extends Neo4jRepository<Route, Long> {
-
+	
 }

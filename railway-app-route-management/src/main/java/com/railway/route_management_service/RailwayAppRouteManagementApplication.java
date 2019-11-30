@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Bean;
 
 import com.railway.route_management_service.domain.Connection;
 import com.railway.route_management_service.domain.Route;
+import com.railway.route_management_service.domain.RouteConnection;
 import com.railway.route_management_service.domain.Station;
 import com.railway.route_management_service.persistence.RouteRepository;
 import com.railway.route_management_service.persistence.StationRepository;
@@ -27,6 +28,7 @@ public class RailwayAppRouteManagementApplication {
 			logger.info("Populating graph database with test data ...");
 
 			stationRepository.deleteAll();
+			routeRepository.deleteAll();
 			
 			Station station01 = new Station("Gent-Sint-Pieters");
 			Station station02 = new Station("Gent-Dampoort");
@@ -73,10 +75,16 @@ public class RailwayAppRouteManagementApplication {
 			
 			
 			Route route01 = new Route("Kortrijk - Deinze");
-			route01.addStation(station03);
-			route01.addStation(station04);
-			route01.addStation(station06);
-			route01.addStation(station07);
+
+			RouteConnection routeCon01 = new RouteConnection(route01, station03, con08.getId());
+			RouteConnection routeCon02 = new RouteConnection(route01, station04, con10.getId());
+			RouteConnection routeCon03 = new RouteConnection(route01, station06, con11.getId());
+			RouteConnection routeCon04 = new RouteConnection(route01, station07, null);
+			
+			route01.addRouteConnections(routeCon01);
+			route01.addRouteConnections(routeCon02);
+			route01.addRouteConnections(routeCon03);
+			route01.addRouteConnections(routeCon04);
 			
 			routeRepository.save(route01);
 		};

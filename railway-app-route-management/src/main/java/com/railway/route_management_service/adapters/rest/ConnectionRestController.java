@@ -14,22 +14,23 @@ import com.railway.route_management_service.domain.Connection;
 import com.railway.route_management_service.domain.QueryFailedException;
 import com.railway.route_management_service.domain.SelfReferentialNodeException;
 import com.railway.route_management_service.persistence.ConnectionRepository;
+import com.railway.route_management_service.persistence.RouteRepository;
 import com.railway.route_management_service.persistence.StationRepository;
 
 @RestController
 @RequestMapping("/network/connection")
 public class ConnectionRestController extends RouteRestController {
-	public ConnectionRestController(StationRepository stationRepository, ConnectionRepository connectionRepository) {
-		super(stationRepository, connectionRepository);
+	public ConnectionRestController(StationRepository stationRepository, ConnectionRepository connectionRepository, RouteRepository routeRepository) {
+		super(stationRepository, connectionRepository, routeRepository);
 	}
 
 	@GetMapping
-	public Iterable<Connection> getRailwayNetwork(){
+	public Iterable<Connection> getRailwayNetwork() {
 		return this.connectionRepository.findAll();
 	}
 
 	@GetMapping("/{id}")
-	public Connection getConnectionById(@PathVariable("id") Long id){
+	public Connection getConnectionById(@PathVariable("id") Long id) {
 		return this.connectionRepository.findById(id).orElse(null);
 	}
 

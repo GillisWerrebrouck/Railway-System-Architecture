@@ -24,29 +24,31 @@ public class Route {
 	private Route() {
 		// Empty constructor required as of Neo4j API 2.0.5
 	}
-	
+
 	public Route(String name) {
 		this.name = name;
 	}
 
-	// Neo4j doesn't have bidirectional relationships.
-	// UNDIRECTED means it will ignore the direction of the relationship when querying.
 	@Relationship(type = Constants.ROUTE_STATION_RELATIONSHIP, direction = Relationship.OUTGOING)
-	public Set<Station> stations = new HashSet<Station>();
+	public Set<RouteConnection> routeConnections = new HashSet<RouteConnection>();
+	
+	public Long getId() {
+		return id;
+	}
 
 	public String getName() {
 		return name;
 	}
-	
+
 	public void setName(String name) {
 		this.name = name;
 	}
-	
-	public Set<Station> getStations() {
-		return stations;
+
+	public Set<RouteConnection> getRouteConnections() {
+		return routeConnections;
 	}
 	
-	public void addStation(Station station) {
-		stations.add(station);
+	public void addRouteConnections(RouteConnection routeConnection) {
+		this.routeConnections.add(routeConnection);
 	}
 }
