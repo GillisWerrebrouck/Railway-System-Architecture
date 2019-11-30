@@ -81,13 +81,13 @@ public class RailwayAppRouteManagementApplication {
 			stationRepository.save(station12);
 			stationRepository.save(station13);			
 			
-			Route route01 = new Route("Kortrijk - Deinze");
+			Route route01 = new Route("Kortrijk - De Pinte");
 			RouteConnection routeCon01 = new RouteConnection(route01, station03, con09.getId());
 			RouteConnection routeCon02 = new RouteConnection(route01, station04, con10.getId());
 			RouteConnection routeCon04 = new RouteConnection(route01, station07, con11.getId());
 			RouteConnection routeCon03 = new RouteConnection(route01, station06, null);
 			
-			Route route02 = new Route("Kortrijk - De Pinte");
+			Route route02 = new Route("Kortrijk - Deinze");
 			RouteConnection routeCon05 = new RouteConnection(route02, station03, con09.getId());
 			RouteConnection routeCon06 = new RouteConnection(route02, station04, con10.getId());
 			RouteConnection routeCon07 = new RouteConnection(route02, station07, null);
