@@ -1,7 +1,6 @@
 package com.railway.station_service;
 
 
-import java.util.Collection;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,26 +15,26 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/platform")
-public class PlatformRestController {
+@RequestMapping("/informationpanel")
+public class InformationPanelRestController {
 
-	private final PlatformRepository platformRepository;
+	private final InformationPanelRepository informationPanelRepository;
 
 	@Autowired
-	public PlatformRestController(PlatformRepository platformRepository) {
-		this.platformRepository = platformRepository;
+	public InformationPanelRestController(InformationPanelRepository informationPanelRepository) {
+		this.informationPanelRepository = informationPanelRepository;
 	}
 
 	@GetMapping
-	public Iterable<Platform> getPlatforms(){
-		return this.platformRepository.findAll();
+	public Iterable<InformationPanel> getStations(){
+		return this.informationPanelRepository.findAll();
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<Platform> platformById(@PathVariable int id) {
-		Optional <Platform> optPlatform = platformRepository.findById(id);
-		if(optPlatform.isPresent()) {
-			return new ResponseEntity<>(optPlatform.get(), HttpStatus.OK);
+	public ResponseEntity<InformationPanel> informationPanelById(@PathVariable int id) {
+		Optional <InformationPanel> optInformationPanel = informationPanelRepository.findById(id);
+		if(optInformationPanel.isPresent()) {
+			return new ResponseEntity<>(optInformationPanel.get(), HttpStatus.OK);
 		}
 		return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		
@@ -43,9 +42,9 @@ public class PlatformRestController {
 	
 	@PostMapping(consumes = "application/json")
 	@ResponseStatus(HttpStatus.CREATED)
-	public Platform postPlatform (@RequestBody Platform p) {
-		return platformRepository.save(p);
+	public InformationPanel postInformationPanel (@RequestBody InformationPanel ip) {
+		return informationPanelRepository.save(ip);
 	}
-
+	
 
 }
