@@ -2,22 +2,22 @@ package com.railway.maintenance_service.domain;
 
 public class Staff {
 	
-	private String staffId;
+	private Long Id;
 	private String firstName;
 	private String lastName;
 	
-	public Staff(String staffId, String firstName, String lastName) {
-		this.staffId = staffId;
+	public Staff(Long Id, String firstName, String lastName) {
+		this.Id = Id;
 		this.firstName = firstName;
 		this.lastName = lastName;
 	}
 	
-	public String getStaffId() {
-		return staffId;
+	public Long getId() {
+		return this.Id;
 	}
 	
-	public void setStaffId(String staffId) {
-		this.staffId = staffId;
+	public void setId(Long Id) {
+		this.Id = Id;
 	}
 	
 	public String getFirstName() {
@@ -38,7 +38,7 @@ public class Staff {
 
 	@Override
 	public String toString() {
-		return "Staff [staffId=" + staffId + ", firstName=" + firstName + ", lastName=" + lastName + "]";
+		return "Staff [staffId=" + Id + ", firstName=" + firstName + ", lastName=" + lastName + "]";
 	}
 	
 }
