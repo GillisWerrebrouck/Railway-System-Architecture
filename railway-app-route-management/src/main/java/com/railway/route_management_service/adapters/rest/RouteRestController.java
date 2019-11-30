@@ -60,4 +60,15 @@ public class RouteRestController {
 			throw new QueryFailedException(errorMessage);
 		}
 	}
+	
+	@DeleteMapping("/route/part/{id}")
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
+	public void deleteRouteStationRelationshipById(@PathVariable Long id) throws QueryFailedException {
+		try {
+			this.routeRepository.deleteRouteStationRelationshipById(id);
+		} catch (Exception e) {
+			String errorMessage = "Could not delete route part with id " + id.toString();
+			throw new QueryFailedException(errorMessage);
+		}
+	}
 }

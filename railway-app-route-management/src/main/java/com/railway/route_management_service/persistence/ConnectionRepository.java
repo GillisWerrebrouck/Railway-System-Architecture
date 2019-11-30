@@ -25,6 +25,6 @@ public interface ConnectionRepository extends Neo4jRepository<Connection, Long> 
 			"ORDER BY reduce(distance = 0, connection IN relationships(p) | distance + connection.distance) LIMIT 1")
 	Collection<Connection> findShortestPath(String startStation, String endStation);
 
-	@Query("MATCH p=(r:Route)-[u:USES_STATION]-(s1:Station)-[c:CONNECTED_WITH]-(s2:Station) WHERE ID(r)={id} AND u.connectionId=ID(c) RETURN p")
+	@Query("MATCH p=(r:Route)-[u:" + Constants.ROUTE_STATION_RELATIONSHIP + "]-(s1:Station)-[c:" + Constants.INTER_STATION_RELATIONSHIP + "]-(s2:Station) WHERE ID(r)={id} AND u.connectionId=ID(c) RETURN p")
 	Collection<Connection> findRouteById(Long id);
 }
