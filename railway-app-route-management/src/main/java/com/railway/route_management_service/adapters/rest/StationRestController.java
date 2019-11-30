@@ -3,6 +3,7 @@ package com.railway.route_management_service.adapters.rest;
 import java.util.Collection;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -62,5 +63,16 @@ public class StationRestController extends RouteRestController{
 		}
 		
 		this.stationRepository.save(station);
+	}
+	
+	@DeleteMapping("/{id}")
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
+	public void deleteStationById(@PathVariable Long id) throws QueryFailedException {
+		try {
+			this.stationRepository.deleteById(id);
+		} catch (Exception e) {
+			String errorMessage = "Could not delete station with id " + id.toString();
+			throw new QueryFailedException(errorMessage);
+		}
 	}
 }
