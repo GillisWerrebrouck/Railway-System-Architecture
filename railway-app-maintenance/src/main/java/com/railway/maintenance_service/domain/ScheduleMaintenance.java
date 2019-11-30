@@ -1,6 +1,6 @@
 package com.railway.maintenance_service.domain;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,41 +12,30 @@ public class ScheduleMaintenance {
 	
 	@Id @GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-	private String maintenanceId;
-	private LocalDate maintenanceDate;
+	private LocalDateTime maintenanceDate;
 	//private List<Staff> staff;
 	private Status status;
 	private String comment;
-	//private Train train;
+	private String train;
 	
 	@SuppressWarnings("unused")
 	private ScheduleMaintenance() {
-		this.maintenanceId = null;
 		this.maintenanceDate = null;
 		this.status = null;
 		this.comment = null;
 	}
 
-	public ScheduleMaintenance(String maintenanceId, LocalDate maintenanceDate, Status status, String comment) {
-		this.maintenanceId = maintenanceId;
+	public ScheduleMaintenance(LocalDateTime maintenanceDate, Status status, String comment) {
 		this.maintenanceDate = maintenanceDate;
 		this.status = status;
 		this.comment = comment;
 	}
-
-	public String getMaintenanceId() {
-		return maintenanceId;
-	}
-
-	public void setMaintenanceId(String maintenanceId) {
-		this.maintenanceId = maintenanceId;
-	}
-
-	public LocalDate getMaintenanceDate() {
+	
+	public LocalDateTime getMaintenanceDate() {
 		return maintenanceDate;
 	}
 
-	public void setMaintenanceDate(LocalDate maintenanceDate) {
+	public void setMaintenanceDate(LocalDateTime maintenanceDate) {
 		this.maintenanceDate = maintenanceDate;
 	}
 /*
@@ -73,22 +62,22 @@ public class ScheduleMaintenance {
 	public void setComment(String comment) {
 		this.comment = comment;
 	}
-/*
-	public Train getTrain() {
+
+	public String getTrain() {
 		return train;
 	}
 
-	public void setTrain(Train train) {
+	public void setTrain(String train) {
 		this.train = train;
 	}
-*/
+
 	public Long getId() {
 		return id;
 	}
 
 	@Override
 	public String toString() {
-		return "ScheduleMaintenance [id=" + id + ", maintenanceId=" + maintenanceId + ", maintenanceDate="
+		return "ScheduleItem [id=" + id + ", maintenanceDate="
 				+ maintenanceDate + ", status=" + status + ", comment=" + comment + "]";
 	}
 	

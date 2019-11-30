@@ -1,6 +1,6 @@
 package com.railway.maintenance_service;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +25,7 @@ public class RailwayAppMaintenanceApplication {
 	public CommandLineRunner printOneScheduledMaintenance() {
 		return (args)->{
 			logger.info("Printing one maintenance:");
-			ScheduleMaintenance scheduleMaintenance = new ScheduleMaintenance("611", LocalDate.now(), Status.SCHEDULED, "train wrecked");
+			ScheduleMaintenance scheduleMaintenance = new ScheduleMaintenance(LocalDateTime.now(), Status.SCHEDULED, "train wrecked");
 			logger.info(scheduleMaintenance.toString());
 		};
 	}
