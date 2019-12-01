@@ -7,21 +7,20 @@ import java.util.Map;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-enum Fuel {ELECTRICITY, DIESEL}
 
 @Document
 public class TechnicalDetails {
 
-	private Fuel fuel;
+	private FuelType fuel;
 	private LocalDate lastCheck;
-	private Map <String,String> defects; 						/// onderwerp, beschrijvingen van de defecten
+	private Map <String,String> defects; 		// key: subject, value: description of defect
 	
 	
 	private TechnicalDetails() {
 	}
 
 
-	public TechnicalDetails(Fuel fuel, LocalDate lastCheck, Map<String,String> defects) {
+	public TechnicalDetails(FuelType fuel, LocalDate lastCheck, Map<String,String> defects) {
 		this.fuel = fuel;
 		this.lastCheck = lastCheck;
 		this.defects = defects;
@@ -29,12 +28,12 @@ public class TechnicalDetails {
 
 
 
-	public Fuel getFuel() {
+	public FuelType getFuel() {
 		return fuel;
 	}
 
 
-	public void setFuel(Fuel fuel) {
+	public void setFuel(FuelType fuel) {
 		this.fuel = fuel;
 	}
 

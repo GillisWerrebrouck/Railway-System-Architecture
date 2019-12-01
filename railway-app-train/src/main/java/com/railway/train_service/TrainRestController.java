@@ -19,8 +19,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("train")
 public class TrainRestController {
 
-	@Autowired
 	private TrainRepository trainRepository;
+	
+	public TrainRestController(TrainRepository trainRepository) {
+		this.trainRepository = trainRepository;
+	}
 	
 	@GetMapping
 	public Iterable<Train> getTrains() {
@@ -48,9 +51,9 @@ public class TrainRestController {
 	  }
 	
 	@PutMapping("/{id}")
-	  Train replaceTrain(@RequestBody Train newTrain, @PathVariable String id) {
+	  ResponseEntity<Train> replaceTrain(@RequestBody Train newTrain, @PathVariable String id) {
 
-	    return trainRepository.findById(id)
+	    Optional<Train> optTrain = trainRepository.findById(id)
 	      .map(train -> {
 	        train.setAvgSpeed(newTrain.getAvgSpeed());
 	        train.setGroupCapacity(newTrain.getGroupCapacity());
@@ -58,11 +61,13 @@ public class TrainRestController {
 	        train.setTechnicaldetails(newTrain.getTechnicaldetails());
 	        train.setTotalCapacity(newTrain.getTotalCapacity());
 	        train.setType(newTrain.getType());
+	        train.setScheduleItems(newTrain.getScheduleItems());
 	        return trainRepository.save(train);
-	      })
-	      .orElseGet(() -> {
-	        newTrain.setId(id);
-	        return trainRepository.save(newTrain);
 	      });
+	    
+	    if(optTrain.isPresent()) {
+			return new ResponseEntity<>(optTrain.get(), HttpStatus.OK);
+		}
+		return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 	  }
 }

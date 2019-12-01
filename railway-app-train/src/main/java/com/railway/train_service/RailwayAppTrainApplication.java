@@ -1,7 +1,9 @@
 package com.railway.train_service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -36,15 +38,14 @@ public class RailwayAppTrainApplication {
 		MongoCollection c = database.getCollection("trains");
 		c*/
 				
-			logger.info("startBegin");
 			Map<String,String> m = new HashMap<String, String>();
-			m.put("kapotte deur", "da wordt een nieuwe deur");
-			TechnicalDetails t = new TechnicalDetails(Fuel.DIESEL, LocalDate.parse("2019-01-01"), m);
-			
-			Train treintje = new Train(Type.IC, 9.999, 100, 15, Status.ACTIVE, t);
-			trainRepository.save(treintje);
-			trainRepository.findAll().forEach((te) -> System.out.println(te.toString()));
-			System.out.println("start");
+			m.put("kapotte deur", "dat wordt een nieuwe deur");
+			TechnicalDetails t = new TechnicalDetails(FuelType.DIESEL, LocalDate.parse("2019-01-01"), m);
+			List<ScheduleItem> items = new ArrayList<ScheduleItem>();
+			items.add(new ScheduleItem(LocalDate.parse("2019-01-01"), LocalDate.parse("2019-01-10")));
+			Train train1 = new Train(TrainType.IC, 9.999, 100, 15, TrainStatus.ACTIVE, t, items);
+			trainRepository.save(train1);
+			trainRepository.findAll().forEach((te) -> logger.info(te.toString()));
 		};
 	}
 	

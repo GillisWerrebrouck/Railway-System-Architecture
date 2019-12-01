@@ -1,56 +1,59 @@
 package com.railway.train_service;
 
+import java.util.List;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-enum Type {IC, IR, P}
-enum Status {ACTIVE, NONACTIVE}
 
 @Document
 public class Train {
 	
 	@Id
 	private String id;
-	private Type type;
+	private TrainType type;
 	private double avgSpeed;
 	private int totalCapacity;
 	private int groupCapacity;
-	private Status status;
+	private TrainStatus status;
 	private TechnicalDetails technicaldetails;
-	
+	private List<ScheduleItem> scheduleItems;
 	
 	private Train() {
 	}
 
 
-	public Train(Type type, double avgSpeed, int totalCapacity, int groupCapacity, Status status,
-			TechnicalDetails technicaldetails) {
+	public Train(TrainType type, double avgSpeed, int totalCapacity, int groupCapacity, TrainStatus status,
+			TechnicalDetails technicaldetails, List<ScheduleItem> scheduleItems) {
 		this.type = type;
 		this.avgSpeed = avgSpeed;
 		this.totalCapacity = totalCapacity;
 		this.groupCapacity = groupCapacity;
 		this.status = status;
 		this.technicaldetails = technicaldetails;
+		this.scheduleItems = scheduleItems;
 	}
 
+	public List<ScheduleItem> getScheduleItems(){
+		return scheduleItems;
+	}
+	
+	public void setScheduleItems(List<ScheduleItem> scheduleItems){
+		this.scheduleItems = scheduleItems;
+	}
 
 	public String getId() {
 		return id;
 	}
 
 
-	public void setId(String id) {
-		this.id = id;
-	}
-
-
-	public Type getType() {
+	public TrainType getType() {
 		return type;
 	}
 
 
-	public void setType(Type type) {
+	public void setType(TrainType type) {
 		this.type = type;
 	}
 
@@ -81,16 +84,16 @@ public class Train {
 
 
 	public void setGroupCapacity(int groupCapacity) {
-		this.groupCapacity = groupCapacity;
+		this.groupCapacity = groupCapacity > this.totalCapacity ? this.totalCapacity : groupCapacity;
 	}
 
 
-	public Status getStatus() {
+	public TrainStatus getStatus() {
 		return status;
 	}
 
 
-	public void setStatus(Status status) {
+	public void setStatus(TrainStatus status) {
 		this.status = status;
 	}
 
@@ -103,10 +106,4 @@ public class Train {
 	public void setTechnicaldetails(TechnicalDetails technicaldetails) {
 		this.technicaldetails = technicaldetails;
 	}
-	
-	
-	
-
-	
-	
 }
