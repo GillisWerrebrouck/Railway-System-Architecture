@@ -21,6 +21,7 @@ public class TrainRestController {
 
 	private TrainRepository trainRepository;
 	
+	@Autowired
 	public TrainRestController(TrainRepository trainRepository) {
 		this.trainRepository = trainRepository;
 	}

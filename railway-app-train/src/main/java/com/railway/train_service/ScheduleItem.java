@@ -1,29 +1,30 @@
 package com.railway.train_service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class ScheduleItem {
-	private LocalDate startDateTime;
-	private LocalDate endDateTime;
+	private LocalDateTime startDateTime;
+	private LocalDateTime endDateTime;
 	
-	public ScheduleItem(LocalDate startDateTime, LocalDate endDateTime) {
+	public ScheduleItem(LocalDateTime startDateTime, LocalDateTime endDateTime) {
 		this.startDateTime = startDateTime;
 		this.endDateTime = endDateTime;
 	}
 	
-	public LocalDate getStartDateTime() {
+	public LocalDateTime getStartDateTime() {
 		return startDateTime;
 	}
 
-	public void setStartDateTime(LocalDate startDateTime) {
+	public void setStartDateTime(LocalDateTime startDateTime) {
 		this.startDateTime = startDateTime;
 	}
 
-	public LocalDate getEndDateTime() {
+	public LocalDateTime getEndDateTime() {
 		return endDateTime;
 	}
 
-	public void setEndDateTime(LocalDate endDateTime) {
+	public void setEndDateTime(LocalDateTime endDateTime) {
 		this.endDateTime = endDateTime;
 	}
 }

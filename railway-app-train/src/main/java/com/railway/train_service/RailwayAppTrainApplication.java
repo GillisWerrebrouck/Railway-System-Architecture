@@ -1,6 +1,7 @@
 package com.railway.train_service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -42,7 +43,7 @@ public class RailwayAppTrainApplication {
 			m.put("kapotte deur", "dat wordt een nieuwe deur");
 			TechnicalDetails t = new TechnicalDetails(FuelType.DIESEL, LocalDate.parse("2019-01-01"), m);
 			List<ScheduleItem> items = new ArrayList<ScheduleItem>();
-			items.add(new ScheduleItem(LocalDate.parse("2019-01-01"), LocalDate.parse("2019-01-10")));
+			items.add(new ScheduleItem(LocalDateTime.parse("2019-01-01"), LocalDateTime.parse("2019-01-10")));
 			Train train1 = new Train(TrainType.IC, 9.999, 100, 15, TrainStatus.ACTIVE, t, items);
 			trainRepository.save(train1);
 			trainRepository.findAll().forEach((te) -> logger.info(te.toString()));
