@@ -62,6 +62,10 @@ public class Platform implements Serializable{
 		this.reservedSlots = reservableSlots;
 	}
 	
+	public void addReservedSlot(SheduleItem slot) {
+		this.reservedSlots.add(slot);
+	}
+	
 	public Station getStation() {
 		return station;
 	}
@@ -72,7 +76,7 @@ public class Platform implements Serializable{
 
 	@Override
 	public String toString() {
-		return "Platform [id=" + id + ", platformNumber=" + platformNumber + ", reservableSlots=" + reservedSlots
+		return "Platform [id=" + id + ", platformNumber=" + platformNumber + ", #reservableSlots=" + reservedSlots.size()
 				+ ", station=" + station + "]";
 	}
 

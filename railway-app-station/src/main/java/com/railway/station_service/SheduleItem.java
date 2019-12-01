@@ -1,6 +1,6 @@
 package com.railway.station_service;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import javax.persistence.*;
 import javax.persistence.Entity;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -11,11 +11,11 @@ public class SheduleItem {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private int id;
+	private Long id;
 	
 	private int trainId;
-	private Timestamp arrivalDateTime;
-	private Timestamp departureDateTime;
+	private LocalDateTime arrivalDateTime;
+	private LocalDateTime departureDateTime;
 	private int delayInMinutes;
 
 	
@@ -26,19 +26,18 @@ public class SheduleItem {
 	private SheduleItem() {
 	}
 	
-	public SheduleItem(int trainId, Timestamp arrivalDateTime, Timestamp departureDateTime, int delayInMinutes) {
-		super();
+	public SheduleItem(int trainId, LocalDateTime arrivalDateTime, LocalDateTime departureDateTime, int delayInMinutes) {
 		this.trainId = trainId;
 		this.arrivalDateTime = arrivalDateTime;
 		this.departureDateTime = departureDateTime;
 		this.delayInMinutes = delayInMinutes;
 	}
 
-	public int getId() {
+	public Long getId() {
 		return id;
 	}
 	
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -58,19 +57,19 @@ public class SheduleItem {
 		this.trainId = trainId;
 	}
 
-	public Timestamp getArrivalDateTime() {
+	public LocalDateTime getArrivalDateTime() {
 		return arrivalDateTime;
 	}
 
-	public void setArrivalDateTime(Timestamp arrivalDateTime) {
+	public void setArrivalDateTime(LocalDateTime arrivalDateTime) {
 		this.arrivalDateTime = arrivalDateTime;
 	}
 
-	public Timestamp getDepartureDateTime() {
+	public LocalDateTime getDepartureDateTime() {
 		return departureDateTime;
 	}
 
-	public void setDepartureDateTime(Timestamp departureDateTime) {
+	public void setDepartureDateTime(LocalDateTime departureDateTime) {
 		this.departureDateTime = departureDateTime;
 	}
 
@@ -96,7 +95,7 @@ public class SheduleItem {
 		result = prime * result + ((arrivalDateTime == null) ? 0 : arrivalDateTime.hashCode());
 		result = prime * result + delayInMinutes;
 		result = prime * result + ((departureDateTime == null) ? 0 : departureDateTime.hashCode());
-		result = prime * result + id;
+		result = (int) (prime * result + id);
 		result = prime * result + ((platform == null) ? 0 : platform.hashCode());
 		result = prime * result + trainId;
 		return result;

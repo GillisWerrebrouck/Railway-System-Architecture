@@ -69,7 +69,7 @@ public class Station implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Station [id=" + id + ", name=" + name + ", address=" + address + ", platforms=" + platforms + "]";
+		return "Station [id=" + id + ", name=" + name + ", address=" + address + ", #platforms=" + platforms.size() + "]";
 	}
 
 

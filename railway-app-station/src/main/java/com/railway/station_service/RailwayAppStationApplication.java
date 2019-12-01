@@ -1,7 +1,6 @@
 package com.railway.station_service;
 
-import java.sql.Date;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -29,9 +28,10 @@ public class RailwayAppStationApplication {
 			Platform p1 = new Platform(7);
 			Platform p2 = new Platform(8);
 			
-			SheduleItem Sitem1 = new SheduleItem(5465, new Timestamp(119, 11, 2, 12, 0, 0, 0), new Timestamp(119, 11, 2, 12, 10, 0, 0), 4);
-			SheduleItem Sitem2 = new SheduleItem(4663, new Timestamp(119, 11, 2, 12, 20, 0, 0), new Timestamp(119, 11, 2, 12, 40, 0, 0), 0);
-			SheduleItem Sitem3 = new SheduleItem(462, new Timestamp(119, 11, 2, 13, 0, 0, 0), new Timestamp(119, 11, 2, 13, 13, 0, 0), 16);
+			SheduleItem Sitem1 = new SheduleItem(5465, LocalDateTime.of(2019,11,2,6,30,40,0), LocalDateTime.of(2019,11,2,6,35,40,0),4);
+			SheduleItem Sitem2 = new SheduleItem(5465, LocalDateTime.of(2019,11,2,6,40,12,0), LocalDateTime.of(2019,11,2,6,45,40,0),0);
+			SheduleItem Sitem3 = new SheduleItem(5465, LocalDateTime.of(2019,11,2,6,50,48,0), LocalDateTime.of(2019,11,2,6,55,40,0),16);
+
 
 			s.setName("Gent-Sint-Pieters");
 			s.setAddress(a);
