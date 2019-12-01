@@ -16,9 +16,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.railway.route_management_service.domain.Connection;
-import com.railway.route_management_service.domain.QueryFailedException;
 import com.railway.route_management_service.domain.Route;
 import com.railway.route_management_service.domain.RouteConnection;
+import com.railway.route_management_service.domain.exception.BadRequestException;
+import com.railway.route_management_service.domain.exception.QueryFailedException;
 import com.railway.route_management_service.persistence.ConnectionRepository;
 import com.railway.route_management_service.persistence.RouteConnectionRepository;
 import com.railway.route_management_service.persistence.RouteRepository;
@@ -74,10 +75,10 @@ public class RouteRestController {
 
 	@PutMapping("/route")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
-	public void updateRoute(@RequestBody Route route) throws QueryFailedException {
+	public void updateRoute(@RequestBody Route route) throws BadRequestException, QueryFailedException {
 		try {
 			if (route.getName().compareTo("") == 0) {
-				throw new Exception("Missing name attribute for route node");
+				throw new BadRequestException("Missing name attribute for route node");
 			}
 			this.routeRepository.save(route);
 		} catch (Exception e) {

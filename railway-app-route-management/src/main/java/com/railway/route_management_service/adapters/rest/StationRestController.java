@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.railway.route_management_service.domain.Connection;
-import com.railway.route_management_service.domain.QueryFailedException;
 import com.railway.route_management_service.domain.Station;
+import com.railway.route_management_service.domain.exception.QueryFailedException;
 import com.railway.route_management_service.persistence.ConnectionRepository;
 import com.railway.route_management_service.persistence.RouteConnectionRepository;
 import com.railway.route_management_service.persistence.RouteRepository;

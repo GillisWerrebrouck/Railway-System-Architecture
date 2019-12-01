@@ -1,4 +1,4 @@
-package com.railway.route_management_service.domain;
+package com.railway.route_management_service.domain.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

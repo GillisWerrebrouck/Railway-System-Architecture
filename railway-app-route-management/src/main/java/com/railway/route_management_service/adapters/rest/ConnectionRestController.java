@@ -11,8 +11,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.railway.route_management_service.domain.Connection;
-import com.railway.route_management_service.domain.QueryFailedException;
-import com.railway.route_management_service.domain.SelfReferentialNodeException;
+import com.railway.route_management_service.domain.exception.BadRequestException;
+import com.railway.route_management_service.domain.exception.QueryFailedException;
+import com.railway.route_management_service.domain.exception.SelfReferentialNodeException;
 import com.railway.route_management_service.persistence.ConnectionRepository;
 import com.railway.route_management_service.persistence.RouteConnectionRepository;
 import com.railway.route_management_service.persistence.RouteRepository;
@@ -54,10 +55,10 @@ public class ConnectionRestController extends RouteRestController {
 
 	@PutMapping
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
-	public void getConnectionById(@RequestBody Connection connection) throws Exception {
+	public void getConnectionById(@RequestBody Connection connection) throws BadRequestException {
 		if (connection.getId() == null) {
 			String errorMessage = "No connection id specified";
-			throw new Exception(errorMessage);
+			throw new BadRequestException(errorMessage);
 		}
 		
 		this.connectionRepository.save(connection);
