@@ -19,6 +19,9 @@ public class TimetableItem {
 	private LocalDateTime startDateTime;
 	private LocalDateTime endDateTime;
 	
+	// delay in minutes
+	private int delay;
+	
 	private Long routeId;
 	private Long trainId;
 	@Column
@@ -31,6 +34,7 @@ public class TimetableItem {
 	public TimetableItem(LocalDateTime startDate, LocalDateTime endDateTime, Long routeId, Long trainId, List<Long> staffIds) {
 		this.startDateTime = startDate;
 		this.endDateTime = endDateTime;
+		this.delay = 0;
 		this.routeId = routeId;
 		this.trainId = trainId;
 		this.staffIds = staffIds;
@@ -54,6 +58,14 @@ public class TimetableItem {
 	
 	public void setEndDateTime(LocalDateTime endDateTime) {
 		this.endDateTime = endDateTime;
+	}
+	
+	public int getDelay() {
+		return delay;
+	}
+	
+	public void setDelay(int delay) {
+		this.delay = delay;
 	}
 	
 	public Long getRouteId() {
