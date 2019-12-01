@@ -22,7 +22,7 @@ public class Platform implements Serializable{
 	
 	
 	@OneToMany(mappedBy = "platform")
-	private List<InformationPanel> informationpanels = new ArrayList<InformationPanel>();
+	private List<SheduleItem> reservableSlots = new ArrayList<SheduleItem>();
 	
 	
     @ManyToOne
@@ -54,12 +54,12 @@ public class Platform implements Serializable{
 		this.platformNumber = platformNumber;
 	}
 	
-	public List<InformationPanel> getInformationpanels() {
-		return informationpanels;
+	public List<SheduleItem> getReservableSlots() {
+		return reservableSlots;
 	}
 	
-	public void setInformationpanels(ArrayList<InformationPanel> informationpanels) {
-		this.informationpanels = informationpanels;
+	public void setReservableSlots(ArrayList<SheduleItem> reservableSlots) {
+		this.reservableSlots = reservableSlots;
 	}
 	
 	public Station getStation() {
@@ -69,5 +69,47 @@ public class Platform implements Serializable{
 	public void setStation(Station station) {
 		this.station = station;
 	}
-	
+
+	@Override
+	public String toString() {
+		return "Platform [id=" + id + ", platformNumber=" + platformNumber + ", reservableSlots=" + reservableSlots
+				+ ", station=" + station + "]";
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + id;
+		result = prime * result + platformNumber;
+		result = prime * result + ((reservableSlots == null) ? 0 : reservableSlots.hashCode());
+		result = prime * result + ((station == null) ? 0 : station.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Platform other = (Platform) obj;
+		if (id != other.id)
+			return false;
+		if (platformNumber != other.platformNumber)
+			return false;
+		if (reservableSlots == null) {
+			if (other.reservableSlots != null)
+				return false;
+		} else if (!reservableSlots.equals(other.reservableSlots))
+			return false;
+		if (station == null) {
+			if (other.station != null)
+				return false;
+		} else if (!station.equals(other.station))
+			return false;
+		return true;
+	}
 }

@@ -1,5 +1,8 @@
 package com.railway.station_service;
 
+import java.sql.Date;
+import java.sql.Timestamp;
+
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -16,7 +19,7 @@ public class RailwayAppStationApplication {
 	}
 	
 	@Bean
-	public CommandLineRunner populateDatabase (StationRepository stationRepository, PlatformRepository platformRepository, InformationPanelRepository informationPanelRepository) {
+	public CommandLineRunner populateDatabase (StationRepository stationRepository, PlatformRepository platformRepository, SheduleItemRepository sheduleItemRepository) {
 
 		return(args)->{
 			
@@ -26,9 +29,9 @@ public class RailwayAppStationApplication {
 			Platform p1 = new Platform(7);
 			Platform p2 = new Platform(8);
 			
-			InformationPanel panel1 = new InformationPanel("Trein perron 7 heeft vertraging");
-			InformationPanel panel2 = new InformationPanel("Trein perron 7 heeft vertraging");
-			InformationPanel panel3 = new InformationPanel("Trein perron 8 heeft vertraging");
+			SheduleItem Sitem1 = new SheduleItem(5465, new Timestamp(119, 11, 2, 12, 0, 0, 0), new Timestamp(119, 11, 2, 12, 10, 0, 0), 4);
+			SheduleItem Sitem2 = new SheduleItem(4663, new Timestamp(119, 11, 2, 12, 20, 0, 0), new Timestamp(119, 11, 2, 12, 40, 0, 0), 0);
+			SheduleItem Sitem3 = new SheduleItem(462, new Timestamp(119, 11, 2, 13, 0, 0, 0), new Timestamp(119, 11, 2, 13, 13, 0, 0), 16);
 
 			s.setName("Gent-Sint-Pieters");
 			s.setAddress(a);
@@ -38,28 +41,21 @@ public class RailwayAppStationApplication {
 			p1.setStation(s);
 			p2.setStation(s);
 			
-			panel1.setPlatform(p1);
-			panel2.setPlatform(p1);
-			panel3.setPlatform(p2);
+			Sitem1.setPlatform(p1);
+			Sitem2.setPlatform(p1);
+			Sitem3.setPlatform(p2);
 			
-			p2.getInformationpanels().add(panel3);
-			p1.getInformationpanels().add(panel1);
-			p1.getInformationpanels().add(panel2);
-			
+			p2.getReservableSlots().add(Sitem3);
+			p1.getReservableSlots().add(Sitem1);
+			p1.getReservableSlots().add(Sitem2);
 			
 			stationRepository.save(s);
 			platformRepository.save(p1);
 			platformRepository.save(p2);
-			informationPanelRepository.save(panel1);
-			informationPanelRepository.save(panel2);
-			informationPanelRepository.save(panel3);
-			
-			
-			System.out.println("werkt");
+			sheduleItemRepository.save(Sitem1);
+			sheduleItemRepository.save(Sitem2);
+			sheduleItemRepository.save(Sitem3);
 		};
-
-
-
 	}
 }
 
