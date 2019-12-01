@@ -12,7 +12,7 @@ import com.railway.staff_service.domain.ScheduleItem;
 import com.railway.staff_service.persistence.ScheduleItemRepository;
 
 @RestController
-@RequestMapping("/schedule")
+@RequestMapping("/staff/schedule")
 public class ScheduleRestController {
 	private final ScheduleItemRepository scheduleItemRepository;
 	
