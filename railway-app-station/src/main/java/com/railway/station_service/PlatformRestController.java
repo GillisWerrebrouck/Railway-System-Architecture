@@ -1,9 +1,7 @@
 package com.railway.station_service;
 
 
-import java.util.Collection;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,7 +33,7 @@ public class PlatformRestController {
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<Platform> platformById(@PathVariable int id) {
-		Optional <Platform> optPlatform = platformRepository.findById(id);
+		Optional<Platform> optPlatform = platformRepository.findById(id);
 		if(optPlatform.isPresent()) {
 			return new ResponseEntity<>(optPlatform.get(), HttpStatus.OK);
 		}
@@ -62,12 +60,10 @@ public class PlatformRestController {
 		if (!platformOptional.isPresent())
 			return ResponseEntity.notFound().build();
 
-		platform.setId(id);
+		platform.setId((long) id);
 		
 		platformRepository.save(platform);
 
 		return ResponseEntity.noContent().build();
 	}
-
-
 }

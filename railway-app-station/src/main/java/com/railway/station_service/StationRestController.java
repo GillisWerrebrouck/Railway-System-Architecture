@@ -1,6 +1,7 @@
 package com.railway.station_service;
 
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +43,30 @@ public class StationRestController {
 		
 	}
 	
+	@GetMapping("/{id}/platforms")
+	public ResponseEntity<List<Platform>> platformsByStationId(@PathVariable int id) {
+		List<Platform> optPlatforms = stationRepository.getPlatforms((long)id);
+		if(optPlatforms != null) {
+			return new ResponseEntity<>(optPlatforms, HttpStatus.OK);
+		}
+		return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		
+	}
+	
+	@GetMapping("/{id}/platforms/{id_pl}")
+	public ResponseEntity<Platform> platformByStationIdAndPlatformId(@PathVariable int id, @PathVariable int id_pl) {
+		List<Platform> optPlatforms = stationRepository.getPlatforms((long)id);
+		if(optPlatforms != null) {
+			for (int i = 0; i < optPlatforms.size(); i++) {
+				if(optPlatforms.get(i).getId() == id_pl) {
+					return new ResponseEntity<>(optPlatforms.get(i), HttpStatus.OK);
+				}
+			}
+		}
+		return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		
+	}
+	
 	@PostMapping(consumes = "application/json")
 	@ResponseStatus(HttpStatus.CREATED)
 	public Station postStation (@RequestBody Station s) {
@@ -61,7 +86,7 @@ public class StationRestController {
 		if (!stationOptional.isPresent())
 			return ResponseEntity.notFound().build();
 
-		station.setId(id);
+		station.setId((long) id);
 		
 		stationRepository.save(station);
 

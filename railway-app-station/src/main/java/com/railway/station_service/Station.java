@@ -11,7 +11,7 @@ public class Station implements Serializable {
 
 	@Id
 	@GeneratedValue (strategy = GenerationType.AUTO)
-	private int id;
+	private Long id;
 	
 	
 	private String name;
@@ -43,11 +43,11 @@ public class Station implements Serializable {
 		this.platforms = platforms;
 	}
 	
-	public int getId() {
+	public Long getId() {
 		return id;
 	}
 	
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 	
@@ -78,7 +78,7 @@ public class Station implements Serializable {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((address == null) ? 0 : address.hashCode());
-		result = prime * result + id;
+		result = (int) (prime * result + id);
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + ((platforms == null) ? 0 : platforms.hashCode());
 		return result;

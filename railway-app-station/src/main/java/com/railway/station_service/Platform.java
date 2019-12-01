@@ -15,7 +15,7 @@ public class Platform implements Serializable{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private int id;
+	private Long id;
 	
 	
 	private int platformNumber;
@@ -38,11 +38,11 @@ public class Platform implements Serializable{
 	}
 
 
-	public int getId() {
+	public Long getId() {
 		return id;
 	}
 	
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 	
@@ -84,7 +84,7 @@ public class Platform implements Serializable{
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + id;
+		result = (int) (prime * result + id);
 		result = prime * result + platformNumber;
 		result = prime * result + ((reservedSlots == null) ? 0 : reservedSlots.hashCode());
 		result = prime * result + ((station == null) ? 0 : station.hashCode());
