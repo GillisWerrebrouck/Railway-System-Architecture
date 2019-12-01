@@ -10,7 +10,7 @@ import com.railway.maintenance_service.domain.ScheduleItem;
 import com.railway.maintenance_service.persistence.MaintenanceRepository;
 
 @RestController
-@RequestMapping("maintenance/schedule")
+@RequestMapping("/maintenance/schedule")
 public class MaintenanceController {
 	private MaintenanceRepository maintenanceRepository;
 
