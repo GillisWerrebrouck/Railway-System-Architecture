@@ -12,8 +12,6 @@ enum Fuel {ELECTRICITY, DIESEL}
 @Document
 public class TechnicalDetails {
 
-	//@Id
-	//private String id;
 	private Fuel fuel;
 	private LocalDate lastCheck;
 	private Map <String,String> defects; 						/// onderwerp, beschrijvingen van de defecten
@@ -29,17 +27,6 @@ public class TechnicalDetails {
 		this.defects = defects;
 	}
 
-
-	/*
-	public String getId() {
-		return id;
-	}*/
-
-
-	/*
-	public void setId(String id) {
-		this.id = id;
-	}*/
 
 
 	public Fuel getFuel() {
