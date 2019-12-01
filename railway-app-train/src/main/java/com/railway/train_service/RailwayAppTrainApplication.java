@@ -28,6 +28,13 @@ public class RailwayAppTrainApplication {
 	@Bean
 	public CommandLineRunner testRepo(TrainRepository trainRepository) {
 		return (args) -> {
+			/*MongoClientURI uri = new MongoClientURI(
+		    "mongodb+srv://TrainService:panda@cluster0-6ipq1.mongodb.net/test?retryWrites=true&w=majority");
+
+		MongoClient mongoClient = new MongoClient(uri);
+		MongoDatabase database = mongoClient.getDatabase("trainService");
+		MongoCollection c = database.getCollection("trains");
+		c*/
 				
 			logger.info("startBegin");
 			Map<String,String> m = new HashMap<String, String>();
@@ -41,5 +48,12 @@ public class RailwayAppTrainApplication {
 		};
 	}
 	
+	/*
+	 * spring.data.mongodb.host=[host]
+spring.data.mongodb.port=[port]
+spring.data.mongodb.authentication-database=[authentication_database]
+spring.data.mongodb.username=[username]
+spring.data.mongodb.password=[password]
+spring.data.mongodb.database=rest_tutorial*/
 
 }
