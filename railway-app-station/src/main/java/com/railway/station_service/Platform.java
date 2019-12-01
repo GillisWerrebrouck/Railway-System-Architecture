@@ -22,7 +22,7 @@ public class Platform implements Serializable{
 	
 	
 	@OneToMany(mappedBy = "platform")
-	private List<SheduleItem> reservableSlots = new ArrayList<SheduleItem>();
+	private List<SheduleItem> reservedSlots = new ArrayList<SheduleItem>();
 	
 	
     @ManyToOne
@@ -54,12 +54,12 @@ public class Platform implements Serializable{
 		this.platformNumber = platformNumber;
 	}
 	
-	public List<SheduleItem> getReservableSlots() {
-		return reservableSlots;
+	public List<SheduleItem> getReservedSlots() {
+		return reservedSlots;
 	}
 	
-	public void setReservableSlots(ArrayList<SheduleItem> reservableSlots) {
-		this.reservableSlots = reservableSlots;
+	public void setReservedSlots(ArrayList<SheduleItem> reservableSlots) {
+		this.reservedSlots = reservableSlots;
 	}
 	
 	public Station getStation() {
@@ -72,7 +72,7 @@ public class Platform implements Serializable{
 
 	@Override
 	public String toString() {
-		return "Platform [id=" + id + ", platformNumber=" + platformNumber + ", reservableSlots=" + reservableSlots
+		return "Platform [id=" + id + ", platformNumber=" + platformNumber + ", reservableSlots=" + reservedSlots
 				+ ", station=" + station + "]";
 	}
 
@@ -82,7 +82,7 @@ public class Platform implements Serializable{
 		int result = 1;
 		result = prime * result + id;
 		result = prime * result + platformNumber;
-		result = prime * result + ((reservableSlots == null) ? 0 : reservableSlots.hashCode());
+		result = prime * result + ((reservedSlots == null) ? 0 : reservedSlots.hashCode());
 		result = prime * result + ((station == null) ? 0 : station.hashCode());
 		return result;
 	}
@@ -100,10 +100,10 @@ public class Platform implements Serializable{
 			return false;
 		if (platformNumber != other.platformNumber)
 			return false;
-		if (reservableSlots == null) {
-			if (other.reservableSlots != null)
+		if (reservedSlots == null) {
+			if (other.reservedSlots != null)
 				return false;
-		} else if (!reservableSlots.equals(other.reservableSlots))
+		} else if (!reservedSlots.equals(other.reservedSlots))
 			return false;
 		if (station == null) {
 			if (other.station != null)

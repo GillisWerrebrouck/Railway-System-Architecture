@@ -45,9 +45,9 @@ public class RailwayAppStationApplication {
 			Sitem2.setPlatform(p1);
 			Sitem3.setPlatform(p2);
 			
-			p2.getReservableSlots().add(Sitem3);
-			p1.getReservableSlots().add(Sitem1);
-			p1.getReservableSlots().add(Sitem2);
+			p2.getReservedSlots().add(Sitem3);
+			p1.getReservedSlots().add(Sitem1);
+			p1.getReservedSlots().add(Sitem2);
 			
 			stationRepository.save(s);
 			platformRepository.save(p1);
