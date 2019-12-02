@@ -29,7 +29,7 @@ public class RailwayAppStationApplication {
 	public CommandLineRunner populateDatabase (StationRepository stationRepository, PlatformRepository platformRepository, SheduleItemRepository sheduleItemRepository) {
 		return(args)->{
 			Address address = new Address("Maria Hendrikaplein", "Gent", "Oost-Vlaanderen", "België" );
-			Station station = new Station("Gent-Sint-Pieters", address);
+			Station station01 = new Station("Gent-Sint-Pieters", address);
 			
 			Platform p1 = new Platform(7);
 			Platform p2 = new Platform(8);
@@ -39,13 +39,13 @@ public class RailwayAppStationApplication {
 			ScheduleItem scheduleItem03 = new ScheduleItem(5465, LocalDateTime.of(2019,11,2,6,50,48,0), LocalDateTime.of(2019,11,2,6,55,40,0),16);
 
 
-			station.setName("Gent-Sint-Pieters");
-			station.setAddress(address);
-			station.getPlatforms().add(p1);
-			station.getPlatforms().add(p2);
+			station01.setName("Gent-Sint-Pieters");
+			station01.setAddress(address);
+			station01.getPlatforms().add(p1);
+			station01.getPlatforms().add(p2);
 			
-			p1.setStation(station);
-			p2.setStation(station);
+			p1.setStation(station01);
+			p2.setStation(station01);
 			
 			scheduleItem01.setPlatform(p1);
 			scheduleItem02.setPlatform(p1);
@@ -55,14 +55,14 @@ public class RailwayAppStationApplication {
 			p1.getReservedSlots().add(scheduleItem02);
 			p2.getReservedSlots().add(scheduleItem03);
 			
-			stationRepository.save(station);
+			stationRepository.save(station01);
 			platformRepository.save(p1);
 			platformRepository.save(p2);
 			sheduleItemRepository.save(scheduleItem01);
 			sheduleItemRepository.save(scheduleItem02);
 			sheduleItemRepository.save(scheduleItem03);
 			
-			logger.info(station.toString());
+			logger.info("Station01: " + station01.toString());
 		};
 	}
 }

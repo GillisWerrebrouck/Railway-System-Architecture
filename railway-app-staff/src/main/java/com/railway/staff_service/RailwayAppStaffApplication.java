@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -17,6 +19,8 @@ import com.railway.staff_service.persistence.StaffMembersRepository;
 
 @SpringBootApplication
 public class RailwayAppStaffApplication {
+	private static final Logger logger = LoggerFactory.getLogger(RailwayAppStaffApplication.class);
+	
 	public static void main(String[] args) {
 		SpringApplication.run(RailwayAppStaffApplication.class, args);
 	}
@@ -48,6 +52,11 @@ public class RailwayAppStaffApplication {
 			scheduleRecordRepository.save(scheduleItem03);
 			scheduleRecordRepository.save(scheduleItem04);
 			scheduleRecordRepository.save(scheduleItem05);
+
+			logger.info("StaffMember01: " + staffMember01.toString());
+			logger.info("StaffMember02: " + staffMember02.toString());
+			logger.info("StaffMember03: " + staffMember03.toString());
+			logger.info("StaffMember04: " + staffMember04.toString());
 		};
 	}
 }
