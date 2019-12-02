@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(path="ticket")
 public class TicketRestController {
-
     private TicketRepository ticketRepository;
 
     @Autowired

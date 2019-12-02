@@ -14,7 +14,6 @@ import java.util.UUID;
 
 @SpringBootApplication
 public class RailwayAppTicketValidationApplication {
-
 	private static Logger logger = LoggerFactory.getLogger(TicketRepository.class);
 
 	public static void main(String[] args) {

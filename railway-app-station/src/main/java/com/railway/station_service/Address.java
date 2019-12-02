@@ -2,16 +2,13 @@ package com.railway.station_service;
 
 import javax.persistence.*;
 
-
 @Embeddable
 public class Address {
-	
 	private String street;
 	private String city;
 	private String province;
 	private String country;
 
-	
 	public Address() {
 	}
 
@@ -21,7 +18,6 @@ public class Address {
 		this.province = province;
 		this.country = country;
 	}
-
 
 	public String getStreet() {
 		return street;
@@ -54,5 +50,4 @@ public class Address {
 	public void setCountry(String country) {
 		this.country = country;
 	}
-
 }

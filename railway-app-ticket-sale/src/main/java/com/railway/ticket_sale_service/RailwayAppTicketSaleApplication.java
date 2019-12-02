@@ -13,7 +13,6 @@ import java.time.LocalDateTime;
 
 @SpringBootApplication
 public class RailwayAppTicketSaleApplication {
-
 	private static Logger logger = LoggerFactory.getLogger(RailwayAppTicketSaleApplication.class);
 
 	public static void main(String[] args) {

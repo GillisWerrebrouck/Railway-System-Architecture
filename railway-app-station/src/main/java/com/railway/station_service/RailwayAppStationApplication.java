@@ -7,21 +7,15 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
-
-
 @SpringBootApplication
 public class RailwayAppStationApplication {
-	
-
 	public static void main(String[] args) {
 		SpringApplication.run(RailwayAppStationApplication.class, args);
 	}
 	
 	@Bean
 	public CommandLineRunner populateDatabase (StationRepository stationRepository, PlatformRepository platformRepository, SheduleItemRepository sheduleItemRepository) {
-
 		return(args)->{
-			
 			Address a = new Address("Maria Hendrikaplein", "Gent", "Oost-Vlaanderen", "België" );
 			Station s = new Station("Gent-Sint-Pieters", a);
 			
@@ -58,5 +52,3 @@ public class RailwayAppStationApplication {
 		};
 	}
 }
-
-

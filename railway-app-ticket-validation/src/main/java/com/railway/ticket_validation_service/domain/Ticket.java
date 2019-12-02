@@ -8,7 +8,6 @@ import java.util.UUID;
 
 @Entity
 public class Ticket {
-
     @Id
     private UUID id;
     private String startStation;

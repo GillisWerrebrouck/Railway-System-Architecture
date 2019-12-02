@@ -8,7 +8,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @Entity
 @JsonIgnoreProperties({"platform"})
 public class SheduleItem {
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
@@ -17,12 +16,11 @@ public class SheduleItem {
 	private LocalDateTime arrivalDateTime;
 	private LocalDateTime departureDateTime;
 	private int delayInMinutes;
-
 	
 	@ManyToOne
 	private Platform platform;
 	
-	
+	@SuppressWarnings("unused")
 	private SheduleItem() {
 	}
 	

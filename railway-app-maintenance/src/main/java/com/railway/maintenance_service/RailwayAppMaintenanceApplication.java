@@ -41,5 +41,4 @@ public class RailwayAppMaintenanceApplication {
 			logger.info(scheduleItem01.toString());
 		};
 	}
-
 }

@@ -22,6 +22,7 @@ public class RailwayAppRouteManagementApplication {
 		SpringApplication.run(RailwayAppRouteManagementApplication.class, args);
 	}
 	
+	@SuppressWarnings("unused")
 	@Bean
 	public CommandLineRunner populateDatabase(StationRepository stationRepository, RouteRepository routeRepository) {
 		return (args) ->{

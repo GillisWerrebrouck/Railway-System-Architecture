@@ -6,5 +6,4 @@ public class processDelay {
 		STARTED,
 		FINISHED
 	}
-	
 }

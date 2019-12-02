@@ -8,7 +8,6 @@ import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
 public class RailwayAppApiGatewayApplication {
-
 	public static void main(String[] args) {
 		SpringApplication.run(RailwayAppApiGatewayApplication.class, args);
 	}
@@ -36,5 +35,4 @@ public class RailwayAppApiGatewayApplication {
 				.route(r -> r.host("*").and().path("/train/**").uri("http://localhost:2003"))
 				.build();
 	}
-
 }

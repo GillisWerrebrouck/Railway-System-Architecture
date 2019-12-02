@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 
 @Repository
 public interface TicketRepository extends CrudRepository<Ticket, Long> {
-
     @Query("SELECT t FROM Ticket t WHERE type = com.railway.ticket_sale_service.domain.TicketType.GROUP")
     Iterable<Ticket> getAllGroupTickets();
 
@@ -17,5 +16,4 @@ public interface TicketRepository extends CrudRepository<Ticket, Long> {
     Iterable<Ticket> getAllSingleTickets();
 
     Iterable<Ticket> getTicketsByValidOnAfter(LocalDateTime date);
-
 }

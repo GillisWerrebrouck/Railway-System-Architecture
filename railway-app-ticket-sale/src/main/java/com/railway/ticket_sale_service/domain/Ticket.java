@@ -10,7 +10,6 @@ import java.util.UUID;
 
 @Entity
 public class Ticket {
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -22,7 +21,8 @@ public class Ticket {
     private TicketType type;
     private UUID validationCode;
 
-    private Ticket() {};
+    @SuppressWarnings("unused")
+	private Ticket() {};
 
     public Ticket(String startStation, String endStation, LocalDateTime validOn, double price, int amount) {
         this.startStation = startStation;
@@ -86,6 +86,22 @@ public class Ticket {
     public void setPrice(double price) {
         this.price = price;
     }
+    
+    public int getAmount() {
+		return amount;
+	}
+    
+    public void setAmount(int amount) {
+		this.amount = amount;
+	}
+    
+    public TicketType getType() {
+		return type;
+	}
+    
+    public void setType(TicketType type) {
+		this.type = type;
+	}
 
     @Override
     public String toString() {
@@ -96,7 +112,4 @@ public class Ticket {
                         "\t price: {4}\t validOn: {5}\t validationCode: {6}" , this.id, this.type, this.startStation,
                 this.endStation, this.price, dateFormat, validationCode);
     }
-
-
-
 }

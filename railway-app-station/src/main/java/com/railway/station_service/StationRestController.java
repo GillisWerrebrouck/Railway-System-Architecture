@@ -1,6 +1,5 @@
 package com.railway.station_service;
 
-
 import java.util.List;
 import java.util.Optional;
 
@@ -20,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/station")
 public class StationRestController {
-
 	private final StationRepository stationRepository;
 
 	@Autowired
@@ -40,7 +38,6 @@ public class StationRestController {
 			return new ResponseEntity<>(optStation.get(), HttpStatus.OK);
 		}
 		return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-		
 	}
 	
 	@GetMapping("/{id}/platform")
@@ -50,7 +47,6 @@ public class StationRestController {
 			return new ResponseEntity<>(optPlatforms, HttpStatus.OK);
 		}
 		return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-		
 	}
 	
 	@GetMapping("/{id}/platform/{id_pl}")
@@ -64,7 +60,6 @@ public class StationRestController {
 			}
 		}
 		return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-		
 	}
 	
 	@PostMapping(consumes = "application/json")
@@ -106,7 +101,5 @@ public class StationRestController {
 		catch (Exception e) {
 			throw new BadRequestException("Could not save given station : " + e.getMessage());
 		}
-		
 	}
-
 }
