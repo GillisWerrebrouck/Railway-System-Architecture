@@ -61,6 +61,6 @@ public class Station {
 
 	@Override
 	public String toString() {
-		return "Station [id=" + id + ", name=" + name + ", address=" + address + ", #platforms=" + platforms.size() + "]";
+		return "id:" + id + ", name:" + name + ", address: " + address.toString() + ", #platforms:" + platforms.size();
 	}
 }

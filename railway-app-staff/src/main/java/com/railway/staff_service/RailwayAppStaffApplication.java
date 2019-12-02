@@ -17,7 +17,6 @@ import com.railway.staff_service.persistence.StaffMembersRepository;
 
 @SpringBootApplication
 public class RailwayAppStaffApplication {
-
 	public static void main(String[] args) {
 		SpringApplication.run(RailwayAppStaffApplication.class, args);
 	}

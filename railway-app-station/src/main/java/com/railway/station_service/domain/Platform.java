@@ -17,7 +17,7 @@ public class Platform{
 	private int platformNumber;
 	
 	@OneToMany(mappedBy = "platform")
-	private List<SheduleItem> reservedSlots = new ArrayList<SheduleItem>();
+	private List<ScheduleItem> reservedSlots = new ArrayList<ScheduleItem>();
 	
     @ManyToOne
 	private Station station;
@@ -45,15 +45,15 @@ public class Platform{
 		this.platformNumber = platformNumber;
 	}
 	
-	public List<SheduleItem> getReservedSlots() {
+	public List<ScheduleItem> getReservedSlots() {
 		return reservedSlots;
 	}
 	
-	public void setReservedSlots(ArrayList<SheduleItem> reservableSlots) {
+	public void setReservedSlots(ArrayList<ScheduleItem> reservableSlots) {
 		this.reservedSlots = reservableSlots;
 	}
 	
-	public void addReservedSlot(SheduleItem slot) {
+	public void addReservedSlot(ScheduleItem slot) {
 		this.reservedSlots.add(slot);
 	}
 	

@@ -49,4 +49,9 @@ public class Address {
 	public void setCountry(String country) {
 		this.country = country;
 	}
+	
+	@Override
+	public String toString() {
+		return this.street + ", " + this.city + ", " + this.province + ", " + this.country;
+	}
 }
