@@ -9,7 +9,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @SpringBootApplication
@@ -27,11 +27,8 @@ public class RailwayAppTicketValidationApplication {
 
 			ticketRepository.deleteAll();
 
-			Ticket singleTicket = new Ticket(UUID.fromString("2b3962ae-11e7-11ea-9858-f5f73fbce6aa"),
-					"Gent", "Brussel", LocalDate.now(), 1);
-
-			Ticket groupTicket = new Ticket(UUID.fromString("2b3962af-11e7-11ea-9858-cf905512618f"),
-					"Oudenaarde", "Brussel", LocalDate.now(), 16);
+			Ticket singleTicket = new Ticket(UUID.randomUUID(), "Gent", "Brussel", LocalDateTime.now(), 1);
+			Ticket groupTicket = new Ticket(UUID.randomUUID(), "Oudenaarde", "Brussel", LocalDateTime.now(), 16);
 
 			ticketRepository.save(singleTicket);
 			ticketRepository.save(groupTicket);

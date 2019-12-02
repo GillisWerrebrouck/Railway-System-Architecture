@@ -17,19 +17,19 @@ public class Ticket {
     private String endStation;
     private LocalDateTime validOn;
     private double price;
-    private int amount;
+    private int amountOfSeats;
     private TicketType type;
     private UUID validationCode;
 
     @SuppressWarnings("unused")
 	private Ticket() {};
 
-    public Ticket(String startStation, String endStation, LocalDateTime validOn, double price, int amount) {
+    public Ticket(String startStation, String endStation, LocalDateTime validOn, double price, int amountOfSeats) {
         this.startStation = startStation;
         this.endStation = endStation;
         this.validOn = validOn;
         this.price = price;
-        this.amount = amount;
+        this.amountOfSeats = amountOfSeats;
         this.type = TicketType.GROUP;
         validationCode = Generators.timeBasedGenerator().generate();
     }
@@ -87,12 +87,12 @@ public class Ticket {
         this.price = price;
     }
     
-    public int getAmount() {
-		return amount;
+    public int getAmountOfSeats() {
+		return amountOfSeats;
 	}
     
-    public void setAmount(int amount) {
-		this.amount = amount;
+    public void setAmountOfSeats(int amountOfSeats) {
+		this.amountOfSeats = amountOfSeats;
 	}
     
     public TicketType getType() {
