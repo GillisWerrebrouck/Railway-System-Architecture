@@ -9,9 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(path="ticket")
+@RequestMapping("/ticket")
 public class TicketRestController {
-
     private TicketRepository ticketRepository;
 
     @Autowired

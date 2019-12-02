@@ -14,14 +14,16 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
-import com.mongodb.MongoClient;
-import com.mongodb.MongoClientURI;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase; 
+import com.railway.train_service.domain.FuelType;
+import com.railway.train_service.domain.ScheduleItem;
+import com.railway.train_service.domain.TechnicalDetails;
+import com.railway.train_service.domain.Train;
+import com.railway.train_service.domain.TrainStatus;
+import com.railway.train_service.domain.TrainType;
+import com.railway.train_service.persistence.TrainRepository;
 
 @SpringBootApplication
 public class RailwayAppTrainApplication {
-	
 	private static final Logger logger = LoggerFactory.getLogger(RailwayAppTrainApplication.class);
 
 	public static void main(String[] args) {
@@ -31,16 +33,17 @@ public class RailwayAppTrainApplication {
 	@Bean
 	public CommandLineRunner testRepo(TrainRepository trainRepository) {
 		return (args) -> {	
-			Map<String,String> m = new HashMap<String, String>();
-			m.put("kapotte deur", "dat wordt een nieuwe deur");
-			TechnicalDetails t = new TechnicalDetails(FuelType.DIESEL, LocalDate.parse("2019-01-01"), m);
-			List<ScheduleItem> items = new ArrayList<ScheduleItem>();
-			items.add(new ScheduleItem(LocalDateTime.parse("2019-01-01"), LocalDateTime.parse("2019-01-10")));
-			Train train1 = new Train(TrainType.IC, 9.999, 100, 15, TrainStatus.ACTIVE, t, items);
-			trainRepository.save(train1);
-			trainRepository.findAll().forEach((te) -> logger.info(te.toString()));
+			Map<String,String> defects = new HashMap<String, String>();
+			defects.put("kapotte deur", "een nieuwe deur plaatsen");
+			
+			TechnicalDetails technicalDetails = new TechnicalDetails(FuelType.DIESEL, LocalDate.parse("2019-01-01"), defects);
+			
+			List<ScheduleItem> scheduleItem = new ArrayList<ScheduleItem>();
+			scheduleItem.add(new ScheduleItem(LocalDateTime.of(2019, 1, 1, 0, 0, 0), LocalDateTime.of(2019, 1, 10, 0, 0, 0)));
+			Train train01 = new Train(TrainType.IC, 9.999, 100, 15, TrainStatus.ACTIVE, technicalDetails, scheduleItem);
+			
+			trainRepository.save(train01);
+			logger.info("Train01: " + train01.toString());
 		};
 	}
-
-
 }

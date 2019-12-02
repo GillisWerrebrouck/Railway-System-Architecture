@@ -43,6 +43,11 @@ public class RailwayAppTimetableApplication {
 			timetableItemRepository.save(timetableItem02);
 			timetableItemRepository.save(timetableItem03);
 			timetableItemRepository.save(timetableItem04);
+
+			logger.info(timetableItem01.toString());
+			logger.info(timetableItem02.toString());
+			logger.info(timetableItem03.toString());
+			logger.info(timetableItem04.toString());
 		};
 	}
 }

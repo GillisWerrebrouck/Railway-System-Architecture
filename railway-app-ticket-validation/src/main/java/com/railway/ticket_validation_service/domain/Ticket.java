@@ -3,17 +3,16 @@ package com.railway.ticket_validation_service.domain;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.text.MessageFormat;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
 public class Ticket {
-
     @Id
     private UUID id;
     private String startStation;
     private String endStation;
-    private LocalDate validOnDate;
+    private LocalDateTime validOn;
     private int amountOfSeats;
     private boolean isUsed;
     private boolean isValid;
@@ -21,11 +20,11 @@ public class Ticket {
     @SuppressWarnings("unused")
 	private Ticket() {};
 
-    public Ticket(UUID id, String startStation, String endStation, LocalDate validOnDate, int amountOfSeats) {
+    public Ticket(UUID id, String startStation, String endStation, LocalDateTime validOn, int amountOfSeats) {
         this.id = id;
         this.startStation = startStation;
         this.endStation = endStation;
-        this.validOnDate = validOnDate;
+        this.validOn = validOn;
         this.amountOfSeats = amountOfSeats;
         isUsed = false;
     }
@@ -54,12 +53,12 @@ public class Ticket {
         this.endStation = endStation;
     }
 
-    public LocalDate getValidOnDate() {
-        return validOnDate;
+    public LocalDateTime getValidOnDate() {
+        return validOn;
     }
 
-    public void setValidOnDate(LocalDate validOnDate) {
-        this.validOnDate = validOnDate;
+    public void setValidOnDate(LocalDateTime validOn) {
+        this.validOn = validOn;
     }
 
     public int getAmountOfSeats() {
@@ -80,7 +79,7 @@ public class Ticket {
 
     // check if the due date of the ticket hasn't passed and that the ticket hasn't been used before
     public boolean isValid() {	
-        return !isUsed && validOnDate.compareTo(LocalDate.now()) <= 0;
+        return !isUsed && validOn.compareTo(LocalDateTime.now()) <= 0;
     }
 
     public void validate(){	
@@ -91,8 +90,7 @@ public class Ticket {
 
     @Override
     public String toString() {
-        return MessageFormat.format("id: {0}\t startStation: {1}\t endStation: {2}" +
-        							"\t amountOfSeats: {4}\t", this.id, this.startStation, this.endStation, this.amountOfSeats);
+        return MessageFormat.format("id: {0}, startStation: {1}, endStation: {2}" +
+        							", amountOfSeats: {3}", this.id, this.startStation, this.endStation, this.amountOfSeats);
     }
-
 }

@@ -4,13 +4,12 @@ import com.railway.ticket_validation_service.domain.Ticket;
 import com.railway.ticket_validation_service.domain.TicketNotFoundException;
 import com.railway.ticket_validation_service.persistence.TicketRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
 @RestController
-@RequestMapping(path="ticket")
+@RequestMapping("/ticket-validation")
 public class TicketRestController {
     private TicketRepository ticketRepository;
 

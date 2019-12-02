@@ -10,7 +10,6 @@ import java.util.UUID;
 
 @Entity
 public class Ticket {
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -18,18 +17,19 @@ public class Ticket {
     private String endStation;
     private LocalDateTime validOn;
     private double price;
-    private int amount;
+    private int amountOfSeats;
     private TicketType type;
     private UUID validationCode;
 
-    private Ticket() {};
+    @SuppressWarnings("unused")
+	private Ticket() {};
 
-    public Ticket(String startStation, String endStation, LocalDateTime validOn, double price, int amount) {
+    public Ticket(String startStation, String endStation, LocalDateTime validOn, double price, int amountOfSeats) {
         this.startStation = startStation;
         this.endStation = endStation;
         this.validOn = validOn;
         this.price = price;
-        this.amount = amount;
+        this.amountOfSeats = amountOfSeats;
         this.type = TicketType.GROUP;
         validationCode = Generators.timeBasedGenerator().generate();
     }
@@ -86,17 +86,30 @@ public class Ticket {
     public void setPrice(double price) {
         this.price = price;
     }
+    
+    public int getAmountOfSeats() {
+		return amountOfSeats;
+	}
+    
+    public void setAmountOfSeats(int amountOfSeats) {
+		this.amountOfSeats = amountOfSeats;
+	}
+    
+    public TicketType getType() {
+		return type;
+	}
+    
+    public void setType(TicketType type) {
+		this.type = type;
+	}
 
     @Override
     public String toString() {
         String dateFormat = this.validOn.format(DateTimeFormatter.ofPattern("dd-LLLL-yyyy"));
         if(this.type == TicketType.GROUP)
             dateFormat += " " + this.validOn.format(DateTimeFormatter.ofPattern("HH:mm"));
-        return MessageFormat.format("id: {0}\t type: {1}\t startStation: {2}\t endStation: {3}" +
-                        "\t price: {4}\t validOn: {5}\t validationCode: {6}" , this.id, this.type, this.startStation,
+        return MessageFormat.format("id: {0}, type: {1}, startStation: {2}, endStation: {3}" +
+                        ", price: {4}, validOn: {5}, validationCode: {6}" , this.id, this.type, this.startStation,
                 this.endStation, this.price, dateFormat, validationCode);
     }
-
-
-
 }

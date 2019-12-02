@@ -1,27 +1,22 @@
-package com.railway.station_service;
+package com.railway.station_service.domain;
 
 import javax.persistence.*;
 
-
 @Embeddable
 public class Address {
-	
 	private String street;
 	private String city;
 	private String province;
 	private String country;
 
+	public Address() {}
 	
-	public Address() {
-	}
-
 	public Address(String street, String city, String province, String country) {
 		this.street = street;
 		this.city = city;
 		this.province = province;
 		this.country = country;
 	}
-
 
 	public String getStreet() {
 		return street;
@@ -54,5 +49,9 @@ public class Address {
 	public void setCountry(String country) {
 		this.country = country;
 	}
-
+	
+	@Override
+	public String toString() {
+		return this.street + ", " + this.city + ", " + this.province + ", " + this.country;
+	}
 }

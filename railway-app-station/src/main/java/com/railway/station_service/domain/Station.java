@@ -1,6 +1,5 @@
-package com.railway.station_service;
+package com.railway.station_service.domain;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.*;
@@ -8,33 +7,26 @@ import javax.persistence.*;
 @Entity
 @Table(name = "station")
 public class Station {
-
 	@Id
 	@GeneratedValue (strategy = GenerationType.AUTO)
 	private Long id;
 	
-	
 	private String name;
-
 	
 	@Embedded
 	private Address address;
 	
-
 	@OneToMany(mappedBy = "station")
 	private List<Platform> platforms = new ArrayList<Platform>();
 	
-	
-	private Station() {
-	}
-	
+	@SuppressWarnings("unused")
+	private Station() {}
 	
 	public Station(String name, Address address) {
 		this.address = address;
 		this.name = name;
 	}
 	
-
 	public List<Platform> getPlatforms() {
 		return platforms;
 	}
@@ -69,6 +61,6 @@ public class Station {
 
 	@Override
 	public String toString() {
-		return "Station [id=" + id + ", name=" + name + ", address=" + address + ", #platforms=" + platforms.size() + "]";
+		return "id:" + id + ", name:" + name + ", address: " + address.toString() + ", #platforms:" + platforms.size();
 	}
 }

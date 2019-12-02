@@ -1,5 +1,4 @@
-package com.railway.station_service;
-
+package com.railway.station_service.adapters.rest;
 
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +14,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.railway.station_service.domain.Platform;
+import com.railway.station_service.domain.exception.BadRequestException;
+import com.railway.station_service.persistence.PlatformRepository;
+
 @RestController
 @RequestMapping("/platform")
 public class PlatformRestController {
-
 	private final PlatformRepository platformRepository;
 
 	@Autowired
@@ -38,13 +40,11 @@ public class PlatformRestController {
 			return new ResponseEntity<>(optPlatform.get(), HttpStatus.OK);
 		}
 		return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-		
 	}
 	
 	@PostMapping(consumes = "application/json")
 	@ResponseStatus(HttpStatus.CREATED)
 	public void postPlatform (@RequestBody Platform p) throws BadRequestException {
-		
 		try {
 			platformRepository.save(p);
 		}
@@ -65,7 +65,6 @@ public class PlatformRestController {
 	
 	@PutMapping("/{id}")
 	public void updatePlatform(@RequestBody Platform platform, @PathVariable Long id) throws BadRequestException{
-
 		Optional<Platform> platformOptional = platformRepository.findById(id);
 
 		if (platformOptional.isPresent()) {
@@ -80,9 +79,5 @@ public class PlatformRestController {
 		else {
 			throw new BadRequestException("Could not find a station for the given ID");
 		}
-			
-
-		
-		
 	}
 }

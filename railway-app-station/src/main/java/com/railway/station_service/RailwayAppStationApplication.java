@@ -2,61 +2,67 @@ package com.railway.station_service;
 
 import java.time.LocalDateTime;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
-
+import com.railway.station_service.domain.Address;
+import com.railway.station_service.domain.Platform;
+import com.railway.station_service.domain.ScheduleItem;
+import com.railway.station_service.domain.Station;
+import com.railway.station_service.persistence.PlatformRepository;
+import com.railway.station_service.persistence.SheduleItemRepository;
+import com.railway.station_service.persistence.StationRepository;
 
 @SpringBootApplication
 public class RailwayAppStationApplication {
+	private static Logger logger = LoggerFactory.getLogger(RailwayAppStationApplication.class);
 	
-
 	public static void main(String[] args) {
 		SpringApplication.run(RailwayAppStationApplication.class, args);
 	}
 	
 	@Bean
 	public CommandLineRunner populateDatabase (StationRepository stationRepository, PlatformRepository platformRepository, SheduleItemRepository sheduleItemRepository) {
-
 		return(args)->{
-			
-			Address a = new Address("Maria Hendrikaplein", "Gent", "Oost-Vlaanderen", "België" );
-			Station s = new Station("Gent-Sint-Pieters", a);
+			Address address = new Address("Maria Hendrikaplein", "Gent", "Oost-Vlaanderen", "België" );
+			Station station01 = new Station("Gent-Sint-Pieters", address);
 			
 			Platform p1 = new Platform(7);
 			Platform p2 = new Platform(8);
 			
-			SheduleItem Sitem1 = new SheduleItem(5465, LocalDateTime.of(2019,11,2,6,30,40,0), LocalDateTime.of(2019,11,2,6,35,40,0),4);
-			SheduleItem Sitem2 = new SheduleItem(5465, LocalDateTime.of(2019,11,2,6,40,12,0), LocalDateTime.of(2019,11,2,6,45,40,0),0);
-			SheduleItem Sitem3 = new SheduleItem(5465, LocalDateTime.of(2019,11,2,6,50,48,0), LocalDateTime.of(2019,11,2,6,55,40,0),16);
+			ScheduleItem scheduleItem01 = new ScheduleItem(5465, LocalDateTime.of(2019,11,2,6,30,40,0), LocalDateTime.of(2019,11,2,6,35,40,0),4);
+			ScheduleItem scheduleItem02 = new ScheduleItem(5465, LocalDateTime.of(2019,11,2,6,40,12,0), LocalDateTime.of(2019,11,2,6,45,40,0),0);
+			ScheduleItem scheduleItem03 = new ScheduleItem(5465, LocalDateTime.of(2019,11,2,6,50,48,0), LocalDateTime.of(2019,11,2,6,55,40,0),16);
 
 
-			s.setName("Gent-Sint-Pieters");
-			s.setAddress(a);
-			s.getPlatforms().add(p1);
-			s.getPlatforms().add(p2);
+			station01.setName("Gent-Sint-Pieters");
+			station01.setAddress(address);
+			station01.getPlatforms().add(p1);
+			station01.getPlatforms().add(p2);
 			
-			p1.setStation(s);
-			p2.setStation(s);
+			p1.setStation(station01);
+			p2.setStation(station01);
 			
-			Sitem1.setPlatform(p1);
-			Sitem2.setPlatform(p1);
-			Sitem3.setPlatform(p2);
+			scheduleItem01.setPlatform(p1);
+			scheduleItem02.setPlatform(p1);
+			scheduleItem02.setPlatform(p2);
 			
-			p2.getReservedSlots().add(Sitem3);
-			p1.getReservedSlots().add(Sitem1);
-			p1.getReservedSlots().add(Sitem2);
+			p1.getReservedSlots().add(scheduleItem01);
+			p1.getReservedSlots().add(scheduleItem02);
+			p2.getReservedSlots().add(scheduleItem03);
 			
-			stationRepository.save(s);
+			stationRepository.save(station01);
 			platformRepository.save(p1);
 			platformRepository.save(p2);
-			sheduleItemRepository.save(Sitem1);
-			sheduleItemRepository.save(Sitem2);
-			sheduleItemRepository.save(Sitem3);
+			sheduleItemRepository.save(scheduleItem01);
+			sheduleItemRepository.save(scheduleItem02);
+			sheduleItemRepository.save(scheduleItem03);
+			
+			logger.info("Station01: " + station01.toString());
 		};
 	}
 }
-
-

@@ -95,6 +95,6 @@ public class ScheduleItem {
 
 	@Override
 	public String toString() {
-		return "ScheduleItem [id=" + id + ", startDate=" + startDate + ", status=" + status + ", comment=" + comment + "]";
+		return "id: " + id + ", startDate: " + startDate + ", status: " + status + ", comment: " + comment;
 	}
 }

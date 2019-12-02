@@ -10,11 +10,11 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import com.railway.maintenance_service.domain.FuelType;
 import com.railway.maintenance_service.domain.ScheduleItem;
 import com.railway.maintenance_service.domain.Staff;
 import com.railway.maintenance_service.domain.Status;
 import com.railway.maintenance_service.domain.Train;
-import com.railway.maintenance_service.domain.TrainType;
 import com.railway.maintenance_service.persistence.MaintenanceRepository;
 
 @SpringBootApplication
@@ -29,7 +29,7 @@ public class RailwayAppMaintenanceApplication {
 	public CommandLineRunner populateDatabase(MaintenanceRepository maintenanceRepository) {
 		return (args)->{
 			ScheduleItem scheduleItem01 = new ScheduleItem(LocalDateTime.of(2018, Month.DECEMBER, 20, 13, 30, 0, 0), LocalDateTime.of(2018, Month.DECEMBER, 20, 15, 45, 0, 0), Status.SCHEDULED, "train wrecked");
-			Train train01 = new Train(1L, TrainType.ELECTRIC);
+			Train train01 = new Train(1L, FuelType.ELECTRIC);
 			Staff staff01 = new Staff(1L, "Jackson", "Decker");
 			Staff staff02 = new Staff(2L, "Sophia", "Duncan");
 			scheduleItem01.setTrain(train01);
@@ -38,8 +38,7 @@ public class RailwayAppMaintenanceApplication {
 			
 			maintenanceRepository.save(scheduleItem01);
 			
-			logger.info(scheduleItem01.toString());
+			logger.info("ScheduleItem01: " + scheduleItem01.toString());
 		};
 	}
-
 }

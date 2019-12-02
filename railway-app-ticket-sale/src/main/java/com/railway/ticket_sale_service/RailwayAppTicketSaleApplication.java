@@ -13,7 +13,6 @@ import java.time.LocalDateTime;
 
 @SpringBootApplication
 public class RailwayAppTicketSaleApplication {
-
 	private static Logger logger = LoggerFactory.getLogger(RailwayAppTicketSaleApplication.class);
 
 	public static void main(String[] args) {
@@ -33,7 +32,7 @@ public class RailwayAppTicketSaleApplication {
 			ticketRepository.save(singleTicket1);
 			ticketRepository.save(groupTicket1);
 
-			ticketRepository.findAll().forEach(t -> logger.info(t.toString()));
+			ticketRepository.findAll().forEach(ticket -> logger.info(ticket.toString()));
 		};
 	}
 }

@@ -1,43 +1,34 @@
-package com.railway.station_service;
+package com.railway.station_service.domain;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @JsonIgnoreProperties("station")
 public class Platform{
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	
-	
 	private int platformNumber;
 	
-	
 	@OneToMany(mappedBy = "platform")
-	private List<SheduleItem> reservedSlots = new ArrayList<SheduleItem>();
-	
+	private List<ScheduleItem> reservedSlots = new ArrayList<ScheduleItem>();
 	
     @ManyToOne
 	private Station station;
     
-	
-    private Platform() {
-	}
-	
-
+    @SuppressWarnings("unused")
+	private Platform() {}
+    
     public Platform(int platformNumber) {
 		this.platformNumber = platformNumber;
 	}
-
-
+    
 	public Long getId() {
 		return id;
 	}
@@ -54,15 +45,15 @@ public class Platform{
 		this.platformNumber = platformNumber;
 	}
 	
-	public List<SheduleItem> getReservedSlots() {
+	public List<ScheduleItem> getReservedSlots() {
 		return reservedSlots;
 	}
 	
-	public void setReservedSlots(ArrayList<SheduleItem> reservableSlots) {
+	public void setReservedSlots(ArrayList<ScheduleItem> reservableSlots) {
 		this.reservedSlots = reservableSlots;
 	}
 	
-	public void addReservedSlot(SheduleItem slot) {
+	public void addReservedSlot(ScheduleItem slot) {
 		this.reservedSlots.add(slot);
 	}
 	

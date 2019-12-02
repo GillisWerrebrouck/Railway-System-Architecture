@@ -1,4 +1,4 @@
-package com.railway.station_service;
+package com.railway.station_service.domain;
 
 import java.time.LocalDateTime;
 import javax.persistence.*;
@@ -7,8 +7,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @JsonIgnoreProperties({"platform"})
-public class SheduleItem {
-
+public class ScheduleItem {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
@@ -17,16 +16,14 @@ public class SheduleItem {
 	private LocalDateTime arrivalDateTime;
 	private LocalDateTime departureDateTime;
 	private int delayInMinutes;
-
 	
 	@ManyToOne
 	private Platform platform;
 	
+	@SuppressWarnings("unused")
+	private ScheduleItem() {}
 	
-	private SheduleItem() {
-	}
-	
-	public SheduleItem(int trainId, LocalDateTime arrivalDateTime, LocalDateTime departureDateTime, int delayInMinutes) {
+	public ScheduleItem(int trainId, LocalDateTime arrivalDateTime, LocalDateTime departureDateTime, int delayInMinutes) {
 		this.trainId = trainId;
 		this.arrivalDateTime = arrivalDateTime;
 		this.departureDateTime = departureDateTime;
@@ -109,7 +106,7 @@ public class SheduleItem {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		SheduleItem other = (SheduleItem) obj;
+		ScheduleItem other = (ScheduleItem) obj;
 		if (arrivalDateTime == null) {
 			if (other.arrivalDateTime != null)
 				return false;

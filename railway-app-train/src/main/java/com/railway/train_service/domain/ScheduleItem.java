@@ -1,6 +1,5 @@
-package com.railway.train_service;
+package com.railway.train_service.domain;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class ScheduleItem {

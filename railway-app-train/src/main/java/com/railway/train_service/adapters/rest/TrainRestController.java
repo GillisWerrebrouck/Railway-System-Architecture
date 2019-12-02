@@ -1,4 +1,4 @@
-package com.railway.train_service;
+package com.railway.train_service.adapters.rest;
 
 import java.util.Optional;
 
@@ -14,11 +14,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.railway.train_service.domain.Train;
+import com.railway.train_service.persistence.TrainRepository;
 
 @RestController
-@RequestMapping("train")
+@RequestMapping("/train")
 public class TrainRestController {
-
 	private TrainRepository trainRepository;
 	
 	@Autowired
@@ -47,13 +48,12 @@ public class TrainRestController {
 	}
 	
 	@DeleteMapping("/{id}")
-	  void deleteTrain(@PathVariable String id) {
-	    trainRepository.deleteById(id);
-	  }
+	void deleteTrain(@PathVariable String id) {
+		trainRepository.deleteById(id);
+	}
 	
 	@PutMapping("/{id}")
-	  ResponseEntity<Train> replaceTrain(@RequestBody Train newTrain, @PathVariable String id) {
-
+	ResponseEntity<Train> replaceTrain(@RequestBody Train newTrain, @PathVariable String id) {
 	    Optional<Train> optTrain = trainRepository.findById(id)
 	      .map(train -> {
 	        train.setAvgSpeed(newTrain.getAvgSpeed());
@@ -64,11 +64,11 @@ public class TrainRestController {
 	        train.setType(newTrain.getType());
 	        train.setScheduleItems(newTrain.getScheduleItems());
 	        return trainRepository.save(train);
-	      });
+	    });
 	    
 	    if(optTrain.isPresent()) {
 			return new ResponseEntity<>(optTrain.get(), HttpStatus.OK);
 		}
 		return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-	  }
+	}
 }

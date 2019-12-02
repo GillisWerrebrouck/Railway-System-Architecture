@@ -51,4 +51,9 @@ public class Station {
 	public Set<Connection> getConnections() {
 		return connections;
 	}
+	
+	@Override
+	public String toString() {
+		return "id: " + this.id + ", name: " + this.name;
+	}
 }

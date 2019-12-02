@@ -4,15 +4,16 @@ import java.io.Serializable;
 
 import javax.persistence.Embeddable;
 
+@SuppressWarnings("serial")
 @Embeddable
 public class Train implements Serializable {
 	private Long trainId;
-	private TrainType type;
+	private FuelType type;
 	
 	@SuppressWarnings("unused")
 	private Train() {}
 	
-	public Train(Long trainId, TrainType type) {
+	public Train(Long trainId, FuelType type) {
 		this.trainId = trainId;
 		this.type = type;
 	}
@@ -21,11 +22,11 @@ public class Train implements Serializable {
 		return trainId;
 	}
 	
-	public TrainType getType() {
+	public FuelType getType() {
 		return type;
 	}
 	
-	public void setType(TrainType type) {
+	public void setType(FuelType type) {
 		this.type = type;
 	}
 
