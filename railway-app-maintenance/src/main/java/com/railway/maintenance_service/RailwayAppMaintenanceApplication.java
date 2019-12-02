@@ -38,7 +38,7 @@ public class RailwayAppMaintenanceApplication {
 			
 			maintenanceRepository.save(scheduleItem01);
 			
-			logger.info(scheduleItem01.toString());
+			logger.info("ScheduleItem01: " + scheduleItem01.toString());
 		};
 	}
 }
