@@ -90,4 +90,9 @@ public class Train {
 	public void setTechnicaldetails(TechnicalDetails technicaldetails) {
 		this.technicaldetails = technicaldetails;
 	}
+	
+	@Override
+	public String toString() {
+		return "id: " + this.id.toString() + ", type: " + this.type + ", total capacity: " + this.totalCapacity;
+	}
 }
