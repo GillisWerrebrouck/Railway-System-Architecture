@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(path="ticket")
+@RequestMapping("/ticket-validation")
 public class TicketRestController {
     private TicketRepository ticketRepository;
 

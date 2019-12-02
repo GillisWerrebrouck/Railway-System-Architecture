@@ -20,7 +20,7 @@ import com.railway.route_management_service.persistence.RouteRepository;
 import com.railway.route_management_service.persistence.StationRepository;
 
 @RestController
-@RequestMapping("/network/connection")
+@RequestMapping("/route/connection")
 public class ConnectionRestController extends RouteRestController {
 	public ConnectionRestController(StationRepository stationRepository, ConnectionRepository connectionRepository, RouteRepository routeRepository, RouteConnectionRepository routeConnectionRepository) {
 		super(stationRepository, connectionRepository, routeRepository, routeConnectionRepository);
