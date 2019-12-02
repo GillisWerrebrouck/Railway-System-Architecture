@@ -32,7 +32,7 @@ public class PlatformRestController {
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<Platform> platformById(@PathVariable int id) {
+	public ResponseEntity<Platform> platformById(@PathVariable Long id) {
 		Optional<Platform> optPlatform = platformRepository.findById(id);
 		if(optPlatform.isPresent()) {
 			return new ResponseEntity<>(optPlatform.get(), HttpStatus.OK);
@@ -54,7 +54,7 @@ public class PlatformRestController {
 	}
 	
 	@DeleteMapping("/{id}")
-	public void deletePlatform(@PathVariable int id) {
+	public void deletePlatform(@PathVariable Long id) {
 		try {
 			platformRepository.deleteById(id);
 		} catch (Exception e) {
@@ -64,19 +64,25 @@ public class PlatformRestController {
 	}
 	
 	@PutMapping("/{id}")
-	public void updatePlatform(@RequestBody Platform platform, @PathVariable int id) throws BadRequestException{
+	public void updatePlatform(@RequestBody Platform platform, @PathVariable Long id) throws BadRequestException{
 
 		Optional<Platform> platformOptional = platformRepository.findById(id);
 
-		if (!platformOptional.isPresent())
-			throw new BadRequestException("Could not find a station for the given ID");
-
-		platform.setId((long) id);
-		try {
+		if (platformOptional.isPresent()) {
+			platform.setId(id);
+			try {
 			platformRepository.save(platform);
+			}
+			catch (Exception e) {
+				throw new BadRequestException("Could not save given platform : " + e.getMessage());
+			}
 		}
-		catch (Exception e) {
-			throw new BadRequestException("Could not save given platform : " + e.getMessage());
+		else {
+			throw new BadRequestException("Could not find a station for the given ID");
 		}
+			
+
+		
+		
 	}
 }

@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface StationRepository extends CrudRepository<Station, Integer>{
+public interface StationRepository extends CrudRepository<Station, Long>{
 
 	List<Station> findByName(@Param("name") String name);
 	

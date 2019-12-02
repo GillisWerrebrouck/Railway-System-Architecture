@@ -11,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @JsonIgnoreProperties("station")
-public class Platform implements Serializable{
+public class Platform{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -78,42 +78,5 @@ public class Platform implements Serializable{
 	public String toString() {
 		return "Platform [id=" + id + ", platformNumber=" + platformNumber + ", #reservableSlots=" + reservedSlots.size()
 				+ ", station=" + station + "]";
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = (int) (prime * result + id);
-		result = prime * result + platformNumber;
-		result = prime * result + ((reservedSlots == null) ? 0 : reservedSlots.hashCode());
-		result = prime * result + ((station == null) ? 0 : station.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Platform other = (Platform) obj;
-		if (id != other.id)
-			return false;
-		if (platformNumber != other.platformNumber)
-			return false;
-		if (reservedSlots == null) {
-			if (other.reservedSlots != null)
-				return false;
-		} else if (!reservedSlots.equals(other.reservedSlots))
-			return false;
-		if (station == null) {
-			if (other.station != null)
-				return false;
-		} else if (!station.equals(other.station))
-			return false;
-		return true;
 	}
 }

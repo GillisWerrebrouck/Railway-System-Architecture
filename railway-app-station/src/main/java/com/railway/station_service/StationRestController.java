@@ -34,7 +34,7 @@ public class StationRestController {
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<Station> stationById(@PathVariable int id) {
+	public ResponseEntity<Station> stationById(@PathVariable Long id) {
 		Optional <Station> optStation = stationRepository.findById(id);
 		if(optStation.isPresent()) {
 			return new ResponseEntity<>(optStation.get(), HttpStatus.OK);
@@ -43,9 +43,9 @@ public class StationRestController {
 		
 	}
 	
-	@GetMapping("/{id}/platforms")
-	public ResponseEntity<List<Platform>> platformsByStationId(@PathVariable int id) {
-		List<Platform> optPlatforms = stationRepository.getPlatforms((long)id);
+	@GetMapping("/{id}/platform")
+	public ResponseEntity<List<Platform>> platformsByStationId(@PathVariable Long id) {
+		List<Platform> optPlatforms = stationRepository.getPlatforms(id);
 		if(optPlatforms != null) {
 			return new ResponseEntity<>(optPlatforms, HttpStatus.OK);
 		}
@@ -53,8 +53,8 @@ public class StationRestController {
 		
 	}
 	
-	@GetMapping("/{id}/platforms/{id_pl}")
-	public ResponseEntity<Platform> platformByStationIdAndPlatformId(@PathVariable int id, @PathVariable int id_pl) {
+	@GetMapping("/{id}/platform/{id_pl}")
+	public ResponseEntity<Platform> platformByStationIdAndPlatformId(@PathVariable Long id, @PathVariable Long id_pl) {
 		List<Platform> optPlatforms = stationRepository.getPlatforms((long)id);
 		if(optPlatforms != null) {
 			for (int i = 0; i < optPlatforms.size(); i++) {
@@ -82,7 +82,7 @@ public class StationRestController {
 	}
 	
 	@DeleteMapping("/{id}")
-	public void deleteStation(@PathVariable int id) {
+	public void deleteStation(@PathVariable Long id) {
 		try {
 			stationRepository.deleteById(id);
 		} catch (Exception e) {
@@ -92,14 +92,14 @@ public class StationRestController {
 	}
 	
 	@PutMapping("/{id}")
-	public void updateStation(@RequestBody Station station, @PathVariable int id) throws BadRequestException {
+	public void updateStation(@RequestBody Station station, @PathVariable Long id) throws BadRequestException {
 
 		Optional<Station> stationOptional = stationRepository.findById(id);
 
 		if (!stationOptional.isPresent())
 			throw new BadRequestException("Could not find a station for the given ID");
 
-		station.setId((long) id);
+		station.setId(id);
 		try {
 			stationRepository.save(station);
 		}
