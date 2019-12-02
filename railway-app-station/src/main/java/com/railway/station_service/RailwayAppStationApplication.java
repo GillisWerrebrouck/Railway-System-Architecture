@@ -7,6 +7,14 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import com.railway.station_service.domain.Address;
+import com.railway.station_service.domain.Platform;
+import com.railway.station_service.domain.SheduleItem;
+import com.railway.station_service.domain.Station;
+import com.railway.station_service.persistence.PlatformRepository;
+import com.railway.station_service.persistence.SheduleItemRepository;
+import com.railway.station_service.persistence.StationRepository;
+
 @SpringBootApplication
 public class RailwayAppStationApplication {
 	public static void main(String[] args) {

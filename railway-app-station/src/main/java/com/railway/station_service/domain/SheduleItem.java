@@ -1,4 +1,4 @@
-package com.railway.station_service;
+package com.railway.station_service.domain;
 
 import java.time.LocalDateTime;
 import javax.persistence.*;

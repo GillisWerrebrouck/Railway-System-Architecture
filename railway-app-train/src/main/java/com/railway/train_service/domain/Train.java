@@ -1,4 +1,4 @@
-package com.railway.train_service;
+package com.railway.train_service.domain;
 
 import java.util.List;
 

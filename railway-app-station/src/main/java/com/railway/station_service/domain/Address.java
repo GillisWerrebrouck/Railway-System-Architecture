@@ -1,4 +1,4 @@
-package com.railway.station_service;
+package com.railway.station_service.domain;
 
 import javax.persistence.*;
 

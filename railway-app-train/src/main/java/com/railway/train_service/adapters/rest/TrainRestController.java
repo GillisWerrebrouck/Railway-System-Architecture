@@ -1,4 +1,4 @@
-package com.railway.train_service;
+package com.railway.train_service.adapters.rest;
 
 import java.util.Optional;
 
@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.railway.train_service.domain.Train;
+import com.railway.train_service.persistence.TrainRepository;
 
 @RestController
 @RequestMapping("/train")

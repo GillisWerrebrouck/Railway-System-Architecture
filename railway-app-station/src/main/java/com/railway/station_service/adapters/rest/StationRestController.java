@@ -1,4 +1,4 @@
-package com.railway.station_service;
+package com.railway.station_service.adapters.rest;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,6 +15,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.railway.station_service.domain.Platform;
+import com.railway.station_service.domain.Station;
+import com.railway.station_service.domain.exception.BadRequestException;
+import com.railway.station_service.persistence.StationRepository;
 
 @RestController
 @RequestMapping("/station")

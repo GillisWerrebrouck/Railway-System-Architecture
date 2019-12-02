@@ -14,6 +14,14 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import com.railway.train_service.domain.FuelType;
+import com.railway.train_service.domain.ScheduleItem;
+import com.railway.train_service.domain.TechnicalDetails;
+import com.railway.train_service.domain.Train;
+import com.railway.train_service.domain.TrainStatus;
+import com.railway.train_service.domain.TrainType;
+import com.railway.train_service.persistence.TrainRepository;
+
 @SpringBootApplication
 public class RailwayAppTrainApplication {
 	private static final Logger logger = LoggerFactory.getLogger(RailwayAppTrainApplication.class);
