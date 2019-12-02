@@ -13,8 +13,7 @@ public class TechnicalDetails {
 	private Map <String,String> defects;
 	
 	@SuppressWarnings("unused")
-	private TechnicalDetails() {
-	}
+	private TechnicalDetails() {}
 
 	public TechnicalDetails(FuelType fuel, LocalDate lastCheck, Map<String,String> defects) {
 		this.fuel = fuel;

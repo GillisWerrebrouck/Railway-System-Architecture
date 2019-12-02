@@ -18,8 +18,7 @@ public class Train {
 	private List<ScheduleItem> scheduleItems;
 	
 	@SuppressWarnings("unused")
-	private Train() {
-	}
+	private Train() {}
 	
 	public Train(TrainType type, double avgSpeed, int totalCapacity, int groupCapacity, TrainStatus status,
 			TechnicalDetails technicaldetails, List<ScheduleItem> scheduleItems) {

@@ -20,8 +20,7 @@ public class Station {
 	private List<Platform> platforms = new ArrayList<Platform>();
 	
 	@SuppressWarnings("unused")
-	private Station() {
-	}
+	private Station() {}
 	
 	public Station(String name, Address address) {
 		this.address = address;

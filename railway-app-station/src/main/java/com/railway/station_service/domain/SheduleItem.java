@@ -21,8 +21,7 @@ public class SheduleItem {
 	private Platform platform;
 	
 	@SuppressWarnings("unused")
-	private SheduleItem() {
-	}
+	private SheduleItem() {}
 	
 	public SheduleItem(int trainId, LocalDateTime arrivalDateTime, LocalDateTime departureDateTime, int delayInMinutes) {
 		this.trainId = trainId;

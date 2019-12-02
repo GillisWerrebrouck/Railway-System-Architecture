@@ -23,8 +23,7 @@ public class Platform{
 	private Station station;
     
     @SuppressWarnings("unused")
-	private Platform() {
-	}
+	private Platform() {}
     
     public Platform(int platformNumber) {
 		this.platformNumber = platformNumber;
