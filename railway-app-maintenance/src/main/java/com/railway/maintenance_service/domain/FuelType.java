@@ -1,6 +1,6 @@
 package com.railway.maintenance_service.domain;
 
-public enum TrainType {
+public enum FuelType {
 	ELECTRIC,
 	DIESEL,
 	HYBRID
