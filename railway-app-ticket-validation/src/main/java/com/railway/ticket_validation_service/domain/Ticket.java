@@ -90,7 +90,7 @@ public class Ticket {
 
     @Override
     public String toString() {
-        return MessageFormat.format("id: {0}\t startStation: {1}\t endStation: {2}" +
-        							"\t amountOfSeats: {4}\t", this.id, this.startStation, this.endStation, this.amountOfSeats);
+        return MessageFormat.format("id: {0}, startStation: {1}, endStation: {2}" +
+        							", amountOfSeats: {3}", this.id, this.startStation, this.endStation, this.amountOfSeats);
     }
 }

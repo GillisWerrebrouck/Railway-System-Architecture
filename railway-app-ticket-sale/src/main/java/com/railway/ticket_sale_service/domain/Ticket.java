@@ -108,8 +108,8 @@ public class Ticket {
         String dateFormat = this.validOn.format(DateTimeFormatter.ofPattern("dd-LLLL-yyyy"));
         if(this.type == TicketType.GROUP)
             dateFormat += " " + this.validOn.format(DateTimeFormatter.ofPattern("HH:mm"));
-        return MessageFormat.format("id: {0}\t type: {1}\t startStation: {2}\t endStation: {3}" +
-                        "\t price: {4}\t validOn: {5}\t validationCode: {6}" , this.id, this.type, this.startStation,
+        return MessageFormat.format("id: {0}, type: {1}, startStation: {2}, endStation: {3}" +
+                        ", price: {4}, validOn: {5}, validationCode: {6}" , this.id, this.type, this.startStation,
                 this.endStation, this.price, dateFormat, validationCode);
     }
 }

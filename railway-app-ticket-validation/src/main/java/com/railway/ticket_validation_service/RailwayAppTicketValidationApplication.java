@@ -33,7 +33,7 @@ public class RailwayAppTicketValidationApplication {
 			ticketRepository.save(singleTicket);
 			ticketRepository.save(groupTicket);
 
-			ticketRepository.findAll().forEach(t -> logger.info(t.toString()));
+			ticketRepository.findAll().forEach(ticket -> logger.info(ticket.toString()));
 		};
 	}
 }
