@@ -69,28 +69,44 @@ public class StationRestController {
 	
 	@PostMapping(consumes = "application/json")
 	@ResponseStatus(HttpStatus.CREATED)
-	public Station postStation (@RequestBody Station s) {
-		return stationRepository.save(s);
+	public void postStation (@RequestBody Station s) {
+		if (s.getName().compareTo("") == 0) {
+			throw new BadRequestException("Missing name attribute for station");
+		}
+		try {
+			stationRepository.save(s);
+		}
+		catch (Exception e) {
+			throw new BadRequestException("Could not update given station : " + e.getMessage());
+		}
 	}
 	
 	@DeleteMapping("/{id}")
 	public void deleteStation(@PathVariable int id) {
-		stationRepository.deleteById(id);
+		try {
+			stationRepository.deleteById(id);
+		} catch (Exception e) {
+			String errorMessage = "Could not delete station with id " + id + " : " + e.getMessage();
+			throw new BadRequestException(errorMessage);
+		}
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<Station> updateStation(@RequestBody Station station, @PathVariable int id) {
+	public void updateStation(@RequestBody Station station, @PathVariable int id) throws BadRequestException {
 
 		Optional<Station> stationOptional = stationRepository.findById(id);
 
 		if (!stationOptional.isPresent())
-			return ResponseEntity.notFound().build();
+			throw new BadRequestException("Could not find a station for the given ID");
 
 		station.setId((long) id);
+		try {
+			stationRepository.save(station);
+		}
+		catch (Exception e) {
+			throw new BadRequestException("Could not save given station : " + e.getMessage());
+		}
 		
-		stationRepository.save(station);
-
-		return ResponseEntity.noContent().build();
 	}
 
 }

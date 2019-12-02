@@ -43,27 +43,40 @@ public class PlatformRestController {
 	
 	@PostMapping(consumes = "application/json")
 	@ResponseStatus(HttpStatus.CREATED)
-	public Platform postPlatform (@RequestBody Platform p) {
-		return platformRepository.save(p);
+	public void postPlatform (@RequestBody Platform p) throws BadRequestException {
+		
+		try {
+			platformRepository.save(p);
+		}
+		catch (Exception e) {
+			throw new BadRequestException("Could not update given platform : " + e.getMessage());
+		}
 	}
 	
 	@DeleteMapping("/{id}")
 	public void deletePlatform(@PathVariable int id) {
-		platformRepository.deleteById(id);
+		try {
+			platformRepository.deleteById(id);
+		} catch (Exception e) {
+			String errorMessage = "Could not delete platform with id " + id + " : " + e.getMessage();
+			throw new BadRequestException(errorMessage);
+		}
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<Platform> updatePlatform(@RequestBody Platform platform, @PathVariable int id) {
+	public void updatePlatform(@RequestBody Platform platform, @PathVariable int id) throws BadRequestException{
 
 		Optional<Platform> platformOptional = platformRepository.findById(id);
 
 		if (!platformOptional.isPresent())
-			return ResponseEntity.notFound().build();
+			throw new BadRequestException("Could not find a station for the given ID");
 
 		platform.setId((long) id);
-		
-		platformRepository.save(platform);
-
-		return ResponseEntity.noContent().build();
+		try {
+			platformRepository.save(platform);
+		}
+		catch (Exception e) {
+			throw new BadRequestException("Could not save given platform : " + e.getMessage());
+		}
 	}
 }
