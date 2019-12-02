@@ -26,7 +26,7 @@ import com.railway.route_management_service.persistence.RouteRepository;
 import com.railway.route_management_service.persistence.StationRepository;
 
 @RestController
-@RequestMapping("/route")
+@RequestMapping("/network")
 public class RouteRestController {
 	protected final StationRepository stationRepository;
 	protected final ConnectionRepository connectionRepository;
@@ -41,25 +41,25 @@ public class RouteRestController {
 		this.routeConnectionRepository = routeConnectionRepository;
 	}
 	
-	@GetMapping
+	@GetMapping("/route")
 	public Iterable<Route> getAllRoutes() {
 		return this.routeRepository.findAll();
 	}
 
 	// get the shortest (distance) route between two station nodes
-	@GetMapping("/shortest")
+	@GetMapping("/route/shortest")
 	public Collection<Connection> getShortestPath(@RequestParam String startStation, @RequestParam String endStation) {
 		return this.connectionRepository.findShortestPath(startStation, endStation);
 	}
 
 	// get a predefined route by id
-	@GetMapping("/{id}")
+	@GetMapping("/route/{id}")
 	public Collection<Connection> getRouteById(@PathVariable Long id) {
 		return this.connectionRepository.findRouteById(id);
 	}
 	
 	// create a new route node
-	@PostMapping
+	@PostMapping("/route")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
 	public void createRoute(@RequestBody Route route) throws QueryFailedException {
 		try {

@@ -11,6 +11,7 @@ import com.railway.route_management_service.domain.Connection;
 import com.railway.route_management_service.domain.Route;
 import com.railway.route_management_service.domain.RouteConnection;
 import com.railway.route_management_service.domain.Station;
+import com.railway.route_management_service.persistence.ConnectionRepository;
 import com.railway.route_management_service.persistence.RouteRepository;
 import com.railway.route_management_service.persistence.StationRepository;
 
@@ -24,7 +25,7 @@ public class RailwayAppRouteManagementApplication {
 	
 	@SuppressWarnings("unused")
 	@Bean
-	public CommandLineRunner populateDatabase(StationRepository stationRepository, RouteRepository routeRepository) {
+	public CommandLineRunner populateDatabase(StationRepository stationRepository, ConnectionRepository connectionRepository, RouteRepository routeRepository) {
 		return (args) ->{
 			logger.info("Populating graph database with test data ...");
 
@@ -103,6 +104,12 @@ public class RailwayAppRouteManagementApplication {
 			routeRepository.save(route01);
 			routeRepository.save(route02);
 			routeRepository.save(route03);
+
+			logger.info("Station01: " + station01.toString());
+			logger.info("Station02: " + station02.toString());
+			logger.info("Station03: " + station03.toString());
+			logger.info("Station04: " + station04.toString());
+			logger.info("Station05: " + station05.toString());
 		};
 	}
 }
