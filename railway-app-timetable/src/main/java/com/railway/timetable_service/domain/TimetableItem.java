@@ -95,4 +95,9 @@ public class TimetableItem {
 	public void addStaffIds(Long staffId) {
 		this.staffIds.add(staffId);
 	}
+	
+	@Override
+	public String toString() {
+		return "Route " + this.routeId + ": " + this.startDateTime.toString() + " - " + this.endDateTime.toString();
+	}
 }
