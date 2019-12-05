@@ -7,6 +7,7 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
@@ -25,12 +26,12 @@ public class TimetableItem {
 	private Long routeId;
 	private Long trainId;
 	@Column
-    @ElementCollection(targetClass=Long.class)
+    @ElementCollection(targetClass=Long.class, fetch=FetchType.EAGER)
 	private List<Long> staffIds = new ArrayList<Long>();
 	
 	@SuppressWarnings("unused")
 	private TimetableItem() {}
-	
+
 	public TimetableItem(LocalDateTime startDate, LocalDateTime endDateTime, Long routeId, Long trainId, List<Long> staffIds) {
 		this.startDateTime = startDate;
 		this.endDateTime = endDateTime;
@@ -38,6 +39,13 @@ public class TimetableItem {
 		this.routeId = routeId;
 		this.trainId = trainId;
 		this.staffIds = staffIds;
+	}
+
+	public TimetableItem(LocalDateTime startDate, Long routeId) {
+		this.startDateTime = startDate;
+		this.endDateTime = null;
+		this.delay = 0;
+		this.routeId = routeId;
 	}
 	
 	public Long getId() {
