@@ -8,7 +8,7 @@ import javax.persistence.*;
 @Table(name = "station")
 public class Station {
 	@Id
-	@GeneratedValue (strategy = GenerationType.AUTO)
+	@GeneratedValue (strategy = GenerationType.IDENTITY)
 	private Long id;
 	
 	private String name;
@@ -31,8 +31,12 @@ public class Station {
 		return platforms;
 	}
 	
-	public void setPlatforms(ArrayList<Platform> platforms) {
+	public void setPlatforms(List<Platform> platforms) {
 		this.platforms = platforms;
+	}
+	
+	public void addPlatform(Platform platform) {
+		this.platforms.add(platform);
 	}
 	
 	public Long getId() {

@@ -36,18 +36,31 @@ public class RailwayAppRouteManagementApplication {
 			routeRepository.deleteAll();
 			
 			Station station01 = new Station("Gent-Sint-Pieters");
+			station01.setId(1L);
 			Station station02 = new Station("Gent-Dampoort");
+			station02.setId(2L);
 			Station station03 = new Station("Kortrijk");
+			station03.setId(3L);
 			Station station04 = new Station("Waregem");
+			station04.setId(4L);
 			Station station05 = new Station("Aalter");
+			station05.setId(5L);
 			Station station06 = new Station("De Pinte");
+			station06.setId(6L);
 			Station station07 = new Station("Deinze");
+			station07.setId(7L);
 			Station station08 = new Station("Eeklo");
+			station08.setId(8L);
 			Station station09 = new Station("Wondelgem");
+			station09.setId(9L);
 			Station station10 = new Station("Oudenaarde");
+			station10.setId(10L);
 			Station station11 = new Station("Zottegem");
+			station11.setId(11L);
 			Station station12 = new Station("Denderleeuw");
+			station12.setId(12L);
 			Station station13 = new Station("Brussel-Zuid");
+			station13.setId(13L);
 
 			Connection con01 = new Connection(station01, station02, 120, 10L);
 			Connection con02 = new Connection(station01, station05, 120, 28L);

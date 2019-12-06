@@ -1,7 +1,5 @@
 package com.railway.station_service;
 
-import java.time.LocalDateTime;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -11,58 +9,66 @@ import org.springframework.context.annotation.Bean;
 
 import com.railway.station_service.domain.Address;
 import com.railway.station_service.domain.Platform;
-import com.railway.station_service.domain.ScheduleItem;
 import com.railway.station_service.domain.Station;
 import com.railway.station_service.persistence.PlatformRepository;
-import com.railway.station_service.persistence.SheduleItemRepository;
 import com.railway.station_service.persistence.StationRepository;
 
 @SpringBootApplication
 public class RailwayAppStationApplication {
 	private static Logger logger = LoggerFactory.getLogger(RailwayAppStationApplication.class);
+	private StationRepository stationRepository;
+	private PlatformRepository platformRepository;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(RailwayAppStationApplication.class, args);
 	}
 	
 	@Bean
-	public CommandLineRunner populateDatabase (StationRepository stationRepository, PlatformRepository platformRepository, SheduleItemRepository sheduleItemRepository) {
-		return(args)->{
-			Address address = new Address("Maria Hendrikaplein", "Gent", "Oost-Vlaanderen", "België" );
-			Station station01 = new Station("Gent-Sint-Pieters", address);
-			
-			Platform p1 = new Platform(7);
-			Platform p2 = new Platform(8);
-			
-			ScheduleItem scheduleItem01 = new ScheduleItem(5465, LocalDateTime.of(2019,11,2,6,30,40,0), LocalDateTime.of(2019,11,2,6,35,40,0),4);
-			ScheduleItem scheduleItem02 = new ScheduleItem(5465, LocalDateTime.of(2019,11,2,6,40,12,0), LocalDateTime.of(2019,11,2,6,45,40,0),0);
-			ScheduleItem scheduleItem03 = new ScheduleItem(5465, LocalDateTime.of(2019,11,2,6,50,48,0), LocalDateTime.of(2019,11,2,6,55,40,0),16);
+	public CommandLineRunner populateDatabase (StationRepository stationRepository, PlatformRepository platformRepository) {
+		return(args)->{			
+			this.stationRepository = stationRepository;
+			this.platformRepository = platformRepository;			
 
-
-			station01.setName("Gent-Sint-Pieters");
-			station01.setAddress(address);
-			station01.getPlatforms().add(p1);
-			station01.getPlatforms().add(p2);
-			
-			p1.setStation(station01);
-			p2.setStation(station01);
-			
-			scheduleItem01.setPlatform(p1);
-			scheduleItem02.setPlatform(p1);
-			scheduleItem02.setPlatform(p2);
-			
-			p1.getReservedSlots().add(scheduleItem01);
-			p1.getReservedSlots().add(scheduleItem02);
-			p2.getReservedSlots().add(scheduleItem03);
-			
-			stationRepository.save(station01);
-			platformRepository.save(p1);
-			platformRepository.save(p2);
-			sheduleItemRepository.save(scheduleItem01);
-			sheduleItemRepository.save(scheduleItem02);
-			sheduleItemRepository.save(scheduleItem03);
-			
-			logger.info("Station01: " + station01.toString());
+			createStation(1L, "Gent-Sint-Pieters", "Koningin Maria Hendrikaplein 1", "Gent", "Oost-Vlaanderen", "België");
+			createStation(2L, "Gent-Dampoort", "Oktrooiplein 10", "Gent", "Oost-Vlaanderen", "België");
+			createStation(3L, "Kortrijk", "Stationsplein 8", "Kortrijk", "West-Vlaanderen", "België");
+			createStation(4L, "Waregem", "Noorderlaan 71", "Waregem", "West-Vlaanderen", "België");
+			createStation(5L, "Aalter", "Stationsplein 2", "Aalter", "Oost-Vlaanderen", "België");
+			createStation(6L, "De Pinte", "Stationsstraat 25", "De Pinte", "Oost-Vlaanderen", "België");
+			createStation(7L, "Deinze", "Statieplein 4", "Deinze", "Oost-Vlaanderen", "België");
+			createStation(8L, "Eeklo", "Koningin Astridplein 1", "Eeklo", "Oost-Vlaanderen", "België");
+			createStation(9L, "Wondelgem", "Wondelgemstationplein 36", "Wondelgem", "Oost-Vlaanderen", "België");
+			createStation(10L, "Oudenaarde", "Stationplein 1 Gewest", "Oudenaarde", "Oost-Vlaanderen", "België");
+			createStation(11L, "Zottegem", "Stationsplein 12", "Zottegem", "Oost-Vlaanderen", "België");
+			createStation(12L, "Denderleeuw", "Stationsplein", "Denderleeuw", "Oost-Vlaanderen", "België");
+			createStation(13L, "Brussel-Zuid", "Fonsnylaan 47b", "Brussel", "Brussels", "België");
 		};
+	}
+	
+	public void createStation(Long id, String name, String street, String city, String province, String country) {
+		Address address = new Address(street, city, province, country);
+		Station station = new Station(name, address);
+		station.setId(id);
+
+		Platform p1 = new Platform(1);
+		Platform p2 = new Platform(2);
+		Platform p3 = new Platform(3);
+		platformRepository.save(p1);
+		platformRepository.save(p2);
+		platformRepository.save(p3);
+		
+		station.getPlatforms().add(p1);
+		station.getPlatforms().add(p2);
+		station.getPlatforms().add(p3);
+		stationRepository.save(station);
+		
+		p1.setStation(station);
+		p2.setStation(station);
+		p3.setStation(station);
+		platformRepository.save(p1);
+		platformRepository.save(p2);
+		platformRepository.save(p3);
+
+		logger.info("Station " + id.toString() + ": " + station.toString());
 	}
 }
