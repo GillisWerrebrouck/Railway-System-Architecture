@@ -1,7 +1,5 @@
 package com.railway.timetable_service.domain;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,9 +7,7 @@ import com.railway.timetable_service.adapters.messaging.RouteFetchedResponse;
 import com.railway.timetable_service.persistence.TimetableItemRepository;
 
 @Service
-public class TimetableService {
-	private static Logger logger = LoggerFactory.getLogger(TimetableService.class);
-	
+public class TimetableService {	
 	private final CreateTimetableItemSaga createTimetableItemSaga;
 	private final TimetableItemRepository timetableItemRepository;
 	
@@ -34,7 +30,6 @@ public class TimetableService {
 	public synchronized void routeFetched(RouteFetchedResponse routeFetchedResponse) {
 		TimetableItem timetableItem = timetableItemRepository.findById(routeFetchedResponse.getTimeTableId()).orElse(null);
 		this.createTimetableItemSaga.onRouteFetched(timetableItem, routeFetchedResponse.getRouteId());
-//		this.timetableItemRepository.save(...);
 	}
 	
 	public synchronized void failedToCreateTimetableItem(RouteFetchedResponse routeFetchedResponse) {

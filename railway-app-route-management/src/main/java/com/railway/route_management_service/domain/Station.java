@@ -18,7 +18,7 @@ public class Station {
 	@GeneratedValue 
 	@JsonProperty
 	private Long id;
-	
+
 	private String name;
 	
 	@SuppressWarnings("unused")

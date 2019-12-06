@@ -49,28 +49,28 @@ public class RailwayAppRouteManagementApplication {
 			Station station12 = new Station("Denderleeuw");
 			Station station13 = new Station("Brussel-Zuid");
 
-			Connection con01 = new Connection(station01, station02, 10L);
-			Connection con02 = new Connection(station01, station05, 28L);
-			Connection con03 = new Connection(station01, station06, 14L);
-			Connection con04 = new Connection(station01, station08, 29L);
-			Connection con05 = new Connection(station01, station11, 38L);
-			Connection con06 = new Connection(station01, station12, 42L);
+			Connection con01 = new Connection(station01, station02, 120, 10L);
+			Connection con02 = new Connection(station01, station05, 120, 28L);
+			Connection con03 = new Connection(station01, station06, 120, 14L);
+			Connection con04 = new Connection(station01, station08, 120, 29L);
+			Connection con05 = new Connection(station01, station11, 120, 38L);
+			Connection con06 = new Connection(station01, station12, 120, 42L);
 
-			Connection con07 = new Connection(station02, station09, 15L);
-			Connection con08 = new Connection(station02, station11, 28L);
+			Connection con07 = new Connection(station02, station09, 120, 15L);
+			Connection con08 = new Connection(station02, station11, 120, 28L);
 
-			Connection con09 = new Connection(station03, station04, 17L);
+			Connection con09 = new Connection(station03, station04, 120, 17L);
 
-			Connection con10 = new Connection(station04, station07, 36L);
+			Connection con10 = new Connection(station04, station07, 120, 36L);
 
-			Connection con11 = new Connection(station06, station07, 19L);
-			Connection con12 = new Connection(station06, station10, 27L);
+			Connection con11 = new Connection(station06, station07, 120, 19L);
+			Connection con12 = new Connection(station06, station10, 120, 27L);
 
-			Connection con13 = new Connection(station08, station09, 22L);
+			Connection con13 = new Connection(station08, station09, 120, 22L);
 
-			Connection con14 = new Connection(station11, station12, 20L);
+			Connection con14 = new Connection(station11, station12, 120, 20L);
 
-			Connection con15 = new Connection(station12, station13, 38L);
+			Connection con15 = new Connection(station12, station13, 120, 38L);
 			
 			stationRepository.save(station01);
 			stationRepository.save(station02);

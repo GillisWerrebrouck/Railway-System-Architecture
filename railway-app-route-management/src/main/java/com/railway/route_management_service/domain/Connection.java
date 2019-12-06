@@ -15,6 +15,8 @@ public class Connection {
 	@GeneratedValue
 	@JsonProperty
     private Long id;
+	
+	private double maxSpeed;
 
 	@StartNode
     private Station stationX;
@@ -30,10 +32,11 @@ public class Connection {
 		// Empty constructor required as of Neo4j API 2.0.5
 	}
 	
-	public Connection(Station stationX, Station stationY, Long distance) {
+	public Connection(Station stationX, Station stationY, double maxSpeed, Long distance) {
 		this.stationX = stationX;
 		this.stationY = stationY;
-		this.setDistance(distance);
+		this.maxSpeed = maxSpeed;
+		this.distance = distance;
 
 		this.stationX.getConnections().add(this);
 		this.stationY.getConnections().add(this);
@@ -41,6 +44,14 @@ public class Connection {
 	
 	public Long getId() {
 		return id;
+	}
+	
+	public double getMaxSpeed() {
+		return maxSpeed;
+	}
+	
+	public void setMaxSpeed(double maxSpeed) {
+		this.maxSpeed = maxSpeed;
 	}
 
 	public Station getStationX() {

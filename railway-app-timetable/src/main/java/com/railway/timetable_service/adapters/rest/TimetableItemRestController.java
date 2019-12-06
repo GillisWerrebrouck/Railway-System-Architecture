@@ -62,6 +62,7 @@ public class TimetableItemRestController implements CreateTimetableItemListener 
 	
 	@PostMapping
 	private DeferredResult<TimetableItem> createTimetableItem(@RequestBody TimetableRequest timetableRequest) {
+		logger.info("[Timetable Item Rest Controller] create timetable item");
 		DeferredResult<TimetableItem> deferredResult = new DeferredResult<>(10000l);
 		
 		deferredResult.onTimeout(() -> {
@@ -76,10 +77,12 @@ public class TimetableItemRestController implements CreateTimetableItemListener 
 		try {
 			this.timetableService.createTimetableItem(timetableItem);
 		} catch (Exception e) {
+			logger.info("[Timetable Item Rest Controller] failed to create a timetable item");
 			deferredResult.setErrorResult("Failed to create timetablle item. " + e.getMessage());
 			this.deferredResults.remove(timetableItem.getId());
 		}
-
+		
+		logger.info("[Timetable Item Rest Controller] succefully created a timetable item");
 		return deferredResult;
 	}
 
