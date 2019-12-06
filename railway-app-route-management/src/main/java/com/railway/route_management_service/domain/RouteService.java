@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.railway.route_management_service.persistence.ConnectionRepository;
-import com.railway.route_management_service.persistence.RouteRepository;
 
 @Service
 public class RouteService {

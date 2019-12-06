@@ -74,7 +74,6 @@ public class TimetableItemRestController implements CreateTimetableItemListener 
 		this.deferredResults.put(timetableItem.getId(), deferredResult);
 
 		try {
-			logger.info("GET ROUTE STARTED");
 			this.timetableService.createTimetableItem(timetableItem);
 		} catch (Exception e) {
 			deferredResult.setErrorResult("Failed to create timetablle item. " + e.getMessage());

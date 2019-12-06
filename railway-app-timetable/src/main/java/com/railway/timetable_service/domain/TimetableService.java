@@ -5,7 +5,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.railway.timetable_service.adapters.messaging.MessageGateway;
 import com.railway.timetable_service.adapters.messaging.RouteFetchedResponse;
 import com.railway.timetable_service.persistence.TimetableItemRepository;
 
@@ -13,13 +12,11 @@ import com.railway.timetable_service.persistence.TimetableItemRepository;
 public class TimetableService {
 	private static Logger logger = LoggerFactory.getLogger(TimetableService.class);
 	
-	private final MessageGateway gateway;
 	private final CreateTimetableItemSaga createTimetableItemSaga;
 	private final TimetableItemRepository timetableItemRepository;
 	
 	@Autowired
-	public TimetableService(MessageGateway gateway, CreateTimetableItemSaga createTimetableItemSaga, TimetableItemRepository timetableItemRepository) {
-		this.gateway = gateway;
+	public TimetableService(CreateTimetableItemSaga createTimetableItemSaga, TimetableItemRepository timetableItemRepository) {
 		this.createTimetableItemSaga = createTimetableItemSaga;
 		this.timetableItemRepository = timetableItemRepository;
 	}
@@ -35,15 +32,13 @@ public class TimetableService {
 	}
 	
 	public synchronized void routeFetched(RouteFetchedResponse routeFetchedResponse) {
-		logger.info("TEST!!!!!!!!!!!!!!!!!!!!!");
 		TimetableItem timetableItem = timetableItemRepository.findById(routeFetchedResponse.getTimeTableId()).orElse(null);
-		logger.info("TEST 22222222222222222!!!!!!!!!!!!!!!!!!!!!");
 		this.createTimetableItemSaga.onRouteFetched(timetableItem, routeFetchedResponse.getRouteId());
-//		this.hospitalStayRepository.save(hospitalStay);
+//		this.timetableItemRepository.save(...);
 	}
 	
 	public synchronized void failedToCreateTimetableItem(RouteFetchedResponse routeFetchedResponse) {
-//		TimetableItem timetableItem = timetableItemRepository.findById(routeFetchedResponse.).orElse(null);
-//		this.createTimetableItemSaga.onGetRouteFailed(timetableItem);
+		TimetableItem timetableItem = timetableItemRepository.findById(routeFetchedResponse.getRouteId()).orElse(null);
+		this.createTimetableItemSaga.onGetRouteFailed(timetableItem);
 	}
 }

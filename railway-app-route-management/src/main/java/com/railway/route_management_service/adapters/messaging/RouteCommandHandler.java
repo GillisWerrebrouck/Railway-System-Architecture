@@ -8,7 +8,6 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Service;
 
 import com.railway.route_management_service.domain.Connection;
-import com.railway.route_management_service.domain.Route;
 import com.railway.route_management_service.domain.RouteService;
 
 @Service
