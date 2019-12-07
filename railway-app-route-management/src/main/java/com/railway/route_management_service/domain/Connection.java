@@ -32,7 +32,7 @@ public class Connection {
 		// Empty constructor required as of Neo4j API 2.0.5
 	}
 	
-	public Connection(Station stationX, Station stationY, double maxSpeed, Long distance) {
+	public Connection(Station stationX, Station stationY, Long distance, double maxSpeed) {
 		this.stationX = stationX;
 		this.stationY = stationY;
 		this.maxSpeed = maxSpeed;

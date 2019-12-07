@@ -1,15 +1,16 @@
 package com.railway.timetable_service.adapters.messaging;
 
 public class Station {
-	private Long id;
+	// UUID as String because UUID is not supported in neo4j in the Route Management Service
+	private String id;
 	private String name;
 	
-	public Station(Long id, String name) {
+	public Station(String id, String name) {
 		this.id = id;
 		this.name = name;
 	}
 	
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
 	

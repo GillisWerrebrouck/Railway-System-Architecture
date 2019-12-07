@@ -2,6 +2,7 @@ package com.railway.station_service.adapters.rest;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -37,7 +38,7 @@ public class StationRestController {
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<Station> stationById(@PathVariable Long id) {
+	public ResponseEntity<Station> stationById(@PathVariable UUID id) {
 		Optional <Station> optStation = stationRepository.findById(id);
 		if(optStation.isPresent()) {
 			return new ResponseEntity<>(optStation.get(), HttpStatus.OK);
@@ -82,7 +83,7 @@ public class StationRestController {
 	}
 	
 	@DeleteMapping("/{id}")
-	public void deleteStation(@PathVariable Long id) {
+	public void deleteStation(@PathVariable UUID id) {
 		try {
 			stationRepository.deleteById(id);
 		} catch (Exception e) {
@@ -92,7 +93,7 @@ public class StationRestController {
 	}
 	
 	@PutMapping("/{id}")
-	public void updateStation(@RequestBody Station station, @PathVariable Long id) throws BadRequestException {
+	public void updateStation(@RequestBody Station station, @PathVariable UUID id) throws BadRequestException {
 
 		Optional<Station> stationOptional = stationRepository.findById(id);
 

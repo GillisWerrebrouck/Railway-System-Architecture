@@ -67,7 +67,7 @@ public class Platform{
 
 	@Override
 	public String toString() {
-		return "Platform [id=" + id + ", platformNumber=" + platformNumber + ", #reservableSlots=" + reservedSlots.size()
-				+ ", station=" + station.toString() + "]";
+		return "id=" + id + ", platformNumber=" + platformNumber + ", #reservableSlots=" + reservedSlots.size()
+				+ ", station=" + station.toString();
 	}
 }

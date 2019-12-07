@@ -2,14 +2,15 @@ package com.railway.station_service.domain;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "station")
 public class Station {
 	@Id
-	@GeneratedValue (strategy = GenerationType.IDENTITY)
-	private Long id;
+	private UUID id;
 	
 	private String name;
 	
@@ -39,11 +40,11 @@ public class Station {
 		this.platforms.add(platform);
 	}
 	
-	public Long getId() {
+	public UUID getId() {
 		return id;
 	}
 	
-	public void setId(Long id) {
+	public void setId(UUID id) {
 		this.id = id;
 	}
 	

@@ -45,9 +45,9 @@ public class ConnectionRestController extends RouteRestController {
 			throw new SelfReferentialNodeException(errorMessage);
 		}
 		
-		int result = this.connectionRepository.connectStations(connection.getStationX().getName(), connection.getStationY().getName(), connection.getDistance());
+		Connection result = this.connectionRepository.connectStations(connection.getStationX().getName(), connection.getStationY().getName(), connection.getDistance(), connection.getMaxSpeed());
 		
-		if (result == 0) {
+		if (result == null) {
 			String errorMessage = "Connection between " + connection.getStationX().getName() + " and " + connection.getStationY().getName() + " could not be created";
 			throw new QueryFailedException(errorMessage);
 		}
