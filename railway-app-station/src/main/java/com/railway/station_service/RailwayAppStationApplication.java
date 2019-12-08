@@ -7,8 +7,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.context.annotation.Bean;
 
+import com.railway.station_service.adapters.messaging.Channels;
 import com.railway.station_service.domain.Address;
 import com.railway.station_service.domain.Platform;
 import com.railway.station_service.domain.Station;
@@ -16,6 +18,7 @@ import com.railway.station_service.persistence.PlatformRepository;
 import com.railway.station_service.persistence.StationRepository;
 
 @SpringBootApplication
+@EnableBinding(Channels.class)
 public class RailwayAppStationApplication {
 	private static Logger logger = LoggerFactory.getLogger(RailwayAppStationApplication.class);
 	private StationRepository stationRepository;

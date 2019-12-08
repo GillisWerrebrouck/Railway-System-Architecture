@@ -78,7 +78,7 @@ public class CreateTimetableItemSaga {
 		LocalDateTime departureTime = timetableItem.getStartDateTime();
 		timetableItem.setStartDateTime(departureTime.minusMinutes(15));
 		LocalDateTime arrivalTime = timetableItem.getStartDateTime();
-		reserveStation(startStation, arrivalTime, departureTime);
+		reserveStation(startStation, timetableItem.getId(), arrivalTime, departureTime);
 		
 		UUID previousStationId = UUID.fromString(startStation.getStationId());
 		
@@ -105,7 +105,7 @@ public class CreateTimetableItemSaga {
 			previousStationId=UUID.fromString(station.getStationId());
 			
 			// reserve a platform at the station with a wait time of 8 minutes
-			reserveStation(station, arrivalTime, departureTime);
+			reserveStation(station, timetableItem.getId(), arrivalTime, departureTime);
 			timetableItem.setEndDateTime(departureTime);
 		}
 		timetableItemRepository.save(timetableItem);
@@ -122,8 +122,8 @@ public class CreateTimetableItemSaga {
 		return routePart;
 	}
 	
-	private void reserveStation(Station station, LocalDateTime arrivalTime, LocalDateTime departureDateTime) {
-		StationRequest stationRequest = new StationRequest(UUID.fromString(station.getStationId()), arrivalTime, departureDateTime);
+	private void reserveStation(Station station, Long timetableId, LocalDateTime arrivalTime, LocalDateTime departureDateTime) {
+		StationRequest stationRequest = new StationRequest(UUID.fromString(station.getStationId()), timetableId, arrivalTime, departureDateTime);
 		logger.info("[Create Timetable Item Saga] reserve station command sent");
 		gateway.reserveStation(stationRequest);
 	}

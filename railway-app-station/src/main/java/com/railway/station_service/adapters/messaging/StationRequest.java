@@ -1,4 +1,4 @@
-package com.railway.timetable_service.adapters.messaging;
+package com.railway.station_service.adapters.messaging;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -10,8 +10,8 @@ public class StationRequest {
 	private LocalDateTime arrivalDateTime;
 	private LocalDateTime departureDateTime;
 	
-	public StationRequest(UUID stationId, Long timetableId, LocalDateTime arrivaDateTime, LocalDateTime departureDateTime) {
-		this.requestId = UUID.randomUUID();
+	public StationRequest(UUID requestId, UUID stationId, Long timetableId, LocalDateTime arrivaDateTime, LocalDateTime departureDateTime) {
+		this.requestId = requestId;
 		this.stationId = stationId;
 		this.timetableId = timetableId;
 		this.arrivalDateTime = arrivaDateTime;

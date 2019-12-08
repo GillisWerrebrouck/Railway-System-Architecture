@@ -23,7 +23,7 @@ public class TrainCommandHandler {
 	@StreamListener(Channels.RESERVE_TRAIN)
 	@SendTo(Channels.TRAIN_RESERVED)
 	public TrainResponse reserveTrain(TrainRequest request) {
-		logger.info("[Train Command Handler] reserve command received");
+		logger.info("[Train Command Handler] reserve train command received");
 		Train train = trainService.reserveTrain(request.getStartDateTime(), request.getEndDateTime(), request.getTrainType());
 		TrainResponse response;
 		if(train != null) {
