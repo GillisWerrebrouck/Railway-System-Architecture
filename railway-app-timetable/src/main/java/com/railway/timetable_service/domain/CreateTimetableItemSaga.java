@@ -9,7 +9,6 @@ import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.geo.Distance;
 import org.springframework.stereotype.Service;
 
 import com.railway.timetable_service.adapters.messaging.MessageGateway;
@@ -47,8 +46,6 @@ public class CreateTimetableItemSaga {
 		RouteRequest routeRequest = new RouteRequest(timetableItem.getId(), timetableItem.getRouteId());
 		logger.info("[Create Timetable Item Saga] get route command sent");
 		gateway.getRoute(routeRequest);
-		
-		// TODO: reserve staff
 	}
 	
 	public void onRouteFetched(TimetableItem timetableItem, RouteFetchedResponse routeFetchedResponse) {
@@ -71,6 +68,8 @@ public class CreateTimetableItemSaga {
 		TrainRequest trainRequest = new TrainRequest(timetableItem.getId(), timetableItem.getStartDateTime(), timetableItem.getEndDateTime(), timetableItem.getRequestedTrainType());
 		logger.info("[Create Timetable Item Saga] reserve train command sent");
 		gateway.reserveTrain(trainRequest);
+		
+		// TODO: reserve staff
 	}
 	
 	private void reserveAllStations(TimetableItem timetableItem, Station startStation, Collection<RoutePart> allRouteConnections) {

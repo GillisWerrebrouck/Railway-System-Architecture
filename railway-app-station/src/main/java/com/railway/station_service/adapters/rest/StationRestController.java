@@ -47,8 +47,8 @@ public class StationRestController {
 	}
 	
 	@GetMapping("/{id}/platform")
-	public ResponseEntity<List<Platform>> platformsByStationId(@PathVariable Long id) {
-		List<Platform> optPlatforms = stationRepository.getPlatforms(id);
+	public ResponseEntity<List<Platform>> platformsByStationId(@PathVariable UUID id) {
+		List<Platform> optPlatforms = stationRepository.getPlatformsByStationId(id);
 		if(optPlatforms != null) {
 			return new ResponseEntity<>(optPlatforms, HttpStatus.OK);
 		}
@@ -56,8 +56,8 @@ public class StationRestController {
 	}
 	
 	@GetMapping("/{id}/platform/{id_pl}")
-	public ResponseEntity<Platform> platformByStationIdAndPlatformId(@PathVariable Long id, @PathVariable Long id_pl) {
-		List<Platform> optPlatforms = stationRepository.getPlatforms((long)id);
+	public ResponseEntity<Platform> platformByStationIdAndPlatformId(@PathVariable UUID id, @PathVariable Long id_pl) {
+		List<Platform> optPlatforms = stationRepository.getPlatformsByStationId(id);
 		if(optPlatforms != null) {
 			for (int i = 0; i < optPlatforms.size(); i++) {
 				if(optPlatforms.get(i).getId() == id_pl) {

@@ -16,7 +16,7 @@ public class Platform{
 	
 	private int platformNumber;
 	
-	@OneToMany(mappedBy = "platform")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "platform")
 	private List<ScheduleItem> reservedSlots = new ArrayList<ScheduleItem>();
 	
     @ManyToOne

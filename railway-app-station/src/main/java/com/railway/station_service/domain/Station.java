@@ -17,7 +17,7 @@ public class Station {
 	@Embedded
 	private Address address;
 	
-	@OneToMany(mappedBy = "station")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "station")
 	private List<Platform> platforms = new ArrayList<Platform>();
 	
 	@SuppressWarnings("unused")

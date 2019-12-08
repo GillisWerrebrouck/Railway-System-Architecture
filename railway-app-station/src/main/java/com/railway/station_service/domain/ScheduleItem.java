@@ -12,7 +12,7 @@ public class ScheduleItem {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	
-	private int trainId;
+	private Long timetableId;
 	private LocalDateTime arrivalDateTime;
 	private LocalDateTime departureDateTime;
 	private int delayInMinutes;
@@ -23,11 +23,15 @@ public class ScheduleItem {
 	@SuppressWarnings("unused")
 	private ScheduleItem() {}
 	
-	public ScheduleItem(int trainId, LocalDateTime arrivalDateTime, LocalDateTime departureDateTime, int delayInMinutes) {
-		this.trainId = trainId;
+	public ScheduleItem(Long timetableId, LocalDateTime arrivalDateTime, LocalDateTime departureDateTime, int delayInMinutes) {
+		this.timetableId = timetableId;
 		this.arrivalDateTime = arrivalDateTime;
 		this.departureDateTime = departureDateTime;
 		this.delayInMinutes = delayInMinutes;
+	}
+	
+	public ScheduleItem(Long timetableId, LocalDateTime arrivalDateTime, LocalDateTime departureDateTime) {
+		this(timetableId, arrivalDateTime, departureDateTime, 0);
 	}
 
 	public Long getId() {
@@ -46,12 +50,12 @@ public class ScheduleItem {
 		this.platform = platform;
 	}
 
-	public int getTrainId() {
-		return trainId;
+	public Long getTimetableId() {
+		return timetableId;
 	}
-
-	public void setTrainId(int trainId) {
-		this.trainId = trainId;
+	
+	public void setTimetableId(Long timetableId) {
+		this.timetableId = timetableId;
 	}
 
 	public LocalDateTime getArrivalDateTime() {
@@ -80,54 +84,8 @@ public class ScheduleItem {
 
 	@Override
 	public String toString() {
-		return "SheduleItem [id=" + id + ", trainId=" + trainId + ", arrivalDateTime=" + arrivalDateTime
+		return "SheduleItem [id=" + id + ", timetableId=" + timetableId + ", arrivalDateTime=" + arrivalDateTime
 				+ ", departureDateTime=" + departureDateTime + ", delayInMinutes=" + delayInMinutes + ", platform="
 				+ platform + "]";
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((arrivalDateTime == null) ? 0 : arrivalDateTime.hashCode());
-		result = prime * result + delayInMinutes;
-		result = prime * result + ((departureDateTime == null) ? 0 : departureDateTime.hashCode());
-		result = (int) (prime * result + id);
-		result = prime * result + ((platform == null) ? 0 : platform.hashCode());
-		result = prime * result + trainId;
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		ScheduleItem other = (ScheduleItem) obj;
-		if (arrivalDateTime == null) {
-			if (other.arrivalDateTime != null)
-				return false;
-		} else if (!arrivalDateTime.equals(other.arrivalDateTime))
-			return false;
-		if (delayInMinutes != other.delayInMinutes)
-			return false;
-		if (departureDateTime == null) {
-			if (other.departureDateTime != null)
-				return false;
-		} else if (!departureDateTime.equals(other.departureDateTime))
-			return false;
-		if (id != other.id)
-			return false;
-		if (platform == null) {
-			if (other.platform != null)
-				return false;
-		} else if (!platform.equals(other.platform))
-			return false;
-		if (trainId != other.trainId)
-			return false;
-		return true;
 	}
 }

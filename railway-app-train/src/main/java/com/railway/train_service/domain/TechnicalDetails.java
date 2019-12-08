@@ -1,7 +1,6 @@
 package com.railway.train_service.domain;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Map;
 
 import org.springframework.data.mongodb.core.mapping.Document;
