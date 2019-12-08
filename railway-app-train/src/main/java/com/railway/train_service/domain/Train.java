@@ -1,5 +1,6 @@
 package com.railway.train_service.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
@@ -10,7 +11,6 @@ public class Train {
 	@Id
 	private String id;
 	private TrainType type;
-	private double avgSpeed;
 	private int totalCapacity;
 	private int groupCapacity;
 	private TrainStatus status;
@@ -20,15 +20,18 @@ public class Train {
 	@SuppressWarnings("unused")
 	private Train() {}
 	
-	public Train(TrainType type, double avgSpeed, int totalCapacity, int groupCapacity, TrainStatus status,
+	public Train(TrainType type, int totalCapacity, int groupCapacity, TrainStatus status,
 			TechnicalDetails technicaldetails, List<ScheduleItem> scheduleItems) {
 		this.type = type;
-		this.avgSpeed = avgSpeed;
 		this.totalCapacity = totalCapacity;
 		this.groupCapacity = groupCapacity;
 		this.status = status;
 		this.technicaldetails = technicaldetails;
 		this.scheduleItems = scheduleItems;
+	}
+	
+	public Train(TrainType type, int totalCapacity, int groupCapacity, TechnicalDetails technicaldetails) {
+		this(type, totalCapacity, groupCapacity, TrainStatus.ACTIVE, technicaldetails, new ArrayList<>());
 	}
 	
 	public List<ScheduleItem> getScheduleItems(){
@@ -50,15 +53,7 @@ public class Train {
 	public void setType(TrainType type) {
 		this.type = type;
 	}
-	
-	public double getAvgSpeed() {
-		return avgSpeed;
-	}
-	
-	public void setAvgSpeed(double avgSpeed) {
-		this.avgSpeed = avgSpeed;
-	}
-	
+		
 	public int getTotalCapacity() {
 		return totalCapacity;
 	}

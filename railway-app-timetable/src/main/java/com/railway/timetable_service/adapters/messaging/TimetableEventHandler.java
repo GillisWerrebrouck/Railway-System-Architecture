@@ -20,11 +20,22 @@ public class TimetableEventHandler {
 	
 	@StreamListener(Channels.ROUTE_FETCHED)
 	public void processFetchedRoute(RouteFetchedResponse response) {
-		if(response.getRoute().size() != 0) {
+		if(response.getRouteConnections().size() != 0) {
 			logger.info("[Timetable Event Handler] successfully fetched route");
 			this.timetableItemService.routeFetched(response);
 		} else {
 			logger.info("[Timetable Event Handler] failed to fetch route");
+			this.timetableItemService.failedToCreateTimetableItem(response);
+		}
+	}
+	
+	@StreamListener(Channels.TRAIN_RESERVED)
+	public void processTrainReserved(TrainReservedResponse response) {
+		if(response.getTrainId() != null) {
+			logger.info("[Timetable Event Handler] successfully reserved train");
+			this.timetableItemService.trainReserved(response);
+		} else {
+			logger.info("[Timetable Event Handler] failed to reserve train");
 			this.timetableItemService.failedToCreateTimetableItem(response);
 		}
 	}

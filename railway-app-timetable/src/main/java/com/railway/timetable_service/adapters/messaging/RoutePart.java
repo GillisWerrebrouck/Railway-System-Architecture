@@ -5,12 +5,14 @@ public class RoutePart {
     private Station stationX;
     private Station stationY;
 	private Long distance;
+	private double maxSpeed;
 	private boolean active = true;
 	
-	public RoutePart(Station stationX, Station stationY, Long distance) {
+	public RoutePart(Station stationX, Station stationY, Long distance, double maxSpeed) {
 		this.stationX = stationX;
 		this.stationY = stationY;
 		this.distance = distance;
+		this.maxSpeed = maxSpeed;
 	}
 	
 	public Long getId() {
@@ -27,6 +29,10 @@ public class RoutePart {
 	
 	public Long getDistance() {
 		return distance;
+	}
+	
+	public double getMaxSpeed() {
+		return maxSpeed;
 	}
 	
 	public boolean isActive() {

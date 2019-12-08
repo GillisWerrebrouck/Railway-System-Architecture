@@ -6,17 +6,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.railway.route_management_service.persistence.ConnectionRepository;
+import com.railway.route_management_service.persistence.RouteRepository;
 
 @Service
 public class RouteService {
 	private final ConnectionRepository connectionRepository;
+	private final RouteRepository routeRepository;
 	
 	@Autowired
-	public RouteService(ConnectionRepository connectionRepository) {
+	public RouteService(ConnectionRepository connectionRepository, RouteRepository routeRepository) {
 		this.connectionRepository = connectionRepository;
+		this.routeRepository = routeRepository;
 	}
 	
-	public Collection<Connection> getRoute(Long routeId) {
+	public Collection<Connection> getRouteConnections(Long routeId) {
 		return connectionRepository.findRouteById(routeId);
+	}
+	
+	public Route getRoute(Long routeId) {
+		return routeRepository.findById(routeId).orElse(null);
 	}
 }

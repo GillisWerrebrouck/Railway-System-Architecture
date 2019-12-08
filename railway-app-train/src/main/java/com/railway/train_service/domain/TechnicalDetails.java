@@ -1,6 +1,7 @@
 package com.railway.train_service.domain;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Map;
 
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -19,6 +20,12 @@ public class TechnicalDetails {
 		this.fuel = fuel;
 		this.lastCheck = lastCheck;
 		this.defects = defects;
+	}
+
+	public TechnicalDetails(FuelType fuel) {
+		this.fuel = fuel;
+		this.lastCheck = LocalDate.now();
+		this.defects = null;
 	}
 
 	public FuelType getFuel() {

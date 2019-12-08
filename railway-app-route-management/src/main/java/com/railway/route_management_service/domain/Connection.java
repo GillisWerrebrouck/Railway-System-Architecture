@@ -15,8 +15,6 @@ public class Connection {
 	@GeneratedValue
 	@JsonProperty
     private Long id;
-	
-	private double maxSpeed;
 
 	@StartNode
     private Station stationX;
@@ -25,6 +23,7 @@ public class Connection {
     private Station stationY;
 
 	private Long distance;
+	private double maxSpeed;
 	private boolean active = true;
 
 	@SuppressWarnings("unused")
@@ -44,14 +43,6 @@ public class Connection {
 	
 	public Long getId() {
 		return id;
-	}
-	
-	public double getMaxSpeed() {
-		return maxSpeed;
-	}
-	
-	public void setMaxSpeed(double maxSpeed) {
-		this.maxSpeed = maxSpeed;
 	}
 
 	public Station getStationX() {
@@ -76,6 +67,14 @@ public class Connection {
 
 	public void setDistance(Long distance) {
 		this.distance = distance;
+	}
+	
+	public double getMaxSpeed() {
+		return maxSpeed;
+	}
+	
+	public void setMaxSpeed(double maxSpeed) {
+		this.maxSpeed = maxSpeed;
 	}
 
 	public boolean isActive() {

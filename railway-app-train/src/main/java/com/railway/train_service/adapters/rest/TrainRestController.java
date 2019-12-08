@@ -56,7 +56,6 @@ public class TrainRestController {
 	ResponseEntity<Train> replaceTrain(@RequestBody Train newTrain, @PathVariable String id) {
 	    Optional<Train> optTrain = trainRepository.findById(id)
 	      .map(train -> {
-	        train.setAvgSpeed(newTrain.getAvgSpeed());
 	        train.setGroupCapacity(newTrain.getGroupCapacity());
 	        train.setStatus(newTrain.getStatus());
 	        train.setTechnicaldetails(newTrain.getTechnicaldetails());

@@ -46,6 +46,7 @@ public class TimetableItem {
 		this.endDateTime = null;
 		this.delay = 0;
 		this.routeId = routeId;
+		this.trainId = null;
 	}
 	
 	public Long getId() {

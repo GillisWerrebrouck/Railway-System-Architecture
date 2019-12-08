@@ -10,6 +10,7 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Service;
 
 import com.railway.route_management_service.domain.Connection;
+import com.railway.route_management_service.domain.Route;
 import com.railway.route_management_service.domain.RouteService;
 
 @Service
@@ -26,8 +27,9 @@ public class RouteCommandHandler {
 	@SendTo(Channels.ROUTE_FETCHED)
 	public RouteResponse getRoute(RouteRequest request) {
 		logger.info("[Route Command Handler] get route command received");
-		Collection<Connection> route = routeService.getRoute(request.getRouteId());
-		RouteResponse response = new RouteResponse(request.getRouteId(), request.getTimetableId(), request.getRequestId(), route);
+		Collection<Connection> routeConnections = routeService.getRouteConnections(request.getRouteId());
+		Route route = routeService.getRoute(request.getRouteId());
+		RouteResponse response = new RouteResponse(request.getRouteId(), request.getTimetableId(), request.getRequestId(), routeConnections, route);
 		logger.info("[Route Command Handler] route fetched");
 		return response;		
 	}

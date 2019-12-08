@@ -75,7 +75,7 @@ public class TimetableItemRestController implements CreateTimetableItemListener 
 		this.deferredResults.put(timetableItem.getId(), deferredResult);
 
 		try {
-			this.timetableService.createTimetableItem(timetableItem);
+			this.timetableService.createTimetableItem(timetableItem, timetableRequest);
 		} catch (Exception e) {
 			logger.info("[Timetable Item Rest Controller] failed to create a timetable item");
 			deferredResult.setErrorResult("Failed to create timetablle item. " + e.getMessage());

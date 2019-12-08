@@ -103,22 +103,22 @@ public class RailwayAppRouteManagementApplication {
 			connectionRepository.save(con15);
 
 			Route route01 = new Route("Kortrijk - De Pinte");
-			RouteConnection routeCon01 = new RouteConnection(route01, station03, con09.getId());
-			RouteConnection routeCon02 = new RouteConnection(route01, station04, con10.getId());
-			RouteConnection routeCon04 = new RouteConnection(route01, station07, con11.getId());
-			RouteConnection routeCon03 = new RouteConnection(route01, station06, null);
+			RouteConnection routeCon01 = new RouteConnection(route01, station03, true, con09.getId());
+			RouteConnection routeCon02 = new RouteConnection(route01, station04, false, con10.getId());
+			RouteConnection routeCon04 = new RouteConnection(route01, station07, false, con11.getId());
+			RouteConnection routeCon03 = new RouteConnection(route01, station06, false, null);
 			
 			Route route02 = new Route("Kortrijk - Deinze");
-			RouteConnection routeCon05 = new RouteConnection(route02, station03, con09.getId());
-			RouteConnection routeCon06 = new RouteConnection(route02, station04, con10.getId());
-			RouteConnection routeCon07 = new RouteConnection(route02, station07, null);
+			RouteConnection routeCon05 = new RouteConnection(route02, station03, true, con09.getId());
+			RouteConnection routeCon06 = new RouteConnection(route02, station04, false, con10.getId());
+			RouteConnection routeCon07 = new RouteConnection(route02, station07, false, null);
 			
 			Route route03 = new Route("Brussel-Zuid - Gent-Sint-Pieters");
-			RouteConnection routeCon08 = new RouteConnection(route03, station13, con15.getId());
-			RouteConnection routeCon09 = new RouteConnection(route03, station12, con14.getId());
-			RouteConnection routeCon10 = new RouteConnection(route03, station11, con08.getId());
-			RouteConnection routeCon11 = new RouteConnection(route03, station02, con01.getId());
-			RouteConnection routeCon12 = new RouteConnection(route03, station01, null);
+			RouteConnection routeCon08 = new RouteConnection(route03, station13, true, con15.getId());
+			RouteConnection routeCon09 = new RouteConnection(route03, station12, false, con14.getId());
+			RouteConnection routeCon10 = new RouteConnection(route03, station11, false, con08.getId());
+			RouteConnection routeCon11 = new RouteConnection(route03, station02, false, con01.getId());
+			RouteConnection routeCon12 = new RouteConnection(route03, station01, false, null);
 
 			routeRepository.save(route01);
 			routeRepository.save(route02);

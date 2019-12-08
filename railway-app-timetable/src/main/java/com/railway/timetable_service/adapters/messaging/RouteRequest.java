@@ -4,24 +4,24 @@ import java.util.UUID;
 
 public class RouteRequest {
 	private UUID requestId;
-	private Long routeId;
 	private Long timetableId;
+	private Long routeId;
 	
-	public RouteRequest(Long routeId, Long timetableId) {
+	public RouteRequest(Long timetableId, Long routeId) {
 		this.requestId = UUID.randomUUID();
-		this.routeId = routeId;
 		this.timetableId = timetableId;
+		this.routeId = routeId;
 	}
 	
 	public UUID getRequestId() {
 		return requestId;
 	}
 	
-	public Long getRouteId() {
-		return routeId;
-	}
-	
 	public Long getTimetableId() {
 		return timetableId;
+	}
+	
+	public Long getRouteId() {
+		return routeId;
 	}
 }
