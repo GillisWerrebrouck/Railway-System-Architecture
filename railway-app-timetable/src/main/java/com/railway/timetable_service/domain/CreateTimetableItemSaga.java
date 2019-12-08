@@ -28,12 +28,12 @@ public class CreateTimetableItemSaga {
 	private static Logger logger = LoggerFactory.getLogger(CreateTimetableItemSaga.class);
 	private final MessageGateway gateway;
 	private final Set<CreateTimetableItemListener> listeners;
-	private final TimetableItemRepository TimetableItemRepository;
+	private final TimetableItemRepository timetableItemRepository;
 	
 	@Autowired
 	public CreateTimetableItemSaga(MessageGateway gateway, TimetableItemRepository timetableItemRepository) {
 		this.gateway = gateway;
-		this.TimetableItemRepository = timetableItemRepository;
+		this.timetableItemRepository = timetableItemRepository;
 		this.listeners = new HashSet<>(5);
 	}
 	
@@ -55,75 +55,77 @@ public class CreateTimetableItemSaga {
 		logger.info("[Create Timetable Item Saga] successfully fetched route");
 		
 		// find the start station of the route
-		UUID stationIdStartOfRoute = null;
 		Station startStation = null;
 		for(RouteConnection r : routeFetchedResponse.getRoute().getRouteConnections()) {
-			startStation = r.getStation();
 			if(r.isStartOfRoute()) {
-				stationIdStartOfRoute = UUID.fromString(r.getStation().getId());
+				startStation = r.getStation();
 				break;
 			}
 		}
-		
+
 		if(startStation == null) this.createTimetableItemFailed(timetableItem);
-		logger.info(startStation.getName());
-//		UUID previousStationId = stationIdStartOfRoute;
-//
-//		// reserve a platform at the start station with a wait time of 15 minutes
-//		LocalDateTime arrivalTime = timetableItem.getStartDateTime().minusMinutes(15);
-//		LocalDateTime departureTime = timetableItem.getStartDateTime();
-//		reserveStation(startStation, arrivalTime, departureTime);
-//		
-//		Station station = null;
-//		// loop over all stations on the route
-//		while(routeFetchedResponse.getRouteConnections().size() > 1) {
-//			RoutePart routePart = getNextRoutePart(routeFetchedResponse.getRouteConnections(), previousStationId);
-//			// remove route part for next iteration
-//			routeFetchedResponse.getRouteConnections().remove(routePart);
-//			
-//			Long distance = routePart.getDistance();
-//			double maxSpeed = routePart.getMaxSpeed();
-//			// the travel time in minutes for a route part is the distance times 95% of the maximum speed on that route part
-//			double travelTime = Math.ceil(distance / ((maxSpeed*0.95)/60));
-//			
-//			arrivalTime = departureTime.plusMinutes(Long.parseLong(String.valueOf(travelTime)));
-//			departureTime = arrivalTime.plusMinutes(8);
-//			
-//			if(routePart.getStationX().getId() == previousStationId.toString()) {
-//				station = routePart.getStationY();
-//			} else {
-//				station = routePart.getStationX();
-//			}
-//			
-//			// reserve a platform at the station with a wait time of 8 minutes
-//			reserveStation(station, arrivalTime, departureTime);
-//		}
 		
-		// reserve a platform at the end station with a wait time of 15 (8 + 7) minutes
-//		timetableItem.setEndDateTime(departureTime.plusMinutes(7));
-//		reserveStation(station, arrivalTime, timetableItem.getEndDateTime());
-//		TimetableItemRepository.save(timetableItem);
+		Collection<RoutePart> allRouteConnections = routeFetchedResponse.getRouteConnections();
+		reserveAllStations(timetableItem, startStation, allRouteConnections);
 		
-		this.createTimetableItemComplete(timetableItem);
+		TrainRequest trainRequest = new TrainRequest(timetableItem.getId(), timetableItem.getStartDateTime(), timetableItem.getEndDateTime(), timetableItem.getRequestedTrainType());
+		logger.info("[Create Timetable Item Saga] reserve train command sent");
+		gateway.reserveTrain(trainRequest);
+	}
+	
+	private void reserveAllStations(TimetableItem timetableItem, Station startStation, Collection<RoutePart> allRouteConnections) {
+		// reserve a platform at the start station with a wait time of 15 minutes
+		LocalDateTime departureTime = timetableItem.getStartDateTime();
+		timetableItem.setStartDateTime(departureTime.minusMinutes(15));
+		LocalDateTime arrivalTime = timetableItem.getStartDateTime();
+		reserveStation(startStation, arrivalTime, departureTime);
 		
-//		TrainRequest trainRequest = new TrainRequest(timetableItem.getId(), timetableItem.getStartDateTime(), timetableItem.getEndDateTime());
-//		logger.info("[Create Timetable Item Saga] reserve train command sent");
-//		gateway.reserveTrain(trainRequest);
+		UUID previousStationId = UUID.fromString(startStation.getStationId());
+		
+		Station station = null;
+		// loop over all stations on the route
+		while(allRouteConnections.size() > 0) {
+			RoutePart routePart = getNextRoutePart(allRouteConnections, previousStationId);
+			// remove route part for next iteration
+			allRouteConnections.removeIf(r -> r.getId() == routePart.getId());
+			
+			Long distance = routePart.getDistance();
+			double maxSpeed = routePart.getMaxSpeed();
+			// the travel time in minutes for a route part is the distance times 95% of the maximum speed on that route part
+			double travelTime = Math.ceil(distance / ((maxSpeed*0.95)/60));
+			
+			arrivalTime = departureTime.plusMinutes((long)travelTime);
+			departureTime = arrivalTime.plusMinutes(8);
+			
+			if(routePart.getStationX().getStationId().compareTo(previousStationId.toString()) == 0) {
+				station = routePart.getStationY();
+			} else {
+				station = routePart.getStationX();
+			}
+			previousStationId=UUID.fromString(station.getStationId());
+			
+			// reserve a platform at the station with a wait time of 8 minutes
+			reserveStation(station, arrivalTime, departureTime);
+			timetableItem.setEndDateTime(departureTime);
+		}
+		timetableItemRepository.save(timetableItem);
 	}
 	
 	private RoutePart getNextRoutePart(Collection<RoutePart> allRouteParts, UUID previousStationId) {
+		RoutePart routePart = null;
 		for(RoutePart r : allRouteParts) {
-			if(r.getStationX().getId() == previousStationId.toString() || r.getStationY().getId() == previousStationId.toString()) {
-				return r;
+			if(r.getStationX().getStationId().compareTo(previousStationId.toString()) == 0 || 
+					r.getStationY().getStationId().compareTo(previousStationId.toString()) == 0) {
+				routePart = r;
 			}
 		}
-		return null;
+		return routePart;
 	}
 	
 	private void reserveStation(Station station, LocalDateTime arrivalTime, LocalDateTime departureDateTime) {
-//		StationRequest stationRequest = new StationRequest(UUID.fromString(station.getId()), arrivalTime, departureDateTime);
-//		logger.info("[Create Timetable Item Saga] reserve station command sent");
-//		gateway.reserveStation(stationRequest);
+		StationRequest stationRequest = new StationRequest(UUID.fromString(station.getStationId()), arrivalTime, departureDateTime);
+		logger.info("[Create Timetable Item Saga] reserve station command sent");
+		gateway.reserveStation(stationRequest);
 	}
 	
 	public void onTrainReserved(TimetableItem timetableItem, TrainReservedResponse trainReservedResponse) {
@@ -151,5 +153,6 @@ public class CreateTimetableItemSaga {
 	public void createTimetableItemFailed(TimetableItem timetableItem) {
 		logger.info("[Create Timetable Item Saga] failed to create a timetable item");
 		this.listeners.forEach(l -> l.onCreateTimetableItemResult(timetableItem));
+		timetableItemRepository.delete(timetableItem);
 	}
 }

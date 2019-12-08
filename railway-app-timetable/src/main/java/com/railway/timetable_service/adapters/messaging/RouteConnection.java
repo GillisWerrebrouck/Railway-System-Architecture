@@ -3,12 +3,12 @@ package com.railway.timetable_service.adapters.messaging;
 public class RouteConnection {
 	private Long id;
 	private Station station;
-	private boolean isStartOfRoute;
+	private boolean startOfRoute;
 	
-	public RouteConnection(Long id, Station station, boolean isStartOfRoute) {
+	public RouteConnection(Long id, Station station, boolean startOfRoute) {
 		this.id = id;
 		this.station = station;
-		this.isStartOfRoute = isStartOfRoute;
+		this.startOfRoute = startOfRoute;
 	}
 	
 	public Long getId() {
@@ -20,6 +20,6 @@ public class RouteConnection {
 	}
 	
 	public boolean isStartOfRoute() {
-		return isStartOfRoute;
+		return startOfRoute;
 	}
 }

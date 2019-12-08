@@ -8,12 +8,14 @@ public class TrainRequest {
 	private Long timetableId;
 	private LocalDateTime startDateTime;
 	private LocalDateTime endDateTime;
+	private TrainType trainType;
 	
-	public TrainRequest(Long timetableId, LocalDateTime startDateTime, LocalDateTime endDateTime) {
+	public TrainRequest(Long timetableId, LocalDateTime startDateTime, LocalDateTime endDateTime, TrainType trainType) {
 		this.requestId = UUID.randomUUID();
 		this.timetableId = timetableId;
 		this.startDateTime = startDateTime;
-		this.startDateTime = endDateTime;
+		this.endDateTime = endDateTime;
+		this.trainType = trainType;
 	}
 	
 	public UUID getRequestId() {
@@ -30,5 +32,9 @@ public class TrainRequest {
 	
 	public LocalDateTime getEndDateTime() {
 		return endDateTime;
+	}
+	
+	public TrainType getTrainType() {
+		return trainType;
 	}
 }

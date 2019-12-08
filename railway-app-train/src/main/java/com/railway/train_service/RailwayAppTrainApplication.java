@@ -36,6 +36,8 @@ public class RailwayAppTrainApplication {
 	@Bean
 	public CommandLineRunner populateDatabase(TrainRepository trainRepository) {
 		return (args) -> {
+			trainRepository.deleteAll();
+			
 			TechnicalDetails technicalDetails01 = new TechnicalDetails(FuelType.DIESEL);
 			TechnicalDetails technicalDetails02 = new TechnicalDetails(FuelType.HYBRID);
 			TechnicalDetails technicalDetails03 = new TechnicalDetails(FuelType.ELECTRIC);

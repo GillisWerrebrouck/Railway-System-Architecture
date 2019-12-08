@@ -11,6 +11,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
+import com.railway.timetable_service.adapters.messaging.TrainType;
+
 @Entity
 public class TimetableItem {
 	@Id
@@ -24,7 +26,8 @@ public class TimetableItem {
 	private int delay;
 	
 	private Long routeId;
-	private Long trainId;
+	private String trainId;
+	private TrainType requestedTrainType;
 	@Column
     @ElementCollection(targetClass=Long.class, fetch=FetchType.EAGER)
 	private List<Long> staffIds = new ArrayList<Long>();
@@ -32,21 +35,18 @@ public class TimetableItem {
 	@SuppressWarnings("unused")
 	private TimetableItem() {}
 
-	public TimetableItem(LocalDateTime startDate, LocalDateTime endDateTime, Long routeId, Long trainId, List<Long> staffIds) {
+	public TimetableItem(LocalDateTime startDate, LocalDateTime endDateTime, Long routeId, String trainId, TrainType requestedTrainType, List<Long> staffIds) {
 		this.startDateTime = startDate;
 		this.endDateTime = endDateTime;
 		this.delay = 0;
 		this.routeId = routeId;
 		this.trainId = trainId;
+		this.requestedTrainType = requestedTrainType;
 		this.staffIds = staffIds;
 	}
 
-	public TimetableItem(LocalDateTime startDate, Long routeId) {
-		this.startDateTime = startDate;
-		this.endDateTime = null;
-		this.delay = 0;
-		this.routeId = routeId;
-		this.trainId = null;
+	public TimetableItem(Long routeId, LocalDateTime startDate, TrainType requestedTrainType) {
+		this(startDate, null, routeId, null, requestedTrainType, new ArrayList<Long>());
 	}
 	
 	public Long getId() {
@@ -85,12 +85,20 @@ public class TimetableItem {
 		this.routeId = routeId;
 	}
 	
-	public Long getTrainId() {
+	public String getTrainId() {
 		return trainId;
 	}
 	
-	public void setTrainId(Long trainId) {
+	public void setTrainId(String trainId) {
 		this.trainId = trainId;
+	}
+	
+	public TrainType getRequestedTrainType() {
+		return requestedTrainType;
+	}
+	
+	public void setRequestedTrainType(TrainType requestedTrainType) {
+		this.requestedTrainType = requestedTrainType;
 	}
 
 	public List<Long> getStaffIds() {
