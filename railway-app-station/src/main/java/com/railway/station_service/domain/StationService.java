@@ -24,9 +24,9 @@ public class StationService {
 		this.scheduleItemRepository = scheduleItemRepository;
 	}
 	
-	public void reserveStation(UUID stationId, Long timetableId, LocalDateTime arrivalDateTime, LocalDateTime departureDateTime) {
+	public boolean reserveStation(UUID stationId, Long timetableId, LocalDateTime arrivalDateTime, LocalDateTime departureDateTime) {
 		Station station = stationRepository.findById(stationId).orElse(null);
-		if(station == null) return;
+		if(station == null) return false;
 		
 		Collection<Platform> platforms = station.getPlatforms();
 		for(Platform platform : platforms) {
@@ -34,9 +34,11 @@ public class StationService {
 				ScheduleItem scheduleItem = new ScheduleItem(timetableId, arrivalDateTime, departureDateTime);
 				scheduleItem.setPlatform(platform);
 				scheduleItemRepository.save(scheduleItem);
-				break;
+				return true;
 			}
 		}
+		
+		return false;
 	}
 	
 	private boolean isPlatformAvailable(Collection<ScheduleItem> reservedSlots, LocalDateTime arrivalDateTime, LocalDateTime departureDateTime) {
@@ -50,5 +52,9 @@ public class StationService {
 		}
 		
 		return isPlatformAvailable;
+	}
+
+	public void discardStationReservations(Long timetableId) {
+		scheduleItemRepository.deleteAllByTimetableId(timetableId);
 	}
 }

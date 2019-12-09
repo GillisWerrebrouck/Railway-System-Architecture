@@ -29,8 +29,19 @@ public class TimetableEventHandler {
 		}
 	}
 	
+	@StreamListener(Channels.STATIONS_RESERVED)
+	public void processStationsReservedResponse(StationsResponse response) {
+		if(response.wasReservationSuccessful()) {
+			logger.info("[Timetable Event Handler] successfully reserved stations on route");
+			this.timetableItemService.stationsReserved(response);
+		} else {
+			logger.info("[Timetable Event Handler] failed to reserve stations on route");
+			this.timetableItemService.failedToCreateTimetableItem(response);
+		}
+	}
+	
 	@StreamListener(Channels.TRAIN_RESERVED)
-	public void processTrainReserved(TrainReservedResponse response) {
+	public void processTrainReservedResponse(TrainReservedResponse response) {
 		if(response.getTrainId() != null) {
 			logger.info("[Timetable Event Handler] successfully reserved train");
 			this.timetableItemService.trainReserved(response);

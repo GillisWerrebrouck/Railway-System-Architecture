@@ -26,13 +26,16 @@ public class TimetableItem {
 	private int delay;
 	
 	private Long routeId;
-	private Status routeStatus; 
 	private String trainId;
 	private TrainType requestedTrainType;
-	private Status trainReservationStatus;
+	
 	@Column
     @ElementCollection(targetClass=Long.class, fetch=FetchType.EAGER)
 	private List<Long> staffIds = new ArrayList<Long>();
+	
+	private Status routeStatus; 
+	private Status trainReservationStatus;
+	private Status stationsReservationStatus;
 	private Status staffReservationStatus;
 	
 	@SuppressWarnings("unused")
@@ -43,11 +46,12 @@ public class TimetableItem {
 		this.endDateTime = endDateTime;
 		this.delay = 0;
 		this.routeId = routeId;
-		this.routeStatus = Status.UNKNOWN;
 		this.trainId = trainId;
 		this.requestedTrainType = requestedTrainType;
-		this.trainReservationStatus = Status.UNKNOWN;
 		this.staffIds = staffIds;
+		this.routeStatus = Status.UNKNOWN;
+		this.trainReservationStatus = Status.UNKNOWN;
+		this.stationsReservationStatus = Status.UNKNOWN;
 		this.staffReservationStatus = Status.UNKNOWN;
 	}
 
@@ -91,14 +95,6 @@ public class TimetableItem {
 		this.routeId = routeId;
 	}
 	
-	public Status getRouteStatus() {
-		return routeStatus;
-	}
-	
-	public void setRouteStatus(Status routeStatus) {
-		this.routeStatus = routeStatus;
-	}
-	
 	public String getTrainId() {
 		return trainId;
 	}
@@ -114,14 +110,6 @@ public class TimetableItem {
 	public void setRequestedTrainType(TrainType requestedTrainType) {
 		this.requestedTrainType = requestedTrainType;
 	}
-	
-	public Status getTrainReservationStatus() {
-		return trainReservationStatus;
-	}
-	
-	public void setTrainReservationStatus(Status trainReservationStatus) {
-		this.trainReservationStatus = trainReservationStatus;
-	}
 
 	public List<Long> getStaffIds() {
 		return staffIds;
@@ -133,6 +121,30 @@ public class TimetableItem {
 	
 	public void addStaffIds(Long staffId) {
 		this.staffIds.add(staffId);
+	}
+	
+	public Status getRouteStatus() {
+		return routeStatus;
+	}
+	
+	public void setRouteStatus(Status routeStatus) {
+		this.routeStatus = routeStatus;
+	}
+	
+	public Status getTrainReservationStatus() {
+		return trainReservationStatus;
+	}
+	
+	public void setTrainReservationStatus(Status trainReservationStatus) {
+		this.trainReservationStatus = trainReservationStatus;
+	}
+	
+	public Status getStationsReservationStatus() {
+		return stationsReservationStatus;
+	}
+	
+	public void setStationsReservationStatus(Status stationsReservationStatus) {
+		this.stationsReservationStatus = stationsReservationStatus;
 	}
 	
 	public Status getStaffReservationStatus() {

@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.annotation.StreamListener;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Service;
 
 import com.railway.station_service.domain.StationService;
@@ -18,10 +19,22 @@ public class StationCommandHandler {
 		this.stationService = stationService;
 	}
 	
-	@StreamListener(Channels.RESERVE_STATION)
-	public void reserveStation(StationRequest request) {
+	@StreamListener(Channels.RESERVE_STATIONS)
+	@SendTo(Channels.STATIONS_RESERVED)
+	public StationsResponse reserveStation(StationsRequest stationsRequest) {
 		logger.info("[Station Command Handler] reserve station command received");
-		stationService.reserveStation(request.getStationId(), request.getTimetableId(), request.getArrivalDateTime(), request.getDepartureDateTime());
-		logger.info("[Station Command Handler] station reserved");
+		
+		for (StationRequest request : stationsRequest.getStationRequests()) {
+			boolean isReserved = stationService.reserveStation(request.getStationId(), request.getTimetableId(), request.getArrivalDateTime(), request.getDepartureDateTime());
+			if(!isReserved) {
+				stationService.discardStationReservations(request.getTimetableId());
+				logger.info("[Station Command Handler] stations could not be reserved");
+				StationsResponse response = new StationsResponse(stationsRequest.getRequestId(), stationsRequest.getTimetableId(), false);
+				return response;
+			}
+		}
+		logger.info("[Station Command Handler] stations reserved");
+		StationsResponse response = new StationsResponse(stationsRequest.getRequestId(), stationsRequest.getTimetableId(), true);
+		return response;
 	}
 }

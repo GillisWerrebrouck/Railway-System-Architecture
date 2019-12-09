@@ -18,8 +18,8 @@ import com.railway.timetable_service.adapters.messaging.RoutePart;
 import com.railway.timetable_service.adapters.messaging.RouteRequest;
 import com.railway.timetable_service.adapters.messaging.Station;
 import com.railway.timetable_service.adapters.messaging.StationRequest;
+import com.railway.timetable_service.adapters.messaging.StationsRequest;
 import com.railway.timetable_service.adapters.messaging.TrainRequest;
-import com.railway.timetable_service.adapters.messaging.TrainReservedResponse;
 import com.railway.timetable_service.persistence.TimetableItemRepository;
 
 @Service
@@ -67,25 +67,22 @@ public class CreateTimetableItemSaga {
 		if(startStation == null) this.createTimetableItemFailed(timetableItem);
 		
 		Collection<RoutePart> allRouteConnections = routeFetchedResponse.getRouteConnections();
+		
 		reserveAllStations(timetableItem, startStation, allRouteConnections);
-
-		timetableItem.setTrainReservationStatus(Status.STARTED);
-		timetableItemRepository.save(timetableItem);
-		TrainRequest trainRequest = new TrainRequest(timetableItem.getId(), timetableItem.getStartDateTime(), timetableItem.getEndDateTime(), timetableItem.getRequestedTrainType());
-		logger.info("[Create Timetable Item Saga] reserve train command sent");
-		gateway.reserveTrain(trainRequest);
-		timetableItem.setTrainReservationStatus(Status.PENDING);
-		timetableItemRepository.save(timetableItem);
+		reserveTrain(timetableItem);
 		
 		// TODO: reserve staff
 	}
 	
 	private void reserveAllStations(TimetableItem timetableItem, Station startStation, Collection<RoutePart> allRouteConnections) {
+		StationsRequest stationsRequest = new StationsRequest(timetableItem.getId());
+		
 		// reserve a platform at the start station with a wait time of 15 minutes
 		LocalDateTime departureTime = timetableItem.getStartDateTime();
 		timetableItem.setStartDateTime(departureTime.minusMinutes(15));
 		LocalDateTime arrivalTime = timetableItem.getStartDateTime();
-		reserveStation(startStation, timetableItem.getId(), arrivalTime, departureTime);
+		// add station to request object
+		stationsRequest.addStationRequest(new StationRequest(UUID.fromString(startStation.getStationId()), timetableItem.getId(), arrivalTime, departureTime));
 		
 		UUID previousStationId = UUID.fromString(startStation.getStationId());
 		
@@ -101,6 +98,7 @@ public class CreateTimetableItemSaga {
 			// the travel time in minutes for a route part is the distance times 95% of the maximum speed on that route part
 			double travelTime = Math.ceil(distance / ((maxSpeed*0.95)/60));
 			
+			// reserve a platform at the station with a wait time of 8 minutes
 			arrivalTime = departureTime.plusMinutes((long)travelTime);
 			departureTime = arrivalTime.plusMinutes(8);
 			
@@ -111,10 +109,12 @@ public class CreateTimetableItemSaga {
 			}
 			previousStationId=UUID.fromString(station.getStationId());
 			
-			// reserve a platform at the station with a wait time of 8 minutes
-			reserveStation(station, timetableItem.getId(), arrivalTime, departureTime);
+			// add station to request object
+			stationsRequest.addStationRequest(new StationRequest(UUID.fromString(station.getStationId()), timetableItem.getId(), arrivalTime, departureTime));
+			
 			timetableItem.setEndDateTime(departureTime);
 		}
+		reserveAllStations(timetableItem, stationsRequest);
 		timetableItemRepository.save(timetableItem);
 	}
 	
@@ -129,16 +129,39 @@ public class CreateTimetableItemSaga {
 		return routePart;
 	}
 	
-	private void reserveStation(Station station, Long timetableId, LocalDateTime arrivalTime, LocalDateTime departureDateTime) {
-		StationRequest stationRequest = new StationRequest(UUID.fromString(station.getStationId()), timetableId, arrivalTime, departureDateTime);
-		logger.info("[Create Timetable Item Saga] reserve station command sent");
-		gateway.reserveStation(stationRequest);
+	private void reserveAllStations(TimetableItem timetableItem, StationsRequest stationsRequest) {
+		timetableItem.setStationsReservationStatus(Status.STARTED);
+		timetableItemRepository.save(timetableItem);
+		logger.info("[Create Timetable Item Saga] reserve all stations command sent");
+		gateway.reserveStations(stationsRequest);
+		timetableItem.setStationsReservationStatus(Status.PENDING);
+		timetableItemRepository.save(timetableItem);
 	}
 	
-	public void onTrainReserved(TimetableItem timetableItem, TrainReservedResponse trainReservedResponse) {
+	private void reserveTrain(TimetableItem timetableItem) {
+		timetableItem.setTrainReservationStatus(Status.STARTED);
+		timetableItemRepository.save(timetableItem);
+		TrainRequest trainRequest = new TrainRequest(timetableItem.getId(), timetableItem.getStartDateTime(), timetableItem.getEndDateTime(), timetableItem.getRequestedTrainType());
+		logger.info("[Create Timetable Item Saga] reserve train command sent");
+		gateway.reserveTrain(trainRequest);
+		timetableItem.setTrainReservationStatus(Status.PENDING);
+		timetableItemRepository.save(timetableItem);
+	}
+
+	public void onStationsReserved(TimetableItem timetableItem) {
+		logger.info("[Create Timetable Item Saga] successfully reserved stations on route");
+		
+		if(timetableItem.getTrainReservationStatus().equals(Status.SUCCESSFUL)) {
+			this.createTimetableItemComplete(timetableItem);
+		}
+	}
+	
+	public void onTrainReserved(TimetableItem timetableItem) {
 		logger.info("[Create Timetable Item Saga] successfully reserved train");
 
-		this.createTimetableItemComplete(timetableItem);
+		if(timetableItem.getStationsReservationStatus().equals(Status.SUCCESSFUL)) {
+			this.createTimetableItemComplete(timetableItem);
+		}
 	}
 	
 	public void onGetRouteFailed(TimetableItem timetableItem){
@@ -151,15 +174,14 @@ public class CreateTimetableItemSaga {
 		this.createTimetableItemFailed(timetableItem);
 	}
 	
-	public void createTimetableItemComplete(TimetableItem timetableItem) {
-		logger.info("[Create Timetable Item Saga] successfully created a timetable item");
-		this.gateway.emitCreateTimetableItemCompleted(timetableItem);
-		this.listeners.forEach(l -> l.onCreateTimetableItemResult(timetableItem));
-	}
-	
 	public void createTimetableItemFailed(TimetableItem timetableItem) {
 		logger.info("[Create Timetable Item Saga] failed to create a timetable item");
 		this.listeners.forEach(l -> l.onCreateTimetableItemResult(timetableItem));
 		timetableItemRepository.delete(timetableItem);
+	}
+	
+	public void createTimetableItemComplete(TimetableItem timetableItem) {
+		logger.info("[Create Timetable Item Saga] successfully created a timetable item");
+		this.listeners.forEach(l -> l.onCreateTimetableItemResult(timetableItem));
 	}
 }

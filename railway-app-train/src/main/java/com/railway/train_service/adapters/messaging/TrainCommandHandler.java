@@ -33,6 +33,6 @@ public class TrainCommandHandler {
 			logger.info("[Train Command Handler] no train could be reserved");
 			response = new TrainResponse(null, request.getTimetableId(), request.getRequestId());
 		}
-		return response;		
+		return response;
 	}
 }
