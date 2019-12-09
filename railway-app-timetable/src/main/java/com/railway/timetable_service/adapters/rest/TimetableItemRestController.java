@@ -70,6 +70,7 @@ public class TimetableItemRestController implements CreateTimetableItemListener 
 		});
 		logger.info(timetableRequest.getRequestedTrainType().toString());
 		TimetableItem timetableItem = new TimetableItem(timetableRequest.getRouteId(), timetableRequest.getStartDateTime(), timetableRequest.getRequestedTrainType());
+		
 		timetableItemRepository.save(timetableItem);
 		
 		this.deferredResults.put(timetableItem.getId(), deferredResult);

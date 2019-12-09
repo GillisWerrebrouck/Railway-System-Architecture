@@ -20,6 +20,10 @@ public class TimetableService {
 	
 	public void createTimetableItem(TimetableItem timetableItem, TimetableRequest timetableRequest) {
 		synchronized (this.createTimetableItemSaga) {
+			timetableItem.setRouteStatus(Status.AWAITING_INITIATION);
+			timetableItem.setTrainReservationStatus(Status.AWAITING_INITIATION);
+			timetableItem.setStaffReservationStatus(Status.AWAITING_INITIATION);
+			timetableItemRepository.save(timetableItem);
 			this.createTimetableItemSaga.startCreateTimetableItemSaga(timetableItem, timetableRequest);
 		}
 	}
@@ -31,22 +35,29 @@ public class TimetableService {
 	public synchronized void trainReserved(TrainReservedResponse trainReservedResponse) {
 		TimetableItem timetableItem = timetableItemRepository.findById(trainReservedResponse.getTimetableId()).orElse(null);
 		timetableItem.setTrainId(trainReservedResponse.getTrainId());
+		timetableItem.setTrainReservationStatus(Status.SUCCESSFUL);
 		timetableItemRepository.save(timetableItem);
 		this.createTimetableItemSaga.onTrainReserved(timetableItem, trainReservedResponse);
 	}
 	
 	public synchronized void failedToCreateTimetableItem(TrainReservedResponse trainReservedResponse) {
 		TimetableItem timetableItem = timetableItemRepository.findById(trainReservedResponse.getTimetableId()).orElse(null);
+		timetableItem.setTrainReservationStatus(Status.FAILED);
+		timetableItemRepository.save(timetableItem);
 		this.createTimetableItemSaga.onReserveTrainFailed(timetableItem);
 	}
 	
 	public synchronized void routeFetched(RouteFetchedResponse routeFetchedResponse) {
 		TimetableItem timetableItem = timetableItemRepository.findById(routeFetchedResponse.getTimetableId()).orElse(null);
+		timetableItem.setRouteStatus(Status.SUCCESSFUL);
+		timetableItemRepository.save(timetableItem);
 		this.createTimetableItemSaga.onRouteFetched(timetableItem, routeFetchedResponse);
 	}
 	
 	public synchronized void failedToCreateTimetableItem(RouteFetchedResponse routeFetchedResponse) {
 		TimetableItem timetableItem = timetableItemRepository.findById(routeFetchedResponse.getTimetableId()).orElse(null);
+		timetableItem.setRouteStatus(Status.FAILED);
+		timetableItemRepository.save(timetableItem);
 		this.createTimetableItemSaga.onGetRouteFailed(timetableItem);
 	}
 }

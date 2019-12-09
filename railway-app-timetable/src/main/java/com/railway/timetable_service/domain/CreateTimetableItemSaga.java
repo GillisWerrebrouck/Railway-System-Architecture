@@ -43,9 +43,13 @@ public class CreateTimetableItemSaga {
 	public void startCreateTimetableItemSaga(TimetableItem timetableItem, TimetableRequest timetableRequest) {
 		logger.info("[Create Timetable Item Saga] saga initiated");
 		
+		timetableItem.setRouteStatus(Status.STARTED);
+		timetableItemRepository.save(timetableItem);
 		RouteRequest routeRequest = new RouteRequest(timetableItem.getId(), timetableItem.getRouteId());
 		logger.info("[Create Timetable Item Saga] get route command sent");
 		gateway.getRoute(routeRequest);
+		timetableItem.setRouteStatus(Status.PENDING);
+		timetableItemRepository.save(timetableItem);
 	}
 	
 	public void onRouteFetched(TimetableItem timetableItem, RouteFetchedResponse routeFetchedResponse) {
@@ -64,10 +68,14 @@ public class CreateTimetableItemSaga {
 		
 		Collection<RoutePart> allRouteConnections = routeFetchedResponse.getRouteConnections();
 		reserveAllStations(timetableItem, startStation, allRouteConnections);
-		
+
+		timetableItem.setTrainReservationStatus(Status.STARTED);
+		timetableItemRepository.save(timetableItem);
 		TrainRequest trainRequest = new TrainRequest(timetableItem.getId(), timetableItem.getStartDateTime(), timetableItem.getEndDateTime(), timetableItem.getRequestedTrainType());
 		logger.info("[Create Timetable Item Saga] reserve train command sent");
 		gateway.reserveTrain(trainRequest);
+		timetableItem.setTrainReservationStatus(Status.PENDING);
+		timetableItemRepository.save(timetableItem);
 		
 		// TODO: reserve staff
 	}
