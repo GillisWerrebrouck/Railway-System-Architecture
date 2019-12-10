@@ -198,7 +198,7 @@ public class CreateTimetableItemSaga {
 	
 	public void createTimetableItemFailed(TimetableItem timetableItem) {
 		logger.info("[Create Timetable Item Saga] failed to create a timetable item");
-		this.listeners.forEach(l -> l.onCreateTimetableItemResult(timetableItem));
+		this.listeners.forEach(l -> l.onCreateTimetableItemFailed(timetableItem));
 		timetableItemRepository.delete(timetableItem);
 	}
 	

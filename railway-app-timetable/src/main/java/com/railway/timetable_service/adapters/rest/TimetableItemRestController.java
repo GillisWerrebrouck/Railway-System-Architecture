@@ -19,6 +19,7 @@ import org.springframework.web.context.request.async.DeferredResult;
 
 import com.railway.timetable_service.RailwayAppTimetableApplication;
 import com.railway.timetable_service.domain.CreateTimetableItemListener;
+import com.railway.timetable_service.domain.Status;
 import com.railway.timetable_service.domain.TimetableItem;
 import com.railway.timetable_service.domain.TimetableRequest;
 import com.railway.timetable_service.domain.TimetableService;
@@ -80,15 +81,8 @@ public class TimetableItemRestController implements CreateTimetableItemListener 
 		
 		this.deferredResults.put(timetableItem.getId(), deferredResult);
 		
-		try {
-			this.timetableService.createTimetableItem(timetableItem, timetableRequest);
-		} catch (Exception e) {
-			logger.info("[Timetable Item Rest Controller] failed to create a timetable item");
-			deferredResult.setErrorResult("Failed to create timetablle item. " + e.getMessage());
-			this.deferredResults.remove(timetableItem.getId());
-		}
+		this.timetableService.createTimetableItem(timetableItem, timetableRequest);
 		
-		logger.info("[Timetable Item Rest Controller] succefully created a timetable item");
 		return deferredResult;
 	}
 
@@ -96,17 +90,43 @@ public class TimetableItemRestController implements CreateTimetableItemListener 
 		return request.getRouteId() != null && request.getStartDateTime() != null && request.getRequestedTrainType() != null;
 	}
 
-	private void performResponse(TimetableItem timetableItem) {
+	private void performSuccessfulResponse(TimetableItem timetableItem) {
 		DeferredResult<TimetableItem> deferredResult = this.deferredResults.remove(timetableItem.getId());
 		if (deferredResult != null && !deferredResult.isSetOrExpired()) {
 			deferredResult.setResult(timetableItem);
 		} else {
-			System.out.println("defereredResult: " + deferredResult);
+			logger.info("defereredResult: " + deferredResult);
 		}
 	}
 
 	@Override
 	public void onCreateTimetableItemResult(TimetableItem timetableItem) {
-		this.performResponse(timetableItem);
+		logger.info("[Timetable Item Rest Controller] succefully created a timetable item");
+		this.performSuccessfulResponse(timetableItem);
+	}
+
+	private void performFailedResponse(TimetableItem timetableItem) {
+		DeferredResult<TimetableItem> deferredResult = this.deferredResults.remove(timetableItem.getId());
+		if (deferredResult != null && !deferredResult.isSetOrExpired()) {			
+			if (timetableItem.getRouteStatus() == Status.FAILED) {
+				deferredResult.setErrorResult("Failed to create timetable item: route could not be fetched");
+			} else if (timetableItem.getTrainReservationStatus() == Status.FAILED) {
+				deferredResult.setErrorResult("Failed to create timetable item: train could not be reserved");
+			} else if (timetableItem.getStationsReservationStatus() == Status.FAILED) {
+				deferredResult.setErrorResult("Failed to create timetable item: stations on route could not be reserved");
+			} else if (timetableItem.getStaffReservationStatus() == Status.FAILED) {
+				deferredResult.setErrorResult("Failed to create timetable item: staff could not be reserved");
+			} else {
+				deferredResult.setErrorResult("Failed to create timetablle item: unknown cause");
+			}
+		} else {
+			logger.info("defereredResult: " + deferredResult);
+		}
+	}
+
+	@Override
+	public void onCreateTimetableItemFailed(TimetableItem timetableItem) {
+		logger.info("[Timetable Item Rest Controller] failed to create a timetable item");
+		this.performFailedResponse(timetableItem);
 	}
 }
