@@ -7,14 +7,14 @@ import com.railway.train_service.domain.TrainType;
 
 public class TrainRequest {
 	private UUID requestId;
-	private Long TimetableId;
+	private Long timetableId;
 	private LocalDateTime startDateTime;
 	private LocalDateTime endDateTime;
 	private TrainType trainType;
 	
 	public TrainRequest(UUID requestId, Long timetableId, LocalDateTime startDateTime, LocalDateTime endDateTime, TrainType trainType) {
 		this.requestId = requestId;
-		this.TimetableId = timetableId;
+		this.timetableId = timetableId;
 		this.startDateTime = startDateTime;
 		this.endDateTime = endDateTime;
 		this.trainType = trainType;
@@ -25,7 +25,7 @@ public class TrainRequest {
 	}
 	
 	public Long getTimetableId() {
-		return TimetableId;
+		return timetableId;
 	}
 	
 	public LocalDateTime getStartDateTime() {

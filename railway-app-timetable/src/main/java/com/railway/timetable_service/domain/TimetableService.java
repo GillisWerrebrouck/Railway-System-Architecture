@@ -3,6 +3,7 @@ package com.railway.timetable_service.domain;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.railway.timetable_service.adapters.messaging.DiscardReservationRequest;
 import com.railway.timetable_service.adapters.messaging.RouteFetchedResponse;
 import com.railway.timetable_service.adapters.messaging.StationsResponse;
 import com.railway.timetable_service.adapters.messaging.TrainReservedResponse;
@@ -35,44 +36,62 @@ public class TimetableService {
 	
 	public synchronized void failedToCreateTimetableItem(RouteFetchedResponse routeFetchedResponse) {
 		TimetableItem timetableItem = timetableItemRepository.findById(routeFetchedResponse.getTimetableId()).orElse(null);
-		timetableItem.setRouteStatus(Status.FAILED);
-		timetableItemRepository.save(timetableItem);
-		this.createTimetableItemSaga.onGetRouteFailed(timetableItem);
+		if(timetableItem != null) {
+			timetableItem.setRouteStatus(Status.FAILED);
+			timetableItemRepository.save(timetableItem);
+			this.createTimetableItemSaga.onGetRouteFailed(timetableItem);
+		}
 	}
 
 	public synchronized void failedToCreateTimetableItem(StationsResponse stationsReservedResponse) {
 		TimetableItem timetableItem = timetableItemRepository.findById(stationsReservedResponse.getTimetableId()).orElse(null);
-		timetableItem.setStationsReservationStatus(Status.FAILED);
-		timetableItemRepository.save(timetableItem);
-		this.createTimetableItemSaga.onReserveTrainFailed(timetableItem);
+		if(timetableItem != null) {
+			timetableItem.setStationsReservationStatus(Status.FAILED);
+			timetableItem.setTrainReservationStatus(Status.DISCARDED);
+			timetableItemRepository.save(timetableItem);
+			this.createTimetableItemSaga.onReserveStationsFailed(timetableItem);
+		}
 	}
 	
 	public synchronized void failedToCreateTimetableItem(TrainReservedResponse trainReservedResponse) {
 		TimetableItem timetableItem = timetableItemRepository.findById(trainReservedResponse.getTimetableId()).orElse(null);
-		timetableItem.setTrainReservationStatus(Status.FAILED);
-		timetableItemRepository.save(timetableItem);
-		this.createTimetableItemSaga.onReserveTrainFailed(timetableItem);
+		if(timetableItem != null) {
+			timetableItem.setTrainReservationStatus(Status.FAILED);
+			timetableItem.setStationsReservationStatus(Status.DISCARDED);
+			timetableItemRepository.save(timetableItem);
+			this.createTimetableItemSaga.onReserveTrainFailed(timetableItem);
+		}
 	}
 	
 	public synchronized void routeFetched(RouteFetchedResponse routeFetchedResponse) {
 		TimetableItem timetableItem = timetableItemRepository.findById(routeFetchedResponse.getTimetableId()).orElse(null);
-		timetableItem.setRouteStatus(Status.SUCCESSFUL);
-		timetableItemRepository.save(timetableItem);
-		this.createTimetableItemSaga.onRouteFetched(timetableItem, routeFetchedResponse);
+		if(timetableItem != null) {
+			timetableItem.setRouteStatus(Status.SUCCESSFUL);
+			timetableItemRepository.save(timetableItem);
+			this.createTimetableItemSaga.onRouteFetched(timetableItem, routeFetchedResponse);
+		}
 	}
 
 	public synchronized void stationsReserved(StationsResponse stationsReservedResponse) {
 		TimetableItem timetableItem = timetableItemRepository.findById(stationsReservedResponse.getTimetableId()).orElse(null);
-		timetableItem.setStationsReservationStatus(Status.SUCCESSFUL);
-		timetableItemRepository.save(timetableItem);
-		this.createTimetableItemSaga.onStationsReserved(timetableItem);
+		if(timetableItem != null) {
+			timetableItem.setStationsReservationStatus(Status.SUCCESSFUL);
+			timetableItemRepository.save(timetableItem);
+			this.createTimetableItemSaga.onStationsReserved(timetableItem);
+		} else {
+			this.createTimetableItemSaga.discardStationReservations(stationsReservedResponse.getTimetableId());
+		}
 	}
 	
 	public synchronized void trainReserved(TrainReservedResponse trainReservedResponse) {
 		TimetableItem timetableItem = timetableItemRepository.findById(trainReservedResponse.getTimetableId()).orElse(null);
-		timetableItem.setTrainId(trainReservedResponse.getTrainId());
-		timetableItem.setTrainReservationStatus(Status.SUCCESSFUL);
-		timetableItemRepository.save(timetableItem);
-		this.createTimetableItemSaga.onTrainReserved(timetableItem);
+		if(timetableItem != null) {
+			timetableItem.setTrainId(trainReservedResponse.getTrainId());
+			timetableItem.setTrainReservationStatus(Status.SUCCESSFUL);
+			timetableItemRepository.save(timetableItem);
+			this.createTimetableItemSaga.onTrainReserved(timetableItem);
+		} else {
+			this.createTimetableItemSaga.discardTrainReservation(trainReservedResponse.getTimetableId());
+		}
 	}
 }

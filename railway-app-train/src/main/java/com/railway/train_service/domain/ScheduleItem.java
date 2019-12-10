@@ -13,6 +13,10 @@ public class ScheduleItem {
 		this.endDateTime = endDateTime;
 	}
 	
+	public Long scheduleItem() {
+		return timetableId;
+	}
+	
 	public Long getTimetableId() {
 		return timetableId;
 	}

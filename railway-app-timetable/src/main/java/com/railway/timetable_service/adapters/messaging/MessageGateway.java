@@ -13,4 +13,10 @@ public interface MessageGateway {
 
 	@Gateway(requestChannel = Channels.RESERVE_STATIONS)
 	public void reserveStations(StationsRequest stationsRequest);
+
+	@Gateway(requestChannel = Channels.DISCARD_TRAIN_RESERVATION)
+	public void discardTrainReservation(DiscardReservationRequest discardReservationRequest);
+
+	@Gateway(requestChannel = Channels.DISCARD_STATION_RESERVATIONS)
+	public void discardStationReservations(DiscardReservationRequest discardReservationRequest);
 }

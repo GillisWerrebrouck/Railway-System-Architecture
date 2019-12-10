@@ -12,6 +12,8 @@ public interface Channels {
 	static final String STATIONS_RESERVED = "stations_reserved";
 	static final String RESERVE_TRAIN = "reserve_train";
 	static final String TRAIN_RESERVED = "train_reserved";
+	static final String DISCARD_TRAIN_RESERVATION = "discard_train_reservation";
+	static final String DISCARD_STATION_RESERVATIONS = "discard_station_reservations";
 	
 	@Output(GET_ROUTE)
 	MessageChannel getRoute();
@@ -30,4 +32,10 @@ public interface Channels {
 	
 	@Input(TRAIN_RESERVED)
 	SubscribableChannel processTrainReservedResponse();
+	
+	@Output(DISCARD_TRAIN_RESERVATION)
+	MessageChannel discardTrainReservation();
+	
+	@Output(DISCARD_STATION_RESERVATIONS)
+	MessageChannel discardStationReservations();
 }

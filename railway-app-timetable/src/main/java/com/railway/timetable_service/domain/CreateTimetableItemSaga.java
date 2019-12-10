@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.railway.timetable_service.adapters.messaging.DiscardReservationRequest;
 import com.railway.timetable_service.adapters.messaging.MessageGateway;
 import com.railway.timetable_service.adapters.messaging.RouteConnection;
 import com.railway.timetable_service.adapters.messaging.RouteFetchedResponse;
@@ -168,10 +169,31 @@ public class CreateTimetableItemSaga {
 		logger.info("[Create Timetable Item Saga] failed to get route");
 		this.createTimetableItemFailed(timetableItem);
 	}
+
+	public void onReserveStationsFailed(TimetableItem timetableItem) {
+		logger.info("[Create Timetable Item Saga] failed to reserve stations");
+		
+		discardTrainReservation(timetableItem.getId());
+		
+		this.createTimetableItemFailed(timetableItem);
+	}
+	
+	public void discardTrainReservation(Long timetableItemId) {
+		DiscardReservationRequest request = new DiscardReservationRequest(timetableItemId);
+		gateway.discardTrainReservation(request);
+	}
 		
 	public void onReserveTrainFailed(TimetableItem timetableItem){
 		logger.info("[Create Timetable Item Saga] failed to reserve train");
+		
+		discardStationReservations(timetableItem.getId());
+		
 		this.createTimetableItemFailed(timetableItem);
+	}
+	
+	public void discardStationReservations(Long timetableItemId) {
+		DiscardReservationRequest request = new DiscardReservationRequest(timetableItemId);
+		gateway.discardStationReservations(request);
 	}
 	
 	public void createTimetableItemFailed(TimetableItem timetableItem) {

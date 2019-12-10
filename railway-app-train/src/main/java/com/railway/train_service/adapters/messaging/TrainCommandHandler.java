@@ -35,4 +35,10 @@ public class TrainCommandHandler {
 		}
 		return response;
 	}
+	
+	@StreamListener(Channels.DISCARD_TRAIN_RESERVATION)
+	public void discardTrainReservation(DiscardReservationRequest request) {
+		logger.info("[Train Command Handler] discard train reservation command received");
+		trainService.discardTrainReservation(request.getTimetableId());
+	}
 }

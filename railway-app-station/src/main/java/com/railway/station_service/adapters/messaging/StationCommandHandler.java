@@ -37,4 +37,10 @@ public class StationCommandHandler {
 		StationsResponse response = new StationsResponse(stationsRequest.getRequestId(), stationsRequest.getTimetableId(), true);
 		return response;
 	}
+	
+	@StreamListener(Channels.DISCARD_STATION_RESERVATIONS)
+	public void discardTrainReservation(DiscardReservationRequest request) {
+		logger.info("[Station Command Handler] discard station reservations command received");
+		stationService.discardStationReservations(request.getTimetableId());
+	}
 }
