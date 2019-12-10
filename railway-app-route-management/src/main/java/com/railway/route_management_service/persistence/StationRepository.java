@@ -13,8 +13,11 @@ import com.railway.route_management_service.domain.Station;
 @Repository
 public interface StationRepository extends Neo4jRepository<Station, Long> {
 	List<Station> findByName(@Param("name") String name);
-	
+
 	// creating a new station node with the merge clause, this will ensure that it is created only if it doesn't already exists (idempotent query)
-	@Query("MERGE (s:Station {stationId: {stationId}, name : {name}}) RETURN s")
+	@Query("MERGE (s:Station {stationId: {stationId}, name: {name}}) RETURN s")
 	Station createStation(UUID stationId, String name);
+	
+	@Query("MATCH (s:Station) WHERE s.stationId={id} DELETE s")
+	void deleteStationByStationId(String id);
 }

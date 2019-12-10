@@ -31,6 +31,6 @@ public class RouteCommandHandler {
 		Route route = routeService.getRoute(request.getRouteId());
 		RouteResponse response = new RouteResponse(request.getRouteId(), request.getTimetableId(), request.getRequestId(), routeConnections, route);
 		logger.info("[Route Command Handler] route fetched");
-		return response;		
+		return response;
 	}
 }

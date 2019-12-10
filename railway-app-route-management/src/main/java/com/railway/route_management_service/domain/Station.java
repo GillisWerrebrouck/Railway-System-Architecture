@@ -30,6 +30,10 @@ public class Station {
 		// Empty constructor required as of Neo4j API 2.0.5
 	}
 	
+	public Station(UUID stationId) {
+		this.stationId = stationId.toString();
+	}
+	
 	public Station(UUID stationId, String name) {
 		this.stationId = stationId.toString();
 		this.name = name;

@@ -21,11 +21,19 @@ public class Station {
 	private List<Platform> platforms = new ArrayList<Platform>();
 	
 	@SuppressWarnings("unused")
-	private Station() {}
+	private Station() {
+		this(UUID.randomUUID());
+	}
+	
+	public Station(UUID id) {
+		this.id = id;
+	}
 	
 	public Station(String name, Address address) {
-		this.address = address;
+		// in production the "id" field should be an auto-generated field but this is easier for development/testing purposes
+		this(UUID.randomUUID());
 		this.name = name;
+		this.address = address;
 	}
 	
 	public List<Platform> getPlatforms() {
