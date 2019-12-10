@@ -63,18 +63,23 @@ public class TimetableItemRestController implements CreateTimetableItemListener 
 	@PostMapping
 	private DeferredResult<TimetableItem> createTimetableItem(@RequestBody TimetableRequest timetableRequest) {
 		logger.info("[Timetable Item Rest Controller] create timetable item");
+		
 		DeferredResult<TimetableItem> deferredResult = new DeferredResult<>(10000l);
+		
+		if(!isValidTimetableRequest(timetableRequest)) {
+			deferredResult.setErrorResult("Request must contain the following fields in the body; \"routeId\", \"startDateTime\" and \"requestedTrainType\"");
+		}
 		
 		deferredResult.onTimeout(() -> {
 			deferredResult.setErrorResult("Request timedout occurred");
 		});
-		logger.info(timetableRequest.getRequestedTrainType().toString());
+		
 		TimetableItem timetableItem = new TimetableItem(timetableRequest.getRouteId(), timetableRequest.getStartDateTime(), timetableRequest.getRequestedTrainType());
 		
 		timetableItemRepository.save(timetableItem);
 		
 		this.deferredResults.put(timetableItem.getId(), deferredResult);
-
+		
 		try {
 			this.timetableService.createTimetableItem(timetableItem, timetableRequest);
 		} catch (Exception e) {
@@ -85,6 +90,10 @@ public class TimetableItemRestController implements CreateTimetableItemListener 
 		
 		logger.info("[Timetable Item Rest Controller] succefully created a timetable item");
 		return deferredResult;
+	}
+
+	private boolean isValidTimetableRequest(TimetableRequest request) {
+		return request.getRouteId() != null && request.getStartDateTime() != null && request.getRequestedTrainType() != null;
 	}
 
 	private void performResponse(TimetableItem timetableItem) {
