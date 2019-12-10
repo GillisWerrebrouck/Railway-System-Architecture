@@ -72,13 +72,14 @@ public class StationRestController {
 	
 	@PostMapping(consumes = "application/json")
 	@ResponseStatus(HttpStatus.CREATED)
-	public void postStation (@RequestBody Station station) {
+	public Station postStation (@RequestBody Station station) {
 		if (station.getName() == null) {
 			throw new BadRequestException("Missing name property for station");
 		}
 		try {
 			stationRepository.save(station);
 			gateway.stationCreated(station);
+			return station;
 		} catch (Exception e) {
 			throw new BadRequestException("Could not create given station: " + e.getMessage());
 		}
