@@ -3,7 +3,6 @@ package com.railway.timetable_service.domain;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.railway.timetable_service.adapters.messaging.DiscardReservationRequest;
 import com.railway.timetable_service.adapters.messaging.RouteFetchedResponse;
 import com.railway.timetable_service.adapters.messaging.StationsResponse;
 import com.railway.timetable_service.adapters.messaging.TrainReservedResponse;
