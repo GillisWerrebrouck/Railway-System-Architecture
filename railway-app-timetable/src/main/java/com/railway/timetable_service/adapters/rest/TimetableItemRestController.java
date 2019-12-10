@@ -72,7 +72,7 @@ public class TimetableItemRestController implements CreateTimetableItemListener 
 		}
 		
 		deferredResult.onTimeout(() -> {
-			deferredResult.setErrorResult("Request timedout occurred");
+			deferredResult.setErrorResult("Request timeout occurred");
 		});
 		
 		TimetableItem timetableItem = new TimetableItem(timetableRequest.getRouteId(), timetableRequest.getStartDateTime(), timetableRequest.getRequestedTrainType());
