@@ -24,7 +24,7 @@ public class TrainCommandHandler {
 	@SendTo(Channels.TRAIN_RESERVED)
 	public TrainResponse reserveTrain(TrainRequest request) {
 		logger.info("[Train Command Handler] reserve train command received");
-		Train train = trainService.reserveTrain(request.getStartDateTime(), request.getEndDateTime(), request.getTrainType());
+		Train train = trainService.reserveTrain(request.getTimetableId(), request.getStartDateTime(), request.getEndDateTime(), request.getTrainType());
 		TrainResponse response;
 		if(train != null) {
 			logger.info("[Train Command Handler] train reserved");

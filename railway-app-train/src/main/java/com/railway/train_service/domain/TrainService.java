@@ -22,7 +22,7 @@ public class TrainService {
 		this.trainRepository = trainRepository;
 	}
 	
-	public Train reserveTrain(LocalDateTime startDateTime, LocalDateTime endDateTime, TrainType trainType) {
+	public Train reserveTrain(Long timetableId, LocalDateTime startDateTime, LocalDateTime endDateTime, TrainType trainType) {
 		Collection<Train> trains = trainRepository.getAllTrainsByType(trainType);
 		Train reservedTrain = null;
 		
@@ -31,7 +31,7 @@ public class TrainService {
 			logger.info(train.getId());
 			if(isTrainAvailable(schedule, startDateTime, endDateTime)) {
 				reservedTrain = train;
-				ScheduleItem scheduleItem = new ScheduleItem(startDateTime, endDateTime);
+				ScheduleItem scheduleItem = new ScheduleItem(timetableId, startDateTime, endDateTime);
 				List<ScheduleItem> scheduleItems = new ArrayList<>();
 				scheduleItems.add(scheduleItem);
 				reservedTrain.setScheduleItems(scheduleItems);
