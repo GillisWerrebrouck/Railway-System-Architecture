@@ -3,6 +3,7 @@ package com.railway.timetable_service.domain;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
@@ -24,8 +25,9 @@ public class TimetableItem {
 	
 	// delay in minutes
 	private int delay;
-	
+
 	private Long routeId;
+	private UUID routeRequestId;
 	private String trainId;
 	private TrainType requestedTrainType;
 	
@@ -33,7 +35,7 @@ public class TimetableItem {
     @ElementCollection(targetClass=Long.class, fetch=FetchType.EAGER)
 	private List<Long> staffIds = new ArrayList<Long>();
 	
-	private Status routeStatus; 
+	private Status routeStatus;
 	private Status trainReservationStatus;
 	private Status stationsReservationStatus;
 	private Status staffReservationStatus;
@@ -46,6 +48,7 @@ public class TimetableItem {
 		this.endDateTime = endDateTime;
 		this.delay = 0;
 		this.routeId = routeId;
+		this.routeRequestId = null;
 		this.trainId = trainId;
 		this.requestedTrainType = requestedTrainType;
 		this.staffIds = staffIds;
@@ -93,6 +96,14 @@ public class TimetableItem {
 	
 	public void setRouteId(Long routeId) {
 		this.routeId = routeId;
+	}
+	
+	public UUID getRouteRequestId() {
+		return routeRequestId;
+	}
+	
+	public void setRouteRequestId(UUID routeRequestId) {
+		this.routeRequestId = routeRequestId;
 	}
 	
 	public String getTrainId() {

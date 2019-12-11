@@ -48,6 +48,8 @@ public class CreateTimetableItemSaga {
 		timetableItemRepository.save(timetableItem);
 		RouteRequest routeRequest = new RouteRequest(timetableItem.getId(), timetableItem.getRouteId());
 		logger.info("[Create Timetable Item Saga] get route command sent");
+		// save the routeRequestId to keep track of the correct response for this exact request
+		timetableItem.setRouteRequestId(routeRequest.getRequestId());
 		gateway.getRoute(routeRequest);
 		timetableItem.setRouteStatus(Status.PENDING);
 		timetableItemRepository.save(timetableItem);

@@ -64,7 +64,8 @@ public class TimetableService {
 	
 	public synchronized void routeFetched(RouteFetchedResponse routeFetchedResponse) {
 		TimetableItem timetableItem = timetableItemRepository.findById(routeFetchedResponse.getTimetableId()).orElse(null);
-		if(timetableItem != null) {
+		// check if the response is for the request linked to the given timetableItem
+		if(timetableItem != null && timetableItem.getRouteRequestId() != routeFetchedResponse.getRequestId()) {
 			timetableItem.setRouteStatus(Status.SUCCESSFUL);
 			timetableItemRepository.save(timetableItem);
 			this.createTimetableItemSaga.onRouteFetched(timetableItem, routeFetchedResponse);
