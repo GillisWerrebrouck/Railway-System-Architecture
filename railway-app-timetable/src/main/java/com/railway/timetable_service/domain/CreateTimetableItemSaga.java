@@ -117,8 +117,9 @@ public class CreateTimetableItemSaga {
 			
 			timetableItem.setEndDateTime(departureTime);
 		}
-		reserveAllStations(timetableItem, stationsRequest);
+		
 		timetableItemRepository.save(timetableItem);
+		reserveAllStations(timetableItem, stationsRequest);
 	}
 	
 	private RoutePart getNextRoutePart(Collection<RoutePart> allRouteParts, UUID previousStationId) {
@@ -135,6 +136,10 @@ public class CreateTimetableItemSaga {
 	private void reserveAllStations(TimetableItem timetableItem, StationsRequest stationsRequest) {
 		timetableItem.setStationsReservationStatus(Status.STARTED);
 		timetableItemRepository.save(timetableItem);
+		
+		// save the stationsRequestId to keep track of the correct response for this exact request
+		timetableItem.setStationsRequestId(stationsRequest.getRequestId());
+		
 		logger.info("[Create Timetable Item Saga] reserve all stations command sent");
 		gateway.reserveStations(stationsRequest);
 		timetableItem.setStationsReservationStatus(Status.PENDING);
@@ -145,6 +150,10 @@ public class CreateTimetableItemSaga {
 		timetableItem.setTrainReservationStatus(Status.STARTED);
 		timetableItemRepository.save(timetableItem);
 		TrainRequest trainRequest = new TrainRequest(timetableItem.getId(), timetableItem.getStartDateTime(), timetableItem.getEndDateTime(), timetableItem.getRequestedTrainType());
+		
+		// save the trainRequestId to keep track of the correct response for this exact request
+		timetableItem.setTrainRequestId(trainRequest.getRequestId());
+		
 		logger.info("[Create Timetable Item Saga] reserve train command sent");
 		gateway.reserveTrain(trainRequest);
 		timetableItem.setTrainReservationStatus(Status.PENDING);

@@ -29,7 +29,9 @@ public class TimetableItem {
 	private Long routeId;
 	private UUID routeRequestId;
 	private String trainId;
+	private UUID trainRequestId;
 	private TrainType requestedTrainType;
+	private UUID stationsRequestId;
 	
 	@Column
     @ElementCollection(targetClass=Long.class, fetch=FetchType.EAGER)
@@ -50,7 +52,9 @@ public class TimetableItem {
 		this.routeId = routeId;
 		this.routeRequestId = null;
 		this.trainId = trainId;
+		this.trainRequestId = null;
 		this.requestedTrainType = requestedTrainType;
+		this.stationsRequestId = null;
 		this.staffIds = staffIds;
 		this.routeStatus = Status.UNKNOWN;
 		this.trainReservationStatus = Status.UNKNOWN;
@@ -114,12 +118,28 @@ public class TimetableItem {
 		this.trainId = trainId;
 	}
 	
+	public UUID getTrainRequestId() {
+		return trainRequestId;
+	}
+	
+	public void setTrainRequestId(UUID trainRequestId) {
+		this.trainRequestId = trainRequestId;
+	}
+	
 	public TrainType getRequestedTrainType() {
 		return requestedTrainType;
 	}
 	
 	public void setRequestedTrainType(TrainType requestedTrainType) {
 		this.requestedTrainType = requestedTrainType;
+	}
+	
+	public UUID getStationsRequestId() {
+		return stationsRequestId;
+	}
+	
+	public void setStationsRequestId(UUID stationsRequestId) {
+		this.stationsRequestId = stationsRequestId;
 	}
 
 	public List<Long> getStaffIds() {

@@ -74,23 +74,29 @@ public class TimetableService {
 
 	public synchronized void stationsReserved(StationsResponse stationsReservedResponse) {
 		TimetableItem timetableItem = timetableItemRepository.findById(stationsReservedResponse.getTimetableId()).orElse(null);
-		if(timetableItem != null) {
+		// check if the response is for the request linked to the given timetableItem
+		if(timetableItem != null && timetableItem.getStationsRequestId() != stationsReservedResponse.getRequestId()) {
 			timetableItem.setStationsReservationStatus(Status.SUCCESSFUL);
 			timetableItemRepository.save(timetableItem);
 			this.createTimetableItemSaga.onStationsReserved(timetableItem);
-		} else {
+		}
+		
+		if(timetableItem == null) {
 			this.createTimetableItemSaga.discardStationReservations(stationsReservedResponse.getTimetableId());
 		}
 	}
 	
 	public synchronized void trainReserved(TrainReservedResponse trainReservedResponse) {
 		TimetableItem timetableItem = timetableItemRepository.findById(trainReservedResponse.getTimetableId()).orElse(null);
-		if(timetableItem != null) {
+		// check if the response is for the request linked to the given timetableItem
+		if(timetableItem != null && timetableItem.getTrainRequestId() != trainReservedResponse.getRequestId()) {
 			timetableItem.setTrainId(trainReservedResponse.getTrainId());
 			timetableItem.setTrainReservationStatus(Status.SUCCESSFUL);
 			timetableItemRepository.save(timetableItem);
 			this.createTimetableItemSaga.onTrainReserved(timetableItem);
-		} else {
+		}
+		
+		if(timetableItem != null) {
 			this.createTimetableItemSaga.discardTrainReservation(trainReservedResponse.getTimetableId());
 		}
 	}
