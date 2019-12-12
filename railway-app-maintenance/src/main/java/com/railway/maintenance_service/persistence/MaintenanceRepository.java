@@ -13,6 +13,4 @@ public interface MaintenanceRepository extends CrudRepository<ScheduleItem, Long
 	public List<ScheduleItem> findScheduleItemByStartDate(LocalDate startDate);
 
 	public List<ScheduleItem> findScheduleItemByStatus(String status);
-
-	public List<ScheduleItem> findScheduleItemByCommentStartsWith(String comment);
 }

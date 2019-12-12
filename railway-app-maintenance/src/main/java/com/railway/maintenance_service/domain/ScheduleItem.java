@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.ElementCollection;
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -22,18 +21,18 @@ public class ScheduleItem {
 	@ElementCollection
 	private List<Staff> staff;
 	private Status status;
-	private String comment;
-	@Embedded
-	private Train train;
+	private String maintenanceMessage;
+	private String trainId;
 	
 	@SuppressWarnings("unused")
 	private ScheduleItem() {}
 
-	public ScheduleItem(LocalDateTime startDate, LocalDateTime endDate, Status status, String comment) {
+	public ScheduleItem(String trainId, LocalDateTime startDate, LocalDateTime endDate, Status status, String comment) {
+		this.trainId = trainId;
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.status = status;
-		this.comment = comment;
+		this.maintenanceMessage = comment;
 		this.staff = new ArrayList<Staff>();
 	}
 
@@ -77,24 +76,24 @@ public class ScheduleItem {
 		this.status = status;
 	}
 
-	public String getComment() {
-		return comment;
+	public String getMaintenanceMessage() {
+		return maintenanceMessage;
 	}
-
-	public void setComment(String comment) {
-		this.comment = comment;
+	
+	public void setMaintenanceMessage(String maintenanceMessage) {
+		this.maintenanceMessage = maintenanceMessage;
 	}
-
-	public Train getTrain() {
-		return train;
+	
+	public String getTrainId() {
+		return trainId;
 	}
-
-	public void setTrain(Train train) {
-		this.train = train;
+	
+	public void setTrainId(String trainId) {
+		this.trainId = trainId;
 	}
 
 	@Override
 	public String toString() {
-		return "id: " + id + ", startDate: " + startDate + ", status: " + status + ", comment: " + comment;
+		return "id: " + id + ", startDate: " + startDate + ", status: " + status + ", comment: " + maintenanceMessage;
 	}
 }

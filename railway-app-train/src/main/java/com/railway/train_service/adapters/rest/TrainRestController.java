@@ -49,12 +49,14 @@ public class TrainRestController {
 		return train;
 	}
 
+	// request maintenance for a train
 	@PostMapping("/{id}/maintenance")
 	public MaintenanceResponse notifyMaintenance(@PathVariable String id, @RequestBody MaintenanceRequest request) {
 		Train train = trainRepository.findById(id).orElse(null);
 		MaintenanceResponse response;
 		
 		if(train != null) {
+			request.setTrainId(id);
 			trainService.requestMaintenance(request);
 			response = new MaintenanceResponse("Successfully fetched train and sent maintenance request");
 		} else {
