@@ -21,6 +21,12 @@ public class TechnicalDetails {
 		this.defects = defects;
 	}
 
+	public TechnicalDetails(FuelType fuel) {
+		this.fuel = fuel;
+		this.lastCheck = LocalDate.now();
+		this.defects = null;
+	}
+
 	public FuelType getFuel() {
 		return fuel;
 	}

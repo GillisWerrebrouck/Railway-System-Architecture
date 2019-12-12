@@ -16,7 +16,7 @@ public class Platform{
 	
 	private int platformNumber;
 	
-	@OneToMany(mappedBy = "platform")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "platform")
 	private List<ScheduleItem> reservedSlots = new ArrayList<ScheduleItem>();
 	
     @ManyToOne
@@ -67,7 +67,7 @@ public class Platform{
 
 	@Override
 	public String toString() {
-		return "Platform [id=" + id + ", platformNumber=" + platformNumber + ", #reservableSlots=" + reservedSlots.size()
-				+ ", station=" + station + "]";
+		return "id=" + id + ", platformNumber=" + platformNumber + ", #reservableSlots=" + reservedSlots.size()
+				+ ", station=" + station.toString();
 	}
 }

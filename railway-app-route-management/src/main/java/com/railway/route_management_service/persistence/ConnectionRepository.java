@@ -14,10 +14,10 @@ public interface ConnectionRepository extends Neo4jRepository<Connection, Long> 
 	@Query("MATCH p=(x:Station)-[c:" + Constants.INTER_STATION_RELATIONSHIP + "]-(y:Station) WHERE LOWER(x.name) = LOWER({name}) RETURN p")
 	Collection<Connection> findConnectionsByStationName(String name);
 	
-	@Query("MATCH (x:Station {name: {station1}}),(y:Station {name: {station2}})\r\n" + 
-			"CREATE p=(x)-[c:" + Constants.INTER_STATION_RELATIONSHIP + " {distance: {distance}, active: true}]->(y)\r\n" + 
-			"RETURN COUNT(c)")
-	int connectStations(String station1, String station2, Long distance);
+	@Query("MATCH (x:Station {stationId: {stationId1}}),(y:Station {stationId: {stationId2}})\r\n" + 
+			"CREATE p=(x)-[c:" + Constants.INTER_STATION_RELATIONSHIP + " {distance: {distance}, maxSpeed: {maxSpeed}, active: {active}}]->(y)\r\n" + 
+			"RETURN c")
+	Connection connectStations(String stationId1, String stationId2, Long distance, double maxSpeed, boolean active);
 
 	@Query("MATCH p =(x:Station)-[:" + Constants.INTER_STATION_RELATIONSHIP + "* { active:true }]-(y:Station)\r\n" + 
 			"WHERE LOWER(x.name) = LOWER({startStation}) AND LOWER(y.name) = LOWER({endStation})\r\n" + 

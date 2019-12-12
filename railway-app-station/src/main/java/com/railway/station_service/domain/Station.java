@@ -2,44 +2,57 @@ package com.railway.station_service.domain;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "station")
 public class Station {
 	@Id
-	@GeneratedValue (strategy = GenerationType.AUTO)
-	private Long id;
+	private UUID id;
 	
 	private String name;
 	
 	@Embedded
 	private Address address;
 	
-	@OneToMany(mappedBy = "station")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "station")
 	private List<Platform> platforms = new ArrayList<Platform>();
 	
 	@SuppressWarnings("unused")
-	private Station() {}
+	private Station() {
+		this(UUID.randomUUID());
+	}
+	
+	public Station(UUID id) {
+		this.id = id;
+	}
 	
 	public Station(String name, Address address) {
-		this.address = address;
+		// in production the "id" field should be an auto-generated field but this is easier for development/testing purposes
+		this(UUID.randomUUID());
 		this.name = name;
+		this.address = address;
 	}
 	
 	public List<Platform> getPlatforms() {
 		return platforms;
 	}
 	
-	public void setPlatforms(ArrayList<Platform> platforms) {
+	public void setPlatforms(List<Platform> platforms) {
 		this.platforms = platforms;
 	}
 	
-	public Long getId() {
+	public void addPlatform(Platform platform) {
+		this.platforms.add(platform);
+	}
+	
+	public UUID getId() {
 		return id;
 	}
 	
-	public void setId(Long id) {
+	public void setId(UUID id) {
 		this.id = id;
 	}
 	

@@ -23,6 +23,7 @@ public class RouteConnection {
     @EndNode
     private Station station;
 
+    private boolean isStartOfRoute;
     private Long connectionId;
 
 	@SuppressWarnings("unused")
@@ -30,9 +31,10 @@ public class RouteConnection {
 		// Empty constructor required as of Neo4j API 2.0.5
 	}
 	
-	public RouteConnection(Route route, Station station, Long connectionId) {
+	public RouteConnection(Route route, Station station, boolean isStartOfRoute, Long connectionId) {
 		this.route = route;
 		this.station = station;
+		this.isStartOfRoute = isStartOfRoute;
 		this.connectionId = connectionId;
 		
 		route.getRouteConnections().add(this);
@@ -57,6 +59,14 @@ public class RouteConnection {
 	
 	public void setStation(Station station) {
 		this.station = station;
+	}
+	
+	public boolean isStartOfRoute() {
+		return isStartOfRoute;
+	}
+	
+	public void setStartOfRoute(boolean isStartOfRoute) {
+		this.isStartOfRoute = isStartOfRoute;
 	}
 	
 	public Long getConnectionId() {

@@ -1,7 +1,7 @@
 package com.railway.station_service.adapters.rest;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.railway.station_service.adapters.messaging.MessageGateway;
 import com.railway.station_service.domain.Platform;
 import com.railway.station_service.domain.Station;
 import com.railway.station_service.domain.exception.BadRequestException;
@@ -25,10 +26,12 @@ import com.railway.station_service.persistence.StationRepository;
 @RequestMapping("/station")
 public class StationRestController {
 	private final StationRepository stationRepository;
+	private MessageGateway gateway;
 
 	@Autowired
-	public StationRestController(StationRepository stationRepository) {
+	public StationRestController(StationRepository stationRepository, MessageGateway gateway) {
 		this.stationRepository = stationRepository;
+		this.gateway = gateway;
 	}
 
 	@GetMapping
@@ -37,30 +40,30 @@ public class StationRestController {
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<Station> stationById(@PathVariable Long id) {
-		Optional <Station> optStation = stationRepository.findById(id);
-		if(optStation.isPresent()) {
-			return new ResponseEntity<>(optStation.get(), HttpStatus.OK);
+	public ResponseEntity<Station> stationById(@PathVariable UUID id) {
+		Station station = stationRepository.findById(id).orElse(null);
+		if(station != null) {
+			return new ResponseEntity<>(station, HttpStatus.OK);
 		}
 		return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 	}
 	
 	@GetMapping("/{id}/platform")
-	public ResponseEntity<List<Platform>> platformsByStationId(@PathVariable Long id) {
-		List<Platform> optPlatforms = stationRepository.getPlatforms(id);
-		if(optPlatforms != null) {
-			return new ResponseEntity<>(optPlatforms, HttpStatus.OK);
+	public ResponseEntity<List<Platform>> platformsByStationId(@PathVariable UUID id) {
+		List<Platform> platforms = stationRepository.getPlatformsByStationId(id);
+		if(platforms != null) {
+			return new ResponseEntity<>(platforms, HttpStatus.OK);
 		}
 		return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 	}
 	
-	@GetMapping("/{id}/platform/{id_pl}")
-	public ResponseEntity<Platform> platformByStationIdAndPlatformId(@PathVariable Long id, @PathVariable Long id_pl) {
-		List<Platform> optPlatforms = stationRepository.getPlatforms((long)id);
-		if(optPlatforms != null) {
-			for (int i = 0; i < optPlatforms.size(); i++) {
-				if(optPlatforms.get(i).getId() == id_pl) {
-					return new ResponseEntity<>(optPlatforms.get(i), HttpStatus.OK);
+	@GetMapping("/{id}/platform/{platformId}")
+	public ResponseEntity<Platform> platformByStationIdAndPlatformId(@PathVariable UUID id, @PathVariable Long platformId) {
+		List<Platform> platforms = stationRepository.getPlatformsByStationId(id);
+		if(platforms != null) {
+			for (Platform platform : platforms) {
+				if(platform.getId() == platformId) {
+					return new ResponseEntity<>(platform, HttpStatus.OK);
 				}
 			}
 		}
@@ -69,42 +72,40 @@ public class StationRestController {
 	
 	@PostMapping(consumes = "application/json")
 	@ResponseStatus(HttpStatus.CREATED)
-	public void postStation (@RequestBody Station s) {
-		if (s.getName().compareTo("") == 0) {
-			throw new BadRequestException("Missing name attribute for station");
+	public Station postStation (@RequestBody Station station) {
+		if (station.getName() == null) {
+			throw new BadRequestException("Missing name property for station");
 		}
 		try {
-			stationRepository.save(s);
-		}
-		catch (Exception e) {
-			throw new BadRequestException("Could not update given station : " + e.getMessage());
+			stationRepository.save(station);
+			gateway.stationCreated(station);
+			return station;
+		} catch (Exception e) {
+			throw new BadRequestException("Could not create given station: " + e.getMessage());
 		}
 	}
 	
 	@DeleteMapping("/{id}")
-	public void deleteStation(@PathVariable Long id) {
+	public void deleteStation(@PathVariable UUID id) {
 		try {
 			stationRepository.deleteById(id);
+			gateway.stationDeleted(new Station(id));
 		} catch (Exception e) {
-			String errorMessage = "Could not delete station with id " + id + " : " + e.getMessage();
+			String errorMessage = "Could not delete station with id " + id + ": " + e.getMessage();
 			throw new BadRequestException(errorMessage);
 		}
 	}
 	
-	@PutMapping("/{id}")
-	public void updateStation(@RequestBody Station station, @PathVariable Long id) throws BadRequestException {
-
-		Optional<Station> stationOptional = stationRepository.findById(id);
-
-		if (!stationOptional.isPresent())
-			throw new BadRequestException("Could not find a station for the given ID");
-
-		station.setId(id);
+	@PutMapping
+	public void updateStation(@RequestBody Station station) throws BadRequestException {		
+		if (station.getId() == null) {
+			throw new BadRequestException("No station id specified");
+		}
+		
 		try {
 			stationRepository.save(station);
-		}
-		catch (Exception e) {
-			throw new BadRequestException("Could not save given station : " + e.getMessage());
+		} catch (Exception e) {
+			throw new BadRequestException("Could not update station with id " + station.getId() + ": " + e.getMessage());
 		}
 	}
 }

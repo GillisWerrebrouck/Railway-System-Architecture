@@ -23,6 +23,7 @@ public class Connection {
     private Station stationY;
 
 	private Long distance;
+	private double maxSpeed;
 	private boolean active = true;
 
 	@SuppressWarnings("unused")
@@ -30,10 +31,11 @@ public class Connection {
 		// Empty constructor required as of Neo4j API 2.0.5
 	}
 	
-	public Connection(Station stationX, Station stationY, Long distance) {
+	public Connection(Station stationX, Station stationY, Long distance, double maxSpeed) {
 		this.stationX = stationX;
 		this.stationY = stationY;
-		this.setDistance(distance);
+		this.maxSpeed = maxSpeed;
+		this.distance = distance;
 
 		this.stationX.getConnections().add(this);
 		this.stationY.getConnections().add(this);
@@ -65,6 +67,14 @@ public class Connection {
 
 	public void setDistance(Long distance) {
 		this.distance = distance;
+	}
+	
+	public double getMaxSpeed() {
+		return maxSpeed;
+	}
+	
+	public void setMaxSpeed(double maxSpeed) {
+		this.maxSpeed = maxSpeed;
 	}
 
 	public boolean isActive() {

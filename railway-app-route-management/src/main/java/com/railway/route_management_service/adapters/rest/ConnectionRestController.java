@@ -40,15 +40,15 @@ public class ConnectionRestController extends RouteRestController {
 	@PostMapping
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
 	public void connectStations(@RequestBody Connection connection) throws SelfReferentialNodeException, QueryFailedException {
-		if (connection.getStationX().getName().compareTo(connection.getStationY().getName()) == 0) {
+		if (connection.getStationX().getStationId().compareTo(connection.getStationY().getStationId()) == 0) {
 			String errorMessage = "Self-referential nodes are not allowed";
 			throw new SelfReferentialNodeException(errorMessage);
 		}
 		
-		int result = this.connectionRepository.connectStations(connection.getStationX().getName(), connection.getStationY().getName(), connection.getDistance());
-		
-		if (result == 0) {
-			String errorMessage = "Connection between " + connection.getStationX().getName() + " and " + connection.getStationY().getName() + " could not be created";
+		try {
+			this.connectionRepository.connectStations(connection.getStationX().getStationId(), connection.getStationY().getStationId(), connection.getDistance(), connection.getMaxSpeed(), connection.isActive());
+		} catch (Exception e) {
+			String errorMessage = "Connection between " + connection.getStationX().getStationId() + " and " + connection.getStationY().getStationId() + " could not be created";
 			throw new QueryFailedException(errorMessage);
 		}
 	}
