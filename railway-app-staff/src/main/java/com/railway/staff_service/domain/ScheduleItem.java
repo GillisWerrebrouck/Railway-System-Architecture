@@ -1,29 +1,23 @@
 package com.railway.staff_service.domain;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.PersistenceConstructor;
-import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document
 public class ScheduleItem {
 	@Id
-	private String id;
+	private UUID id;
 	private LocalDateTime startDate;
 	private LocalDateTime endDate;
-	private StaffMember staffMember;
 	
-	public ScheduleItem() {}
-	
-	@PersistenceConstructor
-	public ScheduleItem(LocalDateTime startDate, LocalDateTime endDate, StaffMember staffMember) {
+	public ScheduleItem(LocalDateTime startDate, LocalDateTime endDate) {
+		this.id = UUID.randomUUID();
 		this.startDate = startDate;
 		this.endDate = endDate;
-		this.staffMember = staffMember;
 	}
 	
-	public String getId() {
+	public UUID getId() {
 		return id;
 	}
 	
@@ -43,16 +37,8 @@ public class ScheduleItem {
 		this.endDate = endDate;
 	}
 	
-	public StaffMember getStaffMember() {
-		return staffMember;
-	}
-	
-	public void setStaffMember(StaffMember staffMember) {
-		this.staffMember = staffMember;
-	}
-	
 	@Override
 	public String toString() {
-		return "StaffSchedule [id=" + id + ", startDate=" + startDate + ", endDate=" + endDate + ", staffMember=" + staffMember.toString() + "]";
+		return "StaffSchedule [id=" + id.toString() + ", startDate=" + startDate + ", endDate=" + endDate + "]";
 	}
 }

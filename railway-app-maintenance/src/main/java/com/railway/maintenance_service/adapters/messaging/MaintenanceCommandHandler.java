@@ -28,13 +28,17 @@ public class MaintenanceCommandHandler {
 	@StreamListener(Channels.REQUEST_MAINTENANCE)
 	public void requestMaintenance(MaintenanceRequest request) {
 		logger.info("[Maintenance Command Handler] request maintenance command received");
-
-		// TODO reserveStaff
 		
 		// a maintenance is schedule to take 1 day by default
 		LocalDateTime startDate = request.getMaintenanceDate();
 		LocalDateTime endDate = request.getMaintenanceDate().plusDays(1);
 		ScheduleItem scheduleItem = new ScheduleItem(request.getTrainId(), startDate, endDate, Status.SCHEDULED, request.getMaintenanceMessage());
+		
+		// reserve staff
+		StaffRequest staffRequest = new StaffRequest(4, StaffMemberType.MECHANIC, startDate, endDate);
+		scheduleItem.setRequestId(staffRequest.getRequestId());
+		maintenanceService.reserveStaff(staffRequest);
+		
 		maintenanceRepository.save(scheduleItem);
 	}
 }

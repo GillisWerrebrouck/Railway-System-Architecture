@@ -1,5 +1,7 @@
 package com.railway.staff_service.domain;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 
 import org.springframework.data.annotation.Id;
@@ -14,6 +16,7 @@ public class StaffMember {
 	private String lastName;
 	private Date birthdate;
 	private StaffMemberType staffMemberType;
+	private Collection<ScheduleItem> scheduleItems;
 	
 	public StaffMember() {}
 	
@@ -23,6 +26,7 @@ public class StaffMember {
 		this.lastName = lastName;
 		this.birthdate = birthdate;
 		this.staffMemberType = staffMemberType;
+		this.scheduleItems = new ArrayList<>();
 	}
 	
 	public String getId() {
@@ -59,6 +63,18 @@ public class StaffMember {
 	
 	public void setStaffMemberType(StaffMemberType staffMemberType) {
 		this.staffMemberType = staffMemberType;
+	}
+	
+	public Collection<ScheduleItem> getScheduleItems() {
+		return scheduleItems;
+	}
+	
+	public void setScheduleItems(Collection<ScheduleItem> scheduleItems) {
+		this.scheduleItems = scheduleItems;
+	}
+	
+	public void addScheduleItem(ScheduleItem scheduleItem) {
+		this.scheduleItems.add(scheduleItem);
 	}
 	
 	@Override

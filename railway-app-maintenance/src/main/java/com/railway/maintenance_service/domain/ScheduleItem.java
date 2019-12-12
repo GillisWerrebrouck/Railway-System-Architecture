@@ -2,7 +2,8 @@ package com.railway.maintenance_service.domain;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
+import java.util.UUID;
 
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
@@ -19,7 +20,9 @@ public class ScheduleItem {
 	private LocalDateTime endDate;
 	
 	@ElementCollection
-	private List<Staff> staff;
+	private Collection<String> staffIds;
+	private UUID requestId;
+	private String staffReservationMessage;
 	private Status status;
 	private String maintenanceMessage;
 	private String trainId;
@@ -33,7 +36,7 @@ public class ScheduleItem {
 		this.endDate = endDate;
 		this.status = status;
 		this.maintenanceMessage = comment;
-		this.staff = new ArrayList<Staff>();
+		this.staffIds = new ArrayList<>();
 	}
 
 	public Long getId() {
@@ -55,17 +58,29 @@ public class ScheduleItem {
 	public void setEndDate(LocalDateTime endDate) {
 		this.endDate = endDate;
 	}
-
-	public List<Staff> getStaff() {
-		return staff;
+	
+	public Collection<String> getStaffIds() {
+		return staffIds;
 	}
-
-	public void setStaff(List<Staff> staff) {
-		this.staff = staff;
+	
+	public void setStaffIds(Collection<String> staffIds) {
+		this.staffIds = staffIds;
 	}
-
-	public void addStaff(Staff staff) {
-		this.staff.add(staff);
+	
+	public UUID getRequestId() {
+		return requestId;
+	}
+	
+	public void setRequestId(UUID requestId) {
+		this.requestId = requestId;
+	}
+	
+	public String getStaffReservationMessage() {
+		return staffReservationMessage;
+	}
+	
+	public void setStaffReservationMessage(String staffReservationMessage) {
+		this.staffReservationMessage = staffReservationMessage;
 	}
 
 	public Status getStatus() {
@@ -94,6 +109,6 @@ public class ScheduleItem {
 
 	@Override
 	public String toString() {
-		return "id: " + id + ", startDate: " + startDate + ", status: " + status + ", comment: " + maintenanceMessage;
+		return "id: " + id + ", startDate: " + startDate + ", status: " + status + ", maintenance message: " + maintenanceMessage;
 	}
 }
