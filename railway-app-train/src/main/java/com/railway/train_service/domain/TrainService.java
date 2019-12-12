@@ -8,15 +8,19 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.railway.train_service.adapters.messaging.MaintenanceRequest;
+import com.railway.train_service.adapters.messaging.MessageGateway;
 import com.railway.train_service.persistence.TrainRepository;
 
 @Service
 public class TrainService {
 	TrainRepository trainRepository;
+	private MessageGateway gateway;
 	
 	@Autowired
-	public TrainService(TrainRepository trainRepository) {
+	public TrainService(TrainRepository trainRepository, MessageGateway gateway) {
 		this.trainRepository = trainRepository;
+		this.gateway = gateway;
 	}
 	
 	public synchronized Train reserveTrain(Long timetableId, LocalDateTime startDateTime, LocalDateTime endDateTime, TrainType trainType) {
@@ -65,5 +69,9 @@ public class TrainService {
 				}
 			}
 		}
+	}
+
+	public void requestMaintenance(MaintenanceRequest request) {
+		gateway.requestMaintenance(request);
 	}
 }
