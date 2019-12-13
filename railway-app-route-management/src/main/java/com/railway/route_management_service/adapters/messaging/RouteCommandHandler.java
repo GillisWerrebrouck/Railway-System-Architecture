@@ -33,4 +33,14 @@ public class RouteCommandHandler {
 		logger.info("[Route Command Handler] route fetched");
 		return response;
 	}
+
+	@StreamListener(Channels.GET_ROUTE_DETAILS)
+	@SendTo(Channels.ROUTE_DETAILS_FETCHED)
+	public RouteDetailResponse getRouteDetails(RouteDetailRequest request){
+		logger.info("[Route Command Handler] get distance command received");
+		RouteDetailResponse response = new RouteDetailResponse("stationX", "stationY",
+				234.00, request.getTicketId(), request.getRouteDetailRequestId());
+		logger.info("[Route Command Handler] distance fetched");
+		return response;
+	}
 }

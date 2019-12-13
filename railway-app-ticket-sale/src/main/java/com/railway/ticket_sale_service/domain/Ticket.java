@@ -21,6 +21,8 @@ public class Ticket {
     private TicketType type;
     private UUID validationCode;
 
+    private UUID routeDetailsRequestId;
+
     @SuppressWarnings("unused")
 	private Ticket() {};
 
@@ -30,13 +32,15 @@ public class Ticket {
         this.validOn = validOn;
         this.price = price;
         this.amountOfSeats = amountOfSeats;
-        this.type = TicketType.GROUP;
         validationCode = Generators.timeBasedGenerator().generate();
+        if(amountOfSeats > 1)
+            this.type = TicketType.GROUP;
+        else
+            this.type = TicketType.SINGLE;
     }
 
-    public Ticket(String startStation, String endStation, LocalDateTime validOn, double price) {
-        this(startStation, endStation, validOn, price, 1);
-        this.type = TicketType.SINGLE;
+    public Ticket(LocalDateTime validOn, int amountOfSeats){
+            this(null, null, validOn, 0, amountOfSeats);
     }
 
     public Long getId() {
@@ -102,6 +106,14 @@ public class Ticket {
     public void setType(TicketType type) {
 		this.type = type;
 	}
+
+    public UUID getRouteDetailsRequestId() {
+        return routeDetailsRequestId;
+    }
+
+    public void setRouteDetailsRequestId(UUID routeDetailsRequestId) {
+        this.routeDetailsRequestId = routeDetailsRequestId;
+    }
 
     @Override
     public String toString() {
