@@ -42,6 +42,10 @@ public class Train {
 		this.scheduleItems = scheduleItems;
 	}
 	
+	public void addScheduleItem(ScheduleItem scheduleItem){
+		this.scheduleItems.add(scheduleItem);
+	}
+	
 	public String getId() {
 		return id;
 	}

@@ -1,25 +1,27 @@
 package com.railway.train_service.domain;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.railway.train_service.adapters.messaging.MaintenanceRequest;
+import com.railway.train_service.adapters.messaging.MessageGateway;
 import com.railway.train_service.persistence.TrainRepository;
 
 @Service
 public class TrainService {
 	TrainRepository trainRepository;
+	private MessageGateway gateway;
 	
 	@Autowired
-	public TrainService(TrainRepository trainRepository) {
+	public TrainService(TrainRepository trainRepository, MessageGateway gateway) {
 		this.trainRepository = trainRepository;
+		this.gateway = gateway;
 	}
 	
-	public synchronized Train reserveTrain(Long timetableId, LocalDateTime startDateTime, LocalDateTime endDateTime, TrainType trainType) {
+	public synchronized Train reserveTrain(Long timetableId, ReservationType reservationType, LocalDateTime startDateTime, LocalDateTime endDateTime, TrainType trainType) {
 		Iterable<Train> trains = trainRepository.getAllTrainsByType(trainType);
 		Train reservedTrain = null;
 		
@@ -27,10 +29,8 @@ public class TrainService {
 			Iterable<ScheduleItem> schedule = train.getScheduleItems();
 			if(isTrainAvailable(schedule, startDateTime, endDateTime)) {
 				reservedTrain = train;
-				ScheduleItem scheduleItem = new ScheduleItem(timetableId, startDateTime, endDateTime);
-				List<ScheduleItem> scheduleItems = new ArrayList<>();
-				scheduleItems.add(scheduleItem);
-				reservedTrain.setScheduleItems(scheduleItems);
+				ScheduleItem scheduleItem = new ScheduleItem(timetableId, reservationType, startDateTime, endDateTime);
+				reservedTrain.addScheduleItem(scheduleItem);
 				trainRepository.save(reservedTrain);
 				break;
 			}
@@ -65,5 +65,26 @@ public class TrainService {
 				}
 			}
 		}
+	}
+
+	public void requestMaintenance(MaintenanceRequest request) {
+		gateway.requestMaintenance(request);
+	}
+
+	public boolean reserveTrainForMaintenance(ReservationType maintenanceReservation, LocalDateTime startDateTime,
+			LocalDateTime endDateTime, String id) {
+		Train train = trainRepository.findById(id).orElse(null);
+		Train reservedTrain = null;
+		
+		Iterable<ScheduleItem> schedule = train.getScheduleItems();
+		if(isTrainAvailable(schedule, startDateTime, endDateTime)) {
+			reservedTrain = train;
+			ScheduleItem scheduleItem = new ScheduleItem(null, ReservationType.MAINTENANCE_RESERVATION, startDateTime, endDateTime);
+			reservedTrain.addScheduleItem(scheduleItem);
+			trainRepository.save(reservedTrain);
+			return true;
+		}
+		
+		return false;
 	}
 }

@@ -6,15 +6,13 @@ public class ScheduleItem {
 	private Long timetableId;
 	private LocalDateTime startDateTime;
 	private LocalDateTime endDateTime;
+	private ReservationType reservationType;
 	
-	public ScheduleItem(Long timetableId, LocalDateTime startDateTime, LocalDateTime endDateTime) {
+	public ScheduleItem(Long timetableId, ReservationType reservationType, LocalDateTime startDateTime, LocalDateTime endDateTime) {
 		this.timetableId = timetableId;
+		this.reservationType = reservationType;
 		this.startDateTime = startDateTime;
 		this.endDateTime = endDateTime;
-	}
-	
-	public Long scheduleItem() {
-		return timetableId;
 	}
 	
 	public Long getTimetableId() {
@@ -23,6 +21,14 @@ public class ScheduleItem {
 	
 	public void setTimetableId(Long timetableId) {
 		this.timetableId = timetableId;
+	}
+	
+	public ReservationType getReservationType() {
+		return reservationType;
+	}
+	
+	public void setReservationType(ReservationType reservationType) {
+		this.reservationType = reservationType;
 	}
 	
 	public LocalDateTime getStartDateTime() {
