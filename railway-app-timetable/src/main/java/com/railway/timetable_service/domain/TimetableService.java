@@ -65,7 +65,7 @@ public class TimetableService {
 	public synchronized void routeFetched(RouteFetchedResponse routeFetchedResponse) {
 		TimetableItem timetableItem = timetableItemRepository.findById(routeFetchedResponse.getTimetableId()).orElse(null);
 		// check if the response is for the request linked to the given timetableItem
-		if(timetableItem != null && timetableItem.getRouteRequestId() != routeFetchedResponse.getRequestId()) {
+		if(timetableItem != null && timetableItem.getRouteRequestId().compareTo(routeFetchedResponse.getRequestId()) == 0) {
 			timetableItem.setRouteStatus(Status.SUCCESSFUL);
 			timetableItemRepository.save(timetableItem);
 			this.createTimetableItemSaga.onRouteFetched(timetableItem, routeFetchedResponse);
@@ -75,7 +75,7 @@ public class TimetableService {
 	public synchronized void stationsReserved(StationsResponse stationsReservedResponse) {
 		TimetableItem timetableItem = timetableItemRepository.findById(stationsReservedResponse.getTimetableId()).orElse(null);
 		// check if the response is for the request linked to the given timetableItem
-		if(timetableItem != null && timetableItem.getStationsRequestId() != stationsReservedResponse.getRequestId()) {
+		if(timetableItem != null && timetableItem.getStationsRequestId().compareTo(stationsReservedResponse.getRequestId()) == 0) {
 			timetableItem.setStationsReservationStatus(Status.SUCCESSFUL);
 			timetableItemRepository.save(timetableItem);
 			this.createTimetableItemSaga.onStationsReserved(timetableItem);
@@ -89,7 +89,7 @@ public class TimetableService {
 	public synchronized void trainReserved(TrainReservedResponse trainReservedResponse) {
 		TimetableItem timetableItem = timetableItemRepository.findById(trainReservedResponse.getTimetableId()).orElse(null);
 		// check if the response is for the request linked to the given timetableItem
-		if(timetableItem != null && timetableItem.getTrainRequestId() != trainReservedResponse.getRequestId()) {
+		if(timetableItem != null && timetableItem.getTrainRequestId().compareTo(trainReservedResponse.getRequestId()) == 0 ) {
 			timetableItem.setTrainId(trainReservedResponse.getTrainId());
 			timetableItem.setTrainReservationStatus(Status.SUCCESSFUL);
 			timetableItemRepository.save(timetableItem);
