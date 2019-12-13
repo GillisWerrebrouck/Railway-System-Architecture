@@ -89,7 +89,7 @@ public class TimetableService {
 	public synchronized void trainReserved(TrainReservedResponse trainReservedResponse) {
 		TimetableItem timetableItem = timetableItemRepository.findById(trainReservedResponse.getTimetableId()).orElse(null);
 		// check if the response is for the request linked to the given timetableItem
-		if(timetableItem != null && timetableItem.getTrainRequestId().compareTo(trainReservedResponse.getRequestId()) == 0 ) {
+		if(timetableItem != null && timetableItem.getTrainRequestId().compareTo(trainReservedResponse.getRequestId()) == 0) {
 			timetableItem.setTrainId(trainReservedResponse.getTrainId());
 			timetableItem.setTrainReservationStatus(Status.SUCCESSFUL);
 			timetableItemRepository.save(timetableItem);
