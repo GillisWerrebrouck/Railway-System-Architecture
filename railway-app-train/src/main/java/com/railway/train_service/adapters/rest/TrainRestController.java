@@ -1,5 +1,7 @@
 package com.railway.train_service.adapters.rest;
 
+import java.time.LocalDateTime;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.railway.train_service.adapters.messaging.MaintenanceRequest;
 import com.railway.train_service.adapters.messaging.MaintenanceResponse;
+import com.railway.train_service.domain.ReservationType;
 import com.railway.train_service.domain.Train;
 import com.railway.train_service.domain.TrainService;
 import com.railway.train_service.persistence.TrainRepository;
@@ -55,12 +58,23 @@ public class TrainRestController {
 		Train train = trainRepository.findById(id).orElse(null);
 		MaintenanceResponse response;
 		
-		if(train != null) {
-			request.setTrainId(id);
+		if(train == null) {
+			response = new MaintenanceResponse("Failed to fetch train, maintenance request aborted");
+			return response;
+		}
+		
+		request.setTrainId(id);
+		
+		// a maintenance is schedule to take 1 day by default
+		LocalDateTime startDate = request.getMaintenanceDate();
+		LocalDateTime endDate = request.getMaintenanceDate().plusDays(1);
+		boolean isReserved = trainService.reserveTrainForMaintenance(ReservationType.MAINTENANCE_RESERVATION, startDate, endDate, train.getId());
+		
+		if(isReserved) {
 			trainService.requestMaintenance(request);
 			response = new MaintenanceResponse("Successfully fetched train and sent maintenance request");
 		} else {
-			response = new MaintenanceResponse("Failed to fetch train, maintenance request aborted");
+			response = new MaintenanceResponse("Failed to reserve train for maintenance on requested date");
 		}
 		return response;
 	}

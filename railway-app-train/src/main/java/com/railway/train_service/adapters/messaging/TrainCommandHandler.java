@@ -7,6 +7,7 @@ import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Service;
 
+import com.railway.train_service.domain.ReservationType;
 import com.railway.train_service.domain.Train;
 import com.railway.train_service.domain.TrainService;
 
@@ -24,7 +25,7 @@ public class TrainCommandHandler {
 	@SendTo(Channels.TRAIN_RESERVED)
 	public TrainResponse reserveTrain(TrainRequest request) {
 		logger.info("[Train Command Handler] reserve train command received");
-		Train train = trainService.reserveTrain(request.getTimetableId(), request.getStartDateTime(), request.getEndDateTime(), request.getTrainType());
+		Train train = trainService.reserveTrain(request.getTimetableId(), ReservationType.TIMETABLE_RESERVATION, request.getStartDateTime(), request.getEndDateTime(), request.getTrainType());
 		TrainResponse response;
 		if(train != null) {
 			logger.info("[Train Command Handler] train reserved");
