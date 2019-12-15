@@ -1,4 +1,4 @@
-package com.railway.delay_service;
+package com.railway.delay_service.domain;
 
 public enum DelayState {
 	PENDING,
