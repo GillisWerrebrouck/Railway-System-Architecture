@@ -8,13 +8,15 @@ public class DelayRequest {
 	private UUID routeId;
 	private UUID startStationId;
 	private int delayInMinutes;
+	private String reasonForDelay; 
 	
 	
-	public DelayRequest(UUID timetableId, UUID routeId, UUID startStationId, int delayInMinutes) {
+	public DelayRequest(UUID timetableId, UUID routeId, UUID startStationId, int delayInMinutes,String reasonForDelay) {
 		TimetableId = timetableId;
 		this.routeId = routeId;
 		this.startStationId = startStationId;
 		this.delayInMinutes = delayInMinutes;
+		this.reasonForDelay = reasonForDelay;
 	}
 
 
@@ -55,6 +57,16 @@ public class DelayRequest {
 
 	public void setDelayInMinutes(int delayInMinutes) {
 		this.delayInMinutes = delayInMinutes;
+	}
+
+
+	public String getReasonForDelay() {
+		return reasonForDelay;
+	}
+
+
+	public void setReasonForDelay(String reasonForDelay) {
+		this.reasonForDelay = reasonForDelay;
 	}
 	
 	
