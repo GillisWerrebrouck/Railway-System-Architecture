@@ -120,9 +120,16 @@ public class RailwayAppRouteManagementApplication {
 			RouteConnection routeCon11 = new RouteConnection(route03, station02, false, con01.getId());
 			RouteConnection routeCon12 = new RouteConnection(route03, station01, false, null);
 
+			Route route04 = new Route("Deinze - Zottegem");
+			RouteConnection routeCon13 = new RouteConnection(route04, station07, true, con11.getId());
+			RouteConnection routeCon14 = new RouteConnection(route04, station06, false, con03.getId());
+			RouteConnection routeCon15 = new RouteConnection(route04, station01, false, con05.getId());
+			RouteConnection routeCon16 = new RouteConnection(route04, station11, false, null);
+
 			routeRepository.save(route01);
 			routeRepository.save(route02);
 			routeRepository.save(route03);
+			routeRepository.save(route04);
 
 			logger.info("Station01: " + station01.toString());
 			logger.info("Station02: " + station02.toString());
