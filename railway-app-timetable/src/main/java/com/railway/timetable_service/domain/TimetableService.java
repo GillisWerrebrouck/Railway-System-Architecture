@@ -6,17 +6,20 @@ import org.springframework.stereotype.Service;
 import com.railway.timetable_service.adapters.messaging.RouteFetchedResponse;
 import com.railway.timetable_service.adapters.messaging.StationsResponse;
 import com.railway.timetable_service.adapters.messaging.TrainReservedResponse;
+import com.railway.timetable_service.adapters.rest.TimetableItemRestAdapter;
 import com.railway.timetable_service.persistence.TimetableItemRepository;
 
 @Service
 public class TimetableService {	
 	private final CreateTimetableItemSaga createTimetableItemSaga;
 	private final TimetableItemRepository timetableItemRepository;
+	private final TimetableItemRestAdapter timetableItemRestAdapter;
 	
 	@Autowired
-	public TimetableService(CreateTimetableItemSaga createTimetableItemSaga, TimetableItemRepository timetableItemRepository) {
+	public TimetableService(CreateTimetableItemSaga createTimetableItemSaga, TimetableItemRepository timetableItemRepository, TimetableItemRestAdapter timetableItemRestAdapter) {
 		this.createTimetableItemSaga = createTimetableItemSaga;
 		this.timetableItemRepository = timetableItemRepository;
+		this.timetableItemRestAdapter = timetableItemRestAdapter;
 	}
 	
 	public void createTimetableItem(TimetableItem timetableItem, TimetableRequest timetableRequest) {
@@ -99,5 +102,9 @@ public class TimetableService {
 		if(timetableItem != null) {
 			this.createTimetableItemSaga.discardTrainReservation(trainReservedResponse.getTimetableId());
 		}
+	}
+	
+	public String getRouteName(Long routeId) {
+		return timetableItemRestAdapter.getRouteName(routeId);
 	}
 }

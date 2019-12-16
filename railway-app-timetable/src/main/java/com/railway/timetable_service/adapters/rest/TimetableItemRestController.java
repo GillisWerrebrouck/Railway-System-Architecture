@@ -1,6 +1,9 @@
 package com.railway.timetable_service.adapters.rest;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Optional;
 
@@ -17,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.async.DeferredResult;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.railway.timetable_service.RailwayAppTimetableApplication;
 import com.railway.timetable_service.domain.CreateTimetableItemListener;
 import com.railway.timetable_service.domain.Status;
@@ -47,8 +52,20 @@ public class TimetableItemRestController implements CreateTimetableItemListener 
 	}
 	
 	@GetMapping
-	private Iterable<TimetableItem> getAllTimetableItems() {
-		return timetableItemRepository.findAll();
+	private Collection<TimetableItemResponse> getAllTimetableItems() throws JsonMappingException, JsonProcessingException {
+		Iterator<TimetableItem> timetableItems = timetableItemRepository.findAll().iterator();
+		Collection<TimetableItemResponse> response = new ArrayList<>();
+		
+		while (timetableItems.hasNext()) {
+			TimetableItem timetableItem = timetableItems.next();
+			
+			String routeName = timetableService.getRouteName(timetableItem.getRouteId());
+			
+			TimetableItemResponse timetableItemResponse = new TimetableItemResponse(timetableItem.getId(), timetableItem.getStartDateTime(), timetableItem.getEndDateTime(), timetableItem.getDelay(), timetableItem.getRouteId(), routeName);
+			response.add(timetableItemResponse);
+		}
+		
+		return response;
 	}
 	
 	@GetMapping("/route/{routeId}")

@@ -1,6 +1,7 @@
 package com.railway.route_management_service.adapters.rest;
 
 import java.util.Collection;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -54,7 +55,13 @@ public class RouteRestController {
 
 	// get a predefined route by id
 	@GetMapping("/route/{id}")
-	public Collection<Connection> getRouteById(@PathVariable Long id) {
+	public Optional<Route> getRouteById(@PathVariable Long id) {
+		return this.routeRepository.findById(id);
+	}
+
+	// get the connections of a predefined route by route id
+	@GetMapping("/route/{id}/connections")
+	public Collection<Connection> getRouteConnectionsByRouteId(@PathVariable Long id) {
 		return this.connectionRepository.findRouteById(id);
 	}
 	

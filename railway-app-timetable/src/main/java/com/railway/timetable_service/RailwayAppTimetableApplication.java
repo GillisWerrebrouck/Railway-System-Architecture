@@ -44,10 +44,10 @@ public class RailwayAppTimetableApplication {
 			TimetableItem timetableItem03 = new TimetableItem(LocalDateTime.of(2018, Month.DECEMBER, 20, 15, 8, 00), LocalDateTime.of(2018, Month.DECEMBER, 20, 15, 52, 00), 3L, "5dec38cfd12963502efef083", TrainType.IR, staffIds);
 			TimetableItem timetableItem04 = new TimetableItem(LocalDateTime.of(2018, Month.DECEMBER, 21, 8, 12, 00), LocalDateTime.of(2018, Month.DECEMBER, 20, 9, 56, 00), 3L, "5dec38cfd12963502efef084", TrainType.P, staffIds);
 
-			timetableItemRepository.save(timetableItem01);
-			timetableItemRepository.save(timetableItem02);
-			timetableItemRepository.save(timetableItem03);
-			timetableItemRepository.save(timetableItem04);
+//			timetableItemRepository.save(timetableItem01);
+//			timetableItemRepository.save(timetableItem02);
+//			timetableItemRepository.save(timetableItem03);
+//			timetableItemRepository.save(timetableItem04);
 
 			logger.info(timetableItem01.toString());
 			logger.info(timetableItem02.toString());
