@@ -40,9 +40,13 @@ public class RouteCommandHandler {
 	public RouteDetailResponse getRouteDetails(RouteDetailRequest request){
 		logger.info("[Route Command Handler] get distance command received");
 		RouteDetails routeDetails = routeService.getRouteDetails(request.getStartStationId(), request.getEndStationId());
-		RouteDetailResponse response = new RouteDetailResponse(routeDetails.getArrivalStation(), routeDetails.getDepartureStation(),
-				routeDetails.getDistance(), request.getTicketId(), request.getRouteDetailRequestId());
-		logger.info("[Route Command Handler] distance fetched");
-		return response;
+		if(routeDetails != null && routeDetails.getDistance() > 0){
+			logger.info("[Route Command Handler] distance fetched");
+			return new RouteDetailResponse(routeDetails.getArrivalStation(), routeDetails.getDepartureStation(),
+					routeDetails.getDistance(), request.getTicketId(), request.getRouteDetailRequestId());
+		}else{
+			return new RouteDetailResponse(null, null, 0, request.getTicketId(), request.getRouteDetailRequestId());
+		}
+
 	}
 }
