@@ -25,10 +25,12 @@ public class TimetableItem {
 	
 	// delay in minutes
 	private int delay;
+	private int reservedGroupSeats;
 
 	private Long routeId;
 	private UUID routeRequestId;
 	private String trainId;
+	private int groupCapacity;
 	private UUID trainRequestId;
 	private TrainType requestedTrainType;
 	private UUID stationsRequestId;
@@ -49,10 +51,12 @@ public class TimetableItem {
 		this.startDateTime = startDate;
 		this.endDateTime = endDateTime;
 		this.delay = 0;
+		this.reservedGroupSeats = 0;
 		this.routeId = routeId;
 		this.routeRequestId = null;
 		this.trainId = trainId;
 		this.trainRequestId = null;
+		this.groupCapacity = 0;
 		this.requestedTrainType = requestedTrainType;
 		this.stationsRequestId = null;
 		this.staffIds = staffIds;
@@ -185,7 +189,23 @@ public class TimetableItem {
 	public void setStaffReservationStatus(Status staffReservationStatus) {
 		this.staffReservationStatus = staffReservationStatus;
 	}
-	
+
+	public int getGroupCapacity() {
+		return groupCapacity;
+	}
+
+	public void setGroupCapacity(int groupCapacity) {
+		this.groupCapacity = groupCapacity;
+	}
+
+	public int getReservedGroupSeats() {
+		return reservedGroupSeats;
+	}
+
+	public void setReservedGroupSeats(int reservedGroupSeats) {
+		this.reservedGroupSeats = reservedGroupSeats;
+	}
+
 	@Override
 	public String toString() {
 		return "Route " + this.routeId + ": " + this.startDateTime.toString() + " - " + this.endDateTime.toString();

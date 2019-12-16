@@ -12,4 +12,7 @@ public interface MessageGateway {
 
     @Gateway(requestChannel = Channels.GET_ROUTE_DETAILS)
     public void getRouteDetails(RouteDetailRequest routeDetailRequest);
+
+    @Gateway(requestChannel = Channels.RESERVE_GROUP_SEATS)
+    public void reserveGroupSeats(ReserveGroupSeatsRequest reserveGroupSeatsRequest);
 }

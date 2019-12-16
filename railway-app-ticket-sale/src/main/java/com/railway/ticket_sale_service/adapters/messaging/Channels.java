@@ -10,6 +10,8 @@ public interface Channels {
     static final String TICKET_CREATED = "ticket_created";
     static final String GET_ROUTE_DETAILS= "get_route_details";
     static final String ROUTE_DETAILS_FETCHED = "route_details_fetched";
+    static final String RESERVE_GROUP_SEATS = "reserve_group_seats";
+    static final String GROUP_SEATS_RESERVED = "group_seats_reserved";
 
     @Output(TICKET_CREATED)
     MessageChannel ticketCreated();
@@ -19,4 +21,10 @@ public interface Channels {
 
     @Input(ROUTE_DETAILS_FETCHED)
     SubscribableChannel routeDetailsFetched();
+
+    @Output(RESERVE_GROUP_SEATS)
+    MessageChannel reserveGroupSeats();
+
+    @Input(GROUP_SEATS_RESERVED)
+    SubscribableChannel groupSeatsReserved();
 }

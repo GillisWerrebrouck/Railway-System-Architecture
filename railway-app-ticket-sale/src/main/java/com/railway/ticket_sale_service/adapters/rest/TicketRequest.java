@@ -1,7 +1,6 @@
 package com.railway.ticket_sale_service.adapters.rest;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 public class TicketRequest {
 
@@ -9,14 +8,14 @@ public class TicketRequest {
     private String endStationId;
     private LocalDateTime startDateTime;
     private int amountOfSeats;
-    private Long routeId;
+    private Long timeTableId;
 
-    public TicketRequest(String startStationId, String endStationId, LocalDateTime startDateTime, int amountOfSeats, Long routeId) {
+    public TicketRequest(String startStationId, String endStationId, LocalDateTime startDateTime, int amountOfSeats, Long timeTableId) {
         this.startStationId = startStationId;
         this.endStationId = endStationId;
         this.startDateTime = startDateTime;
         this.amountOfSeats = amountOfSeats;
-        this.routeId = routeId;
+        this.timeTableId = timeTableId;
     }
 
     public String getStartStationId() {
@@ -51,11 +50,11 @@ public class TicketRequest {
         this.amountOfSeats = amountOfSeats;
     }
 
-    public Long getRouteId() {
-        return routeId;
+    public Long getTimeTableId() {
+        return timeTableId;
     }
 
-    public void setRouteId(Long routeId) {
-        this.routeId = routeId;
+    public void setTimeTableId(Long timeTableId) {
+        this.timeTableId = timeTableId;
     }
 }

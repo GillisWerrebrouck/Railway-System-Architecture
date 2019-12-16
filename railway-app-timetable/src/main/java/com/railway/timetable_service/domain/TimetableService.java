@@ -1,5 +1,6 @@
 package com.railway.timetable_service.domain;
 
+import com.railway.timetable_service.adapters.messaging.ReserveGroupSeatsRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -7,6 +8,7 @@ import com.railway.timetable_service.adapters.messaging.RouteFetchedResponse;
 import com.railway.timetable_service.adapters.messaging.StationsResponse;
 import com.railway.timetable_service.adapters.messaging.TrainReservedResponse;
 import com.railway.timetable_service.persistence.TimetableItemRepository;
+import org.springframework.web.client.HttpClientErrorException;
 
 @Service
 public class TimetableService {	
@@ -91,6 +93,7 @@ public class TimetableService {
 		// check if the response is for the request linked to the given timetableItem
 		if(timetableItem != null && timetableItem.getTrainRequestId() != trainReservedResponse.getRequestId()) {
 			timetableItem.setTrainId(trainReservedResponse.getTrainId());
+			timetableItem.setGroupCapacity(trainReservedResponse.getGroupCapacity());
 			timetableItem.setTrainReservationStatus(Status.SUCCESSFUL);
 			timetableItemRepository.save(timetableItem);
 			this.createTimetableItemSaga.onTrainReserved(timetableItem);
@@ -98,6 +101,24 @@ public class TimetableService {
 		
 		if(timetableItem != null) {
 			this.createTimetableItemSaga.discardTrainReservation(trainReservedResponse.getTimetableId());
+		}
+	}
+
+	public void reserveGroupSeats(ReserveGroupSeatsRequest reserveGroupSeatsRequest) throws NotEnoughGroupSeatsException {
+		TimetableItem timetableItem = timetableItemRepository.findById(reserveGroupSeatsRequest.getTimeTableId()).orElse(null);
+		if(timetableItem != null){
+			reserveGroupSeats(timetableItem, reserveGroupSeatsRequest.getAmountOfSeats());
+		}else{
+			throw new NullPointerException();
+		}
+	}
+
+	private synchronized void reserveGroupSeats(TimetableItem timetableItem, int toReserveSeats) throws NotEnoughGroupSeatsException {
+		if(timetableItem.getGroupCapacity() - timetableItem.getReservedGroupSeats() >= toReserveSeats){
+			timetableItem.setReservedGroupSeats(timetableItem.getReservedGroupSeats() + toReserveSeats);
+			timetableItemRepository.save(timetableItem);
+		}else{
+			throw new NotEnoughGroupSeatsException();
 		}
 	}
 }

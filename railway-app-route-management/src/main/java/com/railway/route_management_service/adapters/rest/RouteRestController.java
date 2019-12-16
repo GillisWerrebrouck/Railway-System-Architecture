@@ -1,7 +1,9 @@
 package com.railway.route_management_service.adapters.rest;
 
 import java.util.Collection;
+import java.util.UUID;
 
+import com.railway.route_management_service.domain.RouteDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -50,6 +52,11 @@ public class RouteRestController {
 	@GetMapping("/route/shortest")
 	public Collection<Connection> getShortestPath(@RequestParam String startStation, @RequestParam String endStation) {
 		return this.connectionRepository.findShortestPath(startStation, endStation);
+	}
+
+	@GetMapping("/route/test")
+	public RouteDetails test() {
+		return this.routeRepository.getRouteDetails(UUID.fromString("05cce0f7-1409-4224-926a-db3b4c4a8ce5"), UUID.fromString("a39b1971-fc82-49b2-809a-444105e03c8d"));
 	}
 
 	// get a predefined route by id

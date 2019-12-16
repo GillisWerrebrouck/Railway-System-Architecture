@@ -1,8 +1,6 @@
 package com.railway.ticket_sale_service.adapters.rest;
 
-import com.railway.ticket_sale_service.domain.BookTicketListener;
-import com.railway.ticket_sale_service.domain.Ticket;
-import com.railway.ticket_sale_service.domain.TicketService;
+import com.railway.ticket_sale_service.domain.*;
 import com.railway.ticket_sale_service.persistence.TicketRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +15,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/ticket")
 public class TicketRestController implements BookTicketListener {
+
     private static Logger logger = LoggerFactory.getLogger(TicketRestController.class);
 
     private TicketRepository ticketRepository;
@@ -53,7 +52,7 @@ public class TicketRestController implements BookTicketListener {
 
         if(!isValidTicketRequest(ticketRequest)){
             deferredResult.setErrorResult("Request must contain the following fields in the body; \"startStationId\", \"endStationId\"" +
-                    ", \"startDateTime\", \"amountOfSeats\" and \"routeId\"");
+                    ", \"startDateTime\", \"amountOfSeats\" and \"timeTableId\"");
         }
 
         deferredResult.onTimeout(() -> {
@@ -61,9 +60,12 @@ public class TicketRestController implements BookTicketListener {
         });
 
         Ticket ticket = new Ticket(ticketRequest.getStartDateTime(), ticketRequest.getAmountOfSeats());
+
         ticketRepository.save(ticket);
         deferredResults.put(ticket.getId(), deferredResult);
-        ticketService.fetchRouteDetails(ticket, ticketRequest);
+
+        ticketService.buyTicket(ticket, ticketRequest);
+
         return deferredResult;
     }
 

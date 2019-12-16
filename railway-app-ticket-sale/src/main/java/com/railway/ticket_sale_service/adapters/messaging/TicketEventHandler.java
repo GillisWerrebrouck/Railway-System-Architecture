@@ -1,7 +1,6 @@
 package com.railway.ticket_sale_service.adapters.messaging;
 
 import com.railway.ticket_sale_service.domain.TicketService;
-import com.railway.ticket_sale_service.persistence.TicketRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,12 +21,23 @@ public class TicketEventHandler {
 
     @StreamListener(Channels.ROUTE_DETAILS_FETCHED)
     public void distanceFetched(RouteDetailResponse response) {
-        logger.info("test");
-        if(response.getDistance() > 0) {
-            logger.info("[TicketSale Event Handler] successfully fetched distance");
-            ticketService.bookTicket(response);
+        if(response.getDistance() > 0 && response.getStartStationName() != null && response.getEndStationName() != null) {
+            logger.info("[TicketSale Event Handler] successfully fetched route details");
+            ticketService.routeDetailsFetched(response);
         } else {
             logger.info("[Timetable Event Handler] failed to fetch route");
+            ticketService.failedToFetchDetails(response);
+        }
+    }
+
+    @StreamListener(Channels.GROUP_SEATS_RESERVED)
+    public void groupSeatsReserved(ReserveGroupSeatsResponse response){
+        if(response.isGroupSeatsReserved()){
+            logger.info("[TicketSale Event Handler] successfully reserved group seats");
+            ticketService.groupSeatsReserved(response);
+        }else{
+            logger.info("[TicketSale Event Handler] failed to reserve group seats");
+            ticketService.failedToReserveGroupSeats(response);
         }
     }
 }

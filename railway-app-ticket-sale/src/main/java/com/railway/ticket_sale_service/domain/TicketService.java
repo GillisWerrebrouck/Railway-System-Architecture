@@ -1,61 +1,82 @@
 package com.railway.ticket_sale_service.domain;
 
 import com.railway.ticket_sale_service.adapters.messaging.MessageGateway;
-import com.railway.ticket_sale_service.adapters.messaging.RouteDetailRequest;
+import com.railway.ticket_sale_service.adapters.messaging.ReserveGroupSeatsResponse;
 import com.railway.ticket_sale_service.adapters.messaging.RouteDetailResponse;
 import com.railway.ticket_sale_service.adapters.rest.TicketRequest;
-import com.railway.ticket_sale_service.adapters.rest.TicketRestController;
 import com.railway.ticket_sale_service.persistence.TicketRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.Set;
 import java.util.UUID;
 
 @Service
 public class TicketService {
     private static Logger logger = LoggerFactory.getLogger(TicketService.class);
-    private final double PRICE_PER_KM = 0.165;
+    private final double PRICE_PER_KM = 0.1056;
+    private final double MAX_PRICE = 9.60;
 
     private final TicketRepository ticketRepository;
+    private final BookTicketSaga bookTicketSaga;
     private final MessageGateway gateway;
-    private final Set<BookTicketListener> listeners;
 
 
     @Autowired
-    public TicketService(TicketRepository ticketRepository, MessageGateway messageGateway) {
+    public TicketService(TicketRepository ticketRepository, MessageGateway messageGateway, BookTicketSaga bookTicketSaga) {
         this.ticketRepository = ticketRepository;
+        this.bookTicketSaga = bookTicketSaga;
         this.gateway = messageGateway;
-        this.listeners = new HashSet<>(5);
     }
 
     public void registerListener(BookTicketListener listener){
-        listeners.add(listener);
+        this.bookTicketSaga.addListener(listener);
     }
 
-    public synchronized void fetchRouteDetails(Ticket ticket, TicketRequest ticketRequest){
-        logger.info("[Ticket Sale Service] fetch route details");
-        RouteDetailRequest request = new RouteDetailRequest(ticketRequest.getRouteId(),
-                UUID.fromString(ticketRequest.getStartStationId()), UUID.fromString(ticketRequest.getEndStationId()),
-                ticket.getId());
-        ticket.setRouteDetailsRequestId(request.getRouteDetailRequestId());
-        ticketRepository.save(ticket);
-        gateway.getRouteDetails(request);
+    public synchronized void buyTicket(Ticket ticket, TicketRequest ticketRequest){
+        this.bookTicketSaga.startBuyTicketSaga(ticket, UUID.fromString(ticketRequest.getEndStationId()),
+                UUID.fromString(ticketRequest.getStartStationId()), ticketRequest.getTimeTableId(), ticketRequest.getAmountOfSeats());
+        this.ticketRepository.save(ticket);
     }
 
-    public synchronized void bookTicket(RouteDetailResponse response){
-        logger.info("[Ticket Sale Service] book ticket");
-        Ticket ticket = ticketRepository.findById(response.getTicketId()).orElse(null);
+    public synchronized void routeDetailsFetched(RouteDetailResponse response){
+        final Ticket ticket = ticketRepository.findById(response.getTicketId()).orElse(null);
         if(ticket != null && ticket.getRouteDetailsRequestId().compareTo(response.getRouteDetailRequestId()) == 0){
-            ticket.setPrice(response.getDistance() * PRICE_PER_KM);
-            ticket.setStartStation(response.getStartStationName());
-            ticket.setEndStation(response.getStartStationName());
-            ticketRepository.save(ticket);
-            gateway.ticketCreated(ticket);
-            this.listeners.forEach(l -> l.onBookTicketListener(ticket));
+            double price = calculatePrice(response.getDistance(), ticket.getAmountOfSeats());
+            this.bookTicketSaga.onRouteDetailsFetched(ticket, price, response.getStartStationName(), response.getEndStationName());
+            this.ticketRepository.save(ticket);
         }
+    }
+
+    public synchronized void groupSeatsReserved(ReserveGroupSeatsResponse response){
+        final Ticket ticket = ticketRepository.findById(response.getTicketId()).orElse(null);
+        if(ticket != null && ticket.getReserveGroupSeatsRequestId().compareTo(response.getReserveGroupSeatsRequestId()) == 0){
+            this.bookTicketSaga.onReservedGroupSeats(ticket);
+            this.ticketRepository.save(ticket);
+        }
+    }
+
+    public synchronized void failedToReserveGroupSeats(ReserveGroupSeatsResponse response){
+        final Ticket ticket = ticketRepository.findById(response.getTicketId()).orElse(null);
+        if(ticket != null && ticket.getReserveGroupSeatsRequestId().compareTo(response.getReserveGroupSeatsRequestId()) == 0){
+            this.bookTicketSaga.onReserveGroupSeatsFailed(ticket);
+            this.ticketRepository.save(ticket);
+        }
+    }
+
+    public synchronized void failedToFetchDetails(RouteDetailResponse response){
+        final Ticket ticket = ticketRepository.findById(response.getTicketId()).orElse(null);
+        if(ticket != null && ticket.getRouteDetailsRequestId().compareTo(response.getRouteDetailRequestId()) == 0){
+            this.bookTicketSaga.onRouteDetailsFetchingFailed(ticket);
+            this.ticketRepository.save(ticket);
+        }
+    }
+
+
+    private double calculatePrice(double distance, int amountOfSeats){
+        double ticketPrice = Math.round(distance * PRICE_PER_KM * 10.0)/10.0;
+        double totalPrice = ticketPrice >= MAX_PRICE ? MAX_PRICE : ticketPrice;
+        return Math.round(totalPrice * amountOfSeats * 10.0)/10.0;
     }
 }

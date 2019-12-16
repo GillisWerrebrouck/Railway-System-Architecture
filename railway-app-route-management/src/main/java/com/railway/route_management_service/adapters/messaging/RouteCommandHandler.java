@@ -2,6 +2,7 @@ package com.railway.route_management_service.adapters.messaging;
 
 import java.util.Collection;
 
+import com.railway.route_management_service.domain.RouteDetails;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,8 +39,9 @@ public class RouteCommandHandler {
 	@SendTo(Channels.ROUTE_DETAILS_FETCHED)
 	public RouteDetailResponse getRouteDetails(RouteDetailRequest request){
 		logger.info("[Route Command Handler] get distance command received");
-		RouteDetailResponse response = new RouteDetailResponse("stationX", "stationY",
-				234.00, request.getTicketId(), request.getRouteDetailRequestId());
+		RouteDetails routeDetails = routeService.getRouteDetails(request.getStartStationId(), request.getEndStationId());
+		RouteDetailResponse response = new RouteDetailResponse(routeDetails.getArrivalStation(), routeDetails.getDepartureStation(),
+				routeDetails.getDistance(), request.getTicketId(), request.getRouteDetailRequestId());
 		logger.info("[Route Command Handler] distance fetched");
 		return response;
 	}
