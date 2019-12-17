@@ -25,7 +25,7 @@ public class TicketEventHandler {
             logger.info("[TicketSale Event Handler] successfully fetched route details");
             ticketService.routeDetailsFetched(response);
         } else {
-            logger.info("[Timetable Event Handler] failed to fetch route");
+            logger.info("[TicketSale Event Handler] failed to fetch route");
             ticketService.failedToFetchDetails(response);
         }
     }

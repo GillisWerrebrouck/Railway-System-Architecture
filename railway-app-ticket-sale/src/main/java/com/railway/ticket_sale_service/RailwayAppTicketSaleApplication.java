@@ -29,8 +29,8 @@ public class RailwayAppTicketSaleApplication {
 
 			ticketRepository.deleteAll();
 
-			Ticket singleTicket1 = new Ticket("Gent", "Brussel", LocalDateTime.now(), 9.70, 1);
-			Ticket groupTicket1 = new Ticket("Oudenaarde", "Kortrijk", LocalDateTime.now(), 153.40, 16);
+			Ticket singleTicket1 = new Ticket("Gent", "Brussel", LocalDateTime.now(), 1L, 9.70, 1);
+			Ticket groupTicket1 = new Ticket("Oudenaarde", "Kortrijk", LocalDateTime.now(), 2L, 153.40, 16);
 
 			ticketRepository.save(singleTicket1);
 			ticketRepository.save(groupTicket1);

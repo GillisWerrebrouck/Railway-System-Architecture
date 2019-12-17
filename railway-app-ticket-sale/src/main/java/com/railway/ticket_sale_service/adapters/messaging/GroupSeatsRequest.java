@@ -2,18 +2,18 @@ package com.railway.ticket_sale_service.adapters.messaging;
 
 import java.util.UUID;
 
-public class ReserveGroupSeatsRequest {
+public class GroupSeatsRequest {
 
     private Long ticketId;
     private Long timeTableId;
     private int amountOfSeats;
-    private UUID reserveGroupSeatsRequestId;
+    private UUID groupSeatsRequest;
 
-    public ReserveGroupSeatsRequest(Long ticketId, Long timeTableId, int amountOfSeats) {
+    public GroupSeatsRequest(Long ticketId, Long timeTableId, int amountOfSeats) {
         this.ticketId = ticketId;
         this.timeTableId = timeTableId;
         this.amountOfSeats = amountOfSeats;
-        this.reserveGroupSeatsRequestId = UUID.randomUUID();
+        this.groupSeatsRequest = UUID.randomUUID();
     }
 
     public Long getTicketId() {
@@ -28,7 +28,7 @@ public class ReserveGroupSeatsRequest {
         return amountOfSeats;
     }
 
-    public UUID getReserveGroupSeatsRequestId() {
-        return reserveGroupSeatsRequestId;
+    public UUID getGroupSeatsRequest() {
+        return groupSeatsRequest;
     }
 }

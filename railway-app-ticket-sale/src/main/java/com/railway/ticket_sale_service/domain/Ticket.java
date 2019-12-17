@@ -16,6 +16,7 @@ public class Ticket {
     private String startStation;
     private String endStation;
     private LocalDateTime validOn;
+    private Long timetableId;
     private double price;
     private int amountOfSeats;
     private TicketType type;
@@ -28,10 +29,11 @@ public class Ticket {
     @SuppressWarnings("unused")
 	private Ticket() {};
 
-    public Ticket(String startStation, String endStation, LocalDateTime validOn, double price, int amountOfSeats) {
+    public Ticket(String startStation, String endStation, LocalDateTime validOn, Long timetableId, double price, int amountOfSeats) {
         this.startStation = startStation;
         this.endStation = endStation;
         this.validOn = validOn;
+        this.timetableId = timetableId;
         this.price = price;
         this.amountOfSeats = amountOfSeats;
         validationCode = Generators.timeBasedGenerator().generate();
@@ -41,8 +43,8 @@ public class Ticket {
             this.type = TicketType.SINGLE;
     }
 
-    public Ticket(LocalDateTime validOn, int amountOfSeats){
-        this(null, null, validOn, 0, amountOfSeats);
+    public Ticket(LocalDateTime validOn, Long timetableId, int amountOfSeats){
+        this(null, null, validOn, timetableId, 0, amountOfSeats);
     }
 
     public Long getId() {
@@ -127,6 +129,14 @@ public class Ticket {
 
     public void setStatus(TicketStatus status) {
         this.status = status;
+    }
+
+    public Long getTimetableId() {
+        return timetableId;
+    }
+
+    public void setTimetableId(Long timetableId) {
+        this.timetableId = timetableId;
     }
 
     @Override

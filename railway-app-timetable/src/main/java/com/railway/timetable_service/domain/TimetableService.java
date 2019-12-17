@@ -1,6 +1,6 @@
 package com.railway.timetable_service.domain;
 
-import com.railway.timetable_service.adapters.messaging.ReserveGroupSeatsRequest;
+import com.railway.timetable_service.adapters.messaging.GroupSeatsRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -8,7 +8,6 @@ import com.railway.timetable_service.adapters.messaging.RouteFetchedResponse;
 import com.railway.timetable_service.adapters.messaging.StationsResponse;
 import com.railway.timetable_service.adapters.messaging.TrainReservedResponse;
 import com.railway.timetable_service.persistence.TimetableItemRepository;
-import org.springframework.web.client.HttpClientErrorException;
 
 @Service
 public class TimetableService {	
@@ -104,10 +103,10 @@ public class TimetableService {
 		}
 	}
 
-	public void reserveGroupSeats(ReserveGroupSeatsRequest reserveGroupSeatsRequest) throws NotEnoughGroupSeatsException {
-		TimetableItem timetableItem = timetableItemRepository.findById(reserveGroupSeatsRequest.getTimeTableId()).orElse(null);
+	public void reserveGroupSeats(GroupSeatsRequest groupSeatsRequest) throws NotEnoughGroupSeatsException {
+		TimetableItem timetableItem = timetableItemRepository.findById(groupSeatsRequest.getTimeTableId()).orElse(null);
 		if(timetableItem != null){
-			reserveGroupSeats(timetableItem, reserveGroupSeatsRequest.getAmountOfSeats());
+			reserveGroupSeats(timetableItem, groupSeatsRequest.getAmountOfSeats());
 		}else{
 			throw new NullPointerException();
 		}
@@ -119,6 +118,14 @@ public class TimetableService {
 			timetableItemRepository.save(timetableItem);
 		}else{
 			throw new NotEnoughGroupSeatsException();
+		}
+	}
+
+	public synchronized void discardReservedGroupSeats(Long timeTableId, int amountOfSeats) {
+		TimetableItem timetableItem = timetableItemRepository.findById(timeTableId).orElse(null);
+		if(timetableItem != null){
+			timetableItem.setReservedGroupSeats(timetableItem.getReservedGroupSeats() - amountOfSeats);
+			timetableItemRepository.save(timetableItem);
 		}
 	}
 }

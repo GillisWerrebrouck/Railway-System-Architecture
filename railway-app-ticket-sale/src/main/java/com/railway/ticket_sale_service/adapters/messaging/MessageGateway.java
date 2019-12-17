@@ -14,5 +14,8 @@ public interface MessageGateway {
     public void getRouteDetails(RouteDetailRequest routeDetailRequest);
 
     @Gateway(requestChannel = Channels.RESERVE_GROUP_SEATS)
-    public void reserveGroupSeats(ReserveGroupSeatsRequest reserveGroupSeatsRequest);
+    public void reserveGroupSeats(GroupSeatsRequest groupSeatsRequest);
+
+    @Gateway(requestChannel = Channels.DISCARD_RESERVED_SEATS)
+    public void discardGroupSeats(GroupSeatsRequest groupSeatsRequest);
 }

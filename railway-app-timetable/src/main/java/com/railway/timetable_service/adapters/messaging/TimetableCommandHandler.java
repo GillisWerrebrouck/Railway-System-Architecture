@@ -22,18 +22,23 @@ public class TimetableCommandHandler {
 
     @StreamListener(Channels.RESERVE_GROUP_SEATS)
     @SendTo(Channels.GROUP_SEATS_RESERVED)
-    public ReserveGroupSeatsResponse reserveGroupSeats(ReserveGroupSeatsRequest groupSeatsRequest){
-        logger.info("[Timetable Event Handler] successfully reserved train");
+    public ReserveGroupSeatsResponse reserveGroupSeats(GroupSeatsRequest groupSeatsRequest){
         try {
             timetableItemService.reserveGroupSeats(groupSeatsRequest);
             logger.info("[Timetable Event Handler] successfully reserved group seats");
-            return new ReserveGroupSeatsResponse(groupSeatsRequest.getTicketId(), groupSeatsRequest.getTimeTableId(), true, groupSeatsRequest.getReserveGroupSeatsRequestId());
+            return new ReserveGroupSeatsResponse(groupSeatsRequest.getTicketId(), groupSeatsRequest.getTimeTableId(), true, groupSeatsRequest.getGroupSeatsRequest());
         } catch (NotEnoughGroupSeatsException e) {
             logger.info("[Timetable Event Handler] failed to reserve group seats, not enough group seats available");
-            return new ReserveGroupSeatsResponse(groupSeatsRequest.getTicketId(), groupSeatsRequest.getTimeTableId(), false, groupSeatsRequest.getReserveGroupSeatsRequestId());
+            return new ReserveGroupSeatsResponse(groupSeatsRequest.getTicketId(), groupSeatsRequest.getTimeTableId(), false, groupSeatsRequest.getGroupSeatsRequest());
         } catch (NullPointerException en){
             logger.info("[Timetable Event Handler] no timetableItem found with the id " + groupSeatsRequest.getTimeTableId());
-            return new ReserveGroupSeatsResponse(groupSeatsRequest.getTicketId(), null, false, groupSeatsRequest.getReserveGroupSeatsRequestId());
+            return new ReserveGroupSeatsResponse(groupSeatsRequest.getTicketId(), null, false, groupSeatsRequest.getGroupSeatsRequest());
         }
+    }
+
+    @StreamListener(Channels.DISCARD_RESERVED_SEATS)
+    public void discardReservedGroupSeats(GroupSeatsRequest groupSeatsRequest){
+        logger.info("[Timetable Event Handler] discard reserved group seats");
+        timetableItemService.discardReservedGroupSeats(groupSeatsRequest.getTimeTableId(), groupSeatsRequest.getAmountOfSeats());
     }
 }

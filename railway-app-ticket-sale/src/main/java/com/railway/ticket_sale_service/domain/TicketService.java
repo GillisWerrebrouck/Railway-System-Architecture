@@ -36,7 +36,7 @@ public class TicketService {
 
     public synchronized void buyTicket(Ticket ticket, TicketRequest ticketRequest){
         this.bookTicketSaga.startBuyTicketSaga(ticket, UUID.fromString(ticketRequest.getEndStationId()),
-                UUID.fromString(ticketRequest.getStartStationId()), ticketRequest.getTimeTableId(), ticketRequest.getAmountOfSeats());
+                UUID.fromString(ticketRequest.getStartStationId()));
         this.ticketRepository.save(ticket);
     }
 

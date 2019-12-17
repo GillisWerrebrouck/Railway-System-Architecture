@@ -12,6 +12,7 @@ public interface Channels {
     static final String ROUTE_DETAILS_FETCHED = "route_details_fetched";
     static final String RESERVE_GROUP_SEATS = "reserve_group_seats";
     static final String GROUP_SEATS_RESERVED = "group_seats_reserved";
+    static final String DISCARD_RESERVED_SEATS = "discard_reserved_seats";
 
     @Output(TICKET_CREATED)
     MessageChannel ticketCreated();
@@ -27,4 +28,8 @@ public interface Channels {
 
     @Input(GROUP_SEATS_RESERVED)
     SubscribableChannel groupSeatsReserved();
+
+    @Output(DISCARD_RESERVED_SEATS)
+    MessageChannel discardReservedSeats();
+
 }

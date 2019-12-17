@@ -1,10 +1,8 @@
 package com.railway.ticket_sale_service.domain;
 
 import com.railway.ticket_sale_service.adapters.messaging.MessageGateway;
-import com.railway.ticket_sale_service.adapters.messaging.ReserveGroupSeatsRequest;
+import com.railway.ticket_sale_service.adapters.messaging.GroupSeatsRequest;
 import com.railway.ticket_sale_service.adapters.messaging.RouteDetailRequest;
-import com.railway.ticket_sale_service.adapters.messaging.RouteDetailResponse;
-import com.railway.ticket_sale_service.adapters.rest.TicketRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,14 +30,14 @@ public class BookTicketSaga {
         listeners.add(listener);
     }
 
-    public void startBuyTicketSaga(Ticket ticket, UUID startStation, UUID endStation, Long timeTableId, int amountOfSeats){
+    public void startBuyTicketSaga(Ticket ticket, UUID startStation, UUID endStation){
         logger.info("[Book Ticket Saga] saga started. Fetching route details.");
         RouteDetailRequest routeDetailRequest = new RouteDetailRequest(ticket.getId(), startStation, endStation);
         ticket.setRouteDetailsRequestId(routeDetailRequest.getRouteDetailRequestId());
         gateway.getRouteDetails(routeDetailRequest);
         if(ticket.getType() == TicketType.GROUP){
-            ReserveGroupSeatsRequest reserveRequest = new ReserveGroupSeatsRequest(ticket.getId(), timeTableId, amountOfSeats);
-            ticket.setReserveGroupSeatsRequestId(reserveRequest.getReserveGroupSeatsRequestId());
+            GroupSeatsRequest reserveRequest = new GroupSeatsRequest(ticket.getId(), ticket.getTimetableId(), ticket.getAmountOfSeats());
+            ticket.setReserveGroupSeatsRequestId(reserveRequest.getGroupSeatsRequest());
             gateway.reserveGroupSeats(reserveRequest);
         }
     }
@@ -54,12 +52,19 @@ public class BookTicketSaga {
     }
 
     public void onReservedGroupSeats(Ticket ticket){
-        TicketStatus status = ticket.getStatus() == TicketStatus.DETAILS_FETCHED ? TicketStatus.DETAILS_FETCHED_GROUP_SEATS_RESERVED : TicketStatus.GROUP_SEATS_RESERVED;
-        ticket.setStatus(status);
-        checkTicketCompletion(ticket);
+        if(ticket.getStatus() == TicketStatus.FETCHING_DETAILS_FAILED){
+            gateway.discardGroupSeats(new GroupSeatsRequest(ticket.getId(), ticket.getTimetableId(), ticket.getAmountOfSeats()));
+        }else{
+            TicketStatus status = ticket.getStatus() == TicketStatus.DETAILS_FETCHED ? TicketStatus.DETAILS_FETCHED_GROUP_SEATS_RESERVED : TicketStatus.GROUP_SEATS_RESERVED;
+            ticket.setStatus(status);
+            checkTicketCompletion(ticket);
+        }
     }
 
     public void onRouteDetailsFetchingFailed(Ticket ticket){
+        if(ticket.getStatus() == TicketStatus.GROUP_SEATS_RESERVED) {
+            gateway.discardGroupSeats(new GroupSeatsRequest(ticket.getId(), ticket.getTimetableId(), ticket.getAmountOfSeats()));
+        }
         ticket.setStatus(TicketStatus.FETCHING_DETAILS_FAILED);
         notifyListeners(ticket);
     }
