@@ -17,4 +17,6 @@ public interface StationRepository extends CrudRepository<Station, UUID>{
 
 	@Query("select s.platforms from Station s where s.id = ?1")
 	List<Platform> getPlatformsByStationId(UUID id);
+	
+	Station getStationById(UUID id);
 }

@@ -41,7 +41,7 @@ public class StationRestController {
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<Station> stationById(@PathVariable UUID id) {
-		Station station = stationRepository.findById(id).orElse(null);
+		Station station = stationRepository.getStationById(id);
 		if(station != null) {
 			return new ResponseEntity<>(station, HttpStatus.OK);
 		}
