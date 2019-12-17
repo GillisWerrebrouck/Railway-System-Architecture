@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.async.DeferredResult;
 
-import com.railway.delay_service.DelayService;
 import com.railway.delay_service.adapters.messaging.DelayRequest;
+import com.railway.delay_service.domain.DelayService;
 
 
 @RestController

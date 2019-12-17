@@ -43,4 +43,10 @@ public class StationCommandHandler {
 		logger.info("[Station Command Handler] discard station reservations command received");
 		stationService.discardStationReservations(request.getTimetableId());
 	}
+	
+	@StreamListener(Channels.NOTIFY_DELAY)
+	public void notifyDelay(DelayRequest request) {
+		logger.info("[Station Command Handler] notify delay command received");
+		stationService.processDelay(request);
+	}
 }

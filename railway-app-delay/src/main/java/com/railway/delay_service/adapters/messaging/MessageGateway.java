@@ -6,7 +6,7 @@ import org.springframework.integration.annotation.MessagingGateway;
 @MessagingGateway
 public interface MessageGateway {
 
-	@Gateway(requestChannel = Channels.DELAY)
+	@Gateway(requestChannel = Channels.NOTIFY_DELAY)
 	public void delayOccured(DelayRequest delayRequest);
-	
+
 }

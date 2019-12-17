@@ -1,8 +1,9 @@
-package com.railway.delay_service.adapters.messaging;
+package com.railway.station_service.adapters.messaging;
 
 import java.util.UUID;
 
-import com.railway.delay_service.domain.DelayState;
+import com.railway.station_service.domain.DelayState;
+
 
 public class DelayRequest {
 

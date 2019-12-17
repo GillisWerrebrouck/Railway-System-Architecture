@@ -1,6 +1,12 @@
-package com.railway.delay_service;
+package com.railway.delay_service.domain;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,17 +19,14 @@ import com.railway.delay_service.adapters.messaging.MessageGateway;
 @Service
 public class DelayService {
 	private static Logger logger = LoggerFactory.getLogger(DelayService.class);
-	
 	private final MessageGateway gateway;
-	//private final Set<HospitalCheckInListener> listeners;
 	
 	@Autowired
 	public DelayService(MessageGateway gateway) {
 		this.gateway = gateway;
-		//this.listeners = new HashSet<>(5);
 	}
 	
 	public void sendDelay(DelayRequest delayRequest) {
 		gateway.delayOccured(delayRequest);
 	}
-}
+}   
