@@ -18,6 +18,7 @@ public interface Channels {
 	@Output(GET_ROUTE)
 	MessageChannel getRoute();
 	
+	
 	@Input(ROUTE_FETCHED)
 	SubscribableChannel processRouteResponse();
 	

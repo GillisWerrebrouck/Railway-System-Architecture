@@ -26,6 +26,7 @@ public class RouteCommandHandler {
 	@StreamListener(Channels.GET_ROUTE)
 	@SendTo(Channels.ROUTE_FETCHED)
 	public RouteResponse getRoute(RouteRequest request) {
+		logger.info("[Route command handler] "+request.getTimetableId()+", "+request.getRouteId());
 		logger.info("[Route Command Handler] get route command received");
 		Collection<Connection> routeConnections = routeService.getRouteConnections(request.getRouteId());
 		Route route = routeService.getRoute(request.getRouteId());

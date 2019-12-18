@@ -18,6 +18,7 @@ public class TimetableEventHandler {
 		this.timetableItemService = timetableItemService;
 	}
 	
+	
 	@StreamListener(Channels.ROUTE_FETCHED)
 	public void processFetchedRoute(RouteFetchedResponse response) {
 		if(response.getRouteConnections().size() != 0) {

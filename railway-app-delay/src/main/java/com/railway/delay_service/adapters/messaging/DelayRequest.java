@@ -6,8 +6,8 @@ import com.railway.delay_service.domain.DelayState;
 
 public class DelayRequest {
 
-	private Long TimetableId;
-	private Long routeId;
+	private Long timetableId;
+	private Long routeId; 
 	private Long startStationId;
 	private int delayInMinutes;
 	private String reasonForDelay;
@@ -19,7 +19,7 @@ public class DelayRequest {
 
 
 	public DelayRequest(Long timetableId, Long routeId, Long startStationId, int delayInMinutes, String reasonForDelay, DelayState state) {
-		TimetableId = timetableId;
+		this.timetableId = timetableId;
 		this.routeId = routeId;
 		this.startStationId = startStationId;
 		this.delayInMinutes = delayInMinutes;
@@ -29,12 +29,12 @@ public class DelayRequest {
 
 
 	public Long getTimetableId() {
-		return TimetableId;
+		return timetableId;
 	}
 
 
 	public void setTimetableId(Long timetableId) {
-		TimetableId = timetableId;
+		this.timetableId = timetableId;
 	}
 
 

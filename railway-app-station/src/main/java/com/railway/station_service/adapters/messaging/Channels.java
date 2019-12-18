@@ -14,6 +14,7 @@ public interface Channels {
 	static final String NOTIFY_DELAY = "notify_delay";
 	static final String GET_ROUTE = "get_route";
 	static final String ROUTE_FETCHED = "route_fetched";
+	static final String NOTIFY_EXTRA_DELAY = "notify_extra_delay";
 	
 	@Input(RESERVE_STATIONS)
 	SubscribableChannel reserveStations();
@@ -35,6 +36,9 @@ public interface Channels {
 	
 	@Output(GET_ROUTE)
 	MessageChannel getRoute();
+	
+	@Output(NOTIFY_EXTRA_DELAY)
+	MessageChannel notifyExtraDelay();
 	
 	@Input(ROUTE_FETCHED)
 	SubscribableChannel routeFetched();

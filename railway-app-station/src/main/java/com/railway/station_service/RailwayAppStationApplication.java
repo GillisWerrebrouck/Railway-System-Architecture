@@ -13,8 +13,10 @@ import org.springframework.context.annotation.Bean;
 import com.railway.station_service.adapters.messaging.Channels;
 import com.railway.station_service.domain.Address;
 import com.railway.station_service.domain.Platform;
+import com.railway.station_service.domain.ScheduleItem;
 import com.railway.station_service.domain.Station;
 import com.railway.station_service.persistence.PlatformRepository;
+import com.railway.station_service.persistence.ScheduleItemRepository;
 import com.railway.station_service.persistence.StationRepository;
 
 @SpringBootApplication
@@ -23,16 +25,18 @@ public class RailwayAppStationApplication {
 	private static Logger logger = LoggerFactory.getLogger(RailwayAppStationApplication.class);
 	private StationRepository stationRepository;
 	private PlatformRepository platformRepository;
+	private ScheduleItemRepository scheduleItemRepository;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(RailwayAppStationApplication.class, args);
 	}
 	
 	@Bean
-	public CommandLineRunner populateDatabase (StationRepository stationRepository, PlatformRepository platformRepository) {
+	public CommandLineRunner populateDatabase (StationRepository stationRepository, PlatformRepository platformRepository, ScheduleItemRepository scheduleItemRepository) {
 		return(args)->{			
 			this.stationRepository = stationRepository;
-			this.platformRepository = platformRepository;			
+			this.platformRepository = platformRepository;	
+			this.scheduleItemRepository = scheduleItemRepository;
 
 			createStation(UUID.fromString("11018de0-1943-42b2-929d-a707f751f79c"), "Gent-Sint-Pieters", "Koningin Maria Hendrikaplein 1", "Gent", "Oost-Vlaanderen", "België");
 			createStation(UUID.fromString("a39b1971-fc82-49b2-809a-444105e03c8d"), "Gent-Dampoort", "Oktrooiplein 10", "Gent", "Oost-Vlaanderen", "België");
@@ -47,6 +51,11 @@ public class RailwayAppStationApplication {
 			createStation(UUID.fromString("5b659978-1c39-4372-97ec-a6e4d1418ef3"), "Zottegem", "Stationsplein 12", "Zottegem", "Oost-Vlaanderen", "België");
 			createStation(UUID.fromString("b44c17fc-6df1-4808-83d6-838f5637c9c7"), "Denderleeuw", "Stationsplein", "Denderleeuw", "Oost-Vlaanderen", "België");
 			createStation(UUID.fromString("05cce0f7-1409-4224-926a-db3b4c4a8ce5"), "Brussel-Zuid", "Fonsnylaan 47b", "Brussel", "Brussels", "België");
+			
+			logger.info("----------------------------ITEMS--------------------------------");
+			for(ScheduleItem s : scheduleItemRepository.findAll()) {
+				logger.info(s.toString());
+			}
 		};
 	}
 	

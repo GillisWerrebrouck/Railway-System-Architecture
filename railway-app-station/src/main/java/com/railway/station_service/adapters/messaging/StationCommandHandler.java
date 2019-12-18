@@ -49,4 +49,15 @@ public class StationCommandHandler {
 		logger.info("[Station Command Handler] notify delay command received");
 		stationService.processDelay(request);
 	}
+	/*
+	@StreamListener(Channels.ROUTE_FETCHED)
+	public void processFetchedRoute(RouteFetchedResponse response) {
+		if(response.getRouteConnections().size() != 0) {
+			logger.info("[Station Event Handler] successfully fetched route");
+			this.stationService.routeFetched(response);
+		} else {
+			logger.info("[Station Event Handler] failed to fetch route");
+			this.stationService.failedToFetchRoute(response);
+		}
+	}*/
 }
