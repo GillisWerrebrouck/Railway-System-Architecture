@@ -22,7 +22,7 @@ public class Connection {
     @EndNode
     private Station stationY;
 
-	private Long distance;
+	private double distance;
 	private double maxSpeed;
 	private boolean active = true;
 
@@ -61,11 +61,11 @@ public class Connection {
 		this.stationY = stationY;
 	}
 	
-    public Long getDistance() {
+    public double getDistance() {
 		return distance;
 	}
 
-	public void setDistance(Long distance) {
+	public void setDistance(double distance) {
 		this.distance = distance;
 	}
 	
