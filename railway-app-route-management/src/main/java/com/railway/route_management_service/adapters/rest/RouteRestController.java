@@ -54,11 +54,6 @@ public class RouteRestController {
 		return this.connectionRepository.findShortestPath(startStation, endStation);
 	}
 
-	@GetMapping("/route/test")
-	public RouteDetails test() {
-		return this.routeRepository.getRouteDetails(UUID.fromString("05cce0f7-1409-4224-926a-db3b4c4a8ce5"), UUID.fromString("a39b1971-fc82-49b2-809a-444105e03c8d"));
-	}
-
 	// get a predefined route by id
 	@GetMapping("/route/{id}")
 	public Collection<Connection> getRouteById(@PathVariable Long id) {

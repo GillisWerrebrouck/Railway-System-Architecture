@@ -37,18 +37,20 @@ public class BookTicketSaga {
         gateway.getRouteDetails(routeDetailRequest);
         if(ticket.getType() == TicketType.GROUP){
             GroupSeatsRequest reserveRequest = new GroupSeatsRequest(ticket.getId(), ticket.getTimetableId(), ticket.getAmountOfSeats());
-            ticket.setReserveGroupSeatsRequestId(reserveRequest.getGroupSeatsRequest());
+            ticket.setReserveGroupSeatsRequestId(reserveRequest.getGroupSeatsRequestId());
             gateway.reserveGroupSeats(reserveRequest);
         }
     }
 
     public void onRouteDetailsFetched(Ticket ticket, double price, String startStation, String endStation){
-        TicketStatus status = ticket.getStatus() == TicketStatus.GROUP_SEATS_RESERVED ? TicketStatus.DETAILS_FETCHED_GROUP_SEATS_RESERVED : TicketStatus.DETAILS_FETCHED;
-        ticket.setPrice(price);
-        ticket.setStartStation(startStation);
-        ticket.setEndStation(endStation);
-        ticket.setStatus(status);
-        checkTicketCompletion(ticket);
+        if(ticket.getStatus() != TicketStatus.RESERVE_GROUP_SEATS_FAILED){
+            TicketStatus status = ticket.getStatus() == TicketStatus.GROUP_SEATS_RESERVED ? TicketStatus.DETAILS_FETCHED_GROUP_SEATS_RESERVED : TicketStatus.DETAILS_FETCHED;
+            ticket.setPrice(price);
+            ticket.setStartStation(startStation);
+            ticket.setEndStation(endStation);
+            ticket.setStatus(status);
+            checkTicketCompletion(ticket);
+        }
     }
 
     public void onReservedGroupSeats(Ticket ticket){
@@ -73,22 +75,18 @@ public class BookTicketSaga {
         ticket.setStatus(TicketStatus.RESERVE_GROUP_SEATS_FAILED);
         notifyListeners(ticket);
     }
+
     private void checkTicketCompletion(Ticket ticket){
-        if(ticket.getType() == TicketType.SINGLE){
-            if(ticket.getStatus() == TicketStatus.DETAILS_FETCHED){
-                ticket.setStatus(TicketStatus.BOOKED);
-                gateway.ticketCreated(ticket);
-                notifyListeners(ticket);
-            }
-        }else if(ticket.getStatus() ==  TicketStatus.DETAILS_FETCHED_GROUP_SEATS_RESERVED){
+        if((ticket.getType() == TicketType.SINGLE && ticket.getStatus() == TicketStatus.DETAILS_FETCHED) || ticket.getStatus() ==  TicketStatus.DETAILS_FETCHED_GROUP_SEATS_RESERVED){
             ticket.setStatus(TicketStatus.BOOKED);
             gateway.ticketCreated(ticket);
             notifyListeners(ticket);
         }
     }
 
+
     private void notifyListeners(Ticket ticket){
-        this.listeners.forEach(l -> l.onBookTicketListener(ticket));
+        this.listeners.forEach(l -> l.onBookTicketResult(ticket));
     }
 
 }

@@ -8,14 +8,14 @@ public class TicketRequest {
     private String endStationId;
     private LocalDateTime startDateTime;
     private int amountOfSeats;
-    private Long timeTableId;
+    private Long timetableId;
 
-    public TicketRequest(String startStationId, String endStationId, LocalDateTime startDateTime, int amountOfSeats, Long timeTableId) {
+    public TicketRequest(String startStationId, String endStationId, LocalDateTime startDateTime, int amountOfSeats, Long timetableId) {
         this.startStationId = startStationId;
         this.endStationId = endStationId;
         this.startDateTime = startDateTime;
         this.amountOfSeats = amountOfSeats;
-        this.timeTableId = timeTableId;
+        this.timetableId = timetableId;
     }
 
     public String getStartStationId() {
@@ -50,11 +50,11 @@ public class TicketRequest {
         this.amountOfSeats = amountOfSeats;
     }
 
-    public Long getTimeTableId() {
-        return timeTableId;
+    public Long getTimetableId() {
+        return timetableId;
     }
 
-    public void setTimeTableId(Long timeTableId) {
-        this.timeTableId = timeTableId;
+    public void setTimetableId(Long timetableId) {
+        this.timetableId = timetableId;
     }
 }

@@ -59,7 +59,7 @@ public class TicketRestController implements BookTicketListener {
             deferredResult.setErrorResult("Request timeout occurred");
         });
 
-        Ticket ticket = new Ticket(ticketRequest.getStartDateTime(), ticketRequest.getTimeTableId(), ticketRequest.getAmountOfSeats());
+        Ticket ticket = new Ticket(ticketRequest.getStartDateTime(), ticketRequest.getTimetableId(), ticketRequest.getAmountOfSeats());
 
         ticketRepository.save(ticket);
         deferredResults.put(ticket.getId(), deferredResult);
@@ -82,7 +82,7 @@ public class TicketRestController implements BookTicketListener {
     }
 
     @Override
-    public void onBookTicketListener(Ticket ticket) {
+    public void onBookTicketResult(Ticket ticket) {
         this.performResponse(ticket);
     }
 }

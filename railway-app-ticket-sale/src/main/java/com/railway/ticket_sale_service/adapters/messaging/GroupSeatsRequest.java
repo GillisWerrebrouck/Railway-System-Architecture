@@ -7,13 +7,13 @@ public class GroupSeatsRequest {
     private Long ticketId;
     private Long timeTableId;
     private int amountOfSeats;
-    private UUID groupSeatsRequest;
+    private UUID groupSeatsRequestId;
 
     public GroupSeatsRequest(Long ticketId, Long timeTableId, int amountOfSeats) {
         this.ticketId = ticketId;
         this.timeTableId = timeTableId;
         this.amountOfSeats = amountOfSeats;
-        this.groupSeatsRequest = UUID.randomUUID();
+        this.groupSeatsRequestId = UUID.randomUUID();
     }
 
     public Long getTicketId() {
@@ -28,7 +28,7 @@ public class GroupSeatsRequest {
         return amountOfSeats;
     }
 
-    public UUID getGroupSeatsRequest() {
-        return groupSeatsRequest;
+    public UUID getGroupSeatsRequestId() {
+        return groupSeatsRequestId;
     }
 }

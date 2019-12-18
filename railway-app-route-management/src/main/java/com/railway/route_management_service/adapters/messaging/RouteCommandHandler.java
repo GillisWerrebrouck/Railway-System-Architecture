@@ -38,10 +38,10 @@ public class RouteCommandHandler {
 	@StreamListener(Channels.GET_ROUTE_DETAILS)
 	@SendTo(Channels.ROUTE_DETAILS_FETCHED)
 	public RouteDetailResponse getRouteDetails(RouteDetailRequest request){
-		logger.info("[Route Command Handler] get distance command received");
+		logger.info("[Route Command Handler] get route details command received");
 		RouteDetails routeDetails = routeService.getRouteDetails(request.getStartStationId(), request.getEndStationId());
 		if(routeDetails != null && routeDetails.getDistance() > 0){
-			logger.info("[Route Command Handler] distance fetched");
+			logger.info("[Route Command Handler] route details fetched");
 			return new RouteDetailResponse(routeDetails.getArrivalStation(), routeDetails.getDepartureStation(),
 					routeDetails.getDistance(), request.getTicketId(), request.getRouteDetailRequestId());
 		}else{

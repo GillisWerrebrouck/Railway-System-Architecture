@@ -26,13 +26,13 @@ public class TimetableCommandHandler {
         try {
             timetableItemService.reserveGroupSeats(groupSeatsRequest);
             logger.info("[Timetable Event Handler] successfully reserved group seats");
-            return new ReserveGroupSeatsResponse(groupSeatsRequest.getTicketId(), groupSeatsRequest.getTimeTableId(), true, groupSeatsRequest.getGroupSeatsRequest());
+            return new ReserveGroupSeatsResponse(groupSeatsRequest.getTicketId(), groupSeatsRequest.getTimeTableId(), true, groupSeatsRequest.getGroupSeatsRequestId());
         } catch (NotEnoughGroupSeatsException e) {
             logger.info("[Timetable Event Handler] failed to reserve group seats, not enough group seats available");
-            return new ReserveGroupSeatsResponse(groupSeatsRequest.getTicketId(), groupSeatsRequest.getTimeTableId(), false, groupSeatsRequest.getGroupSeatsRequest());
+            return new ReserveGroupSeatsResponse(groupSeatsRequest.getTicketId(), groupSeatsRequest.getTimeTableId(), false, groupSeatsRequest.getGroupSeatsRequestId());
         } catch (NullPointerException en){
             logger.info("[Timetable Event Handler] no timetableItem found with the id " + groupSeatsRequest.getTimeTableId());
-            return new ReserveGroupSeatsResponse(groupSeatsRequest.getTicketId(), null, false, groupSeatsRequest.getGroupSeatsRequest());
+            return new ReserveGroupSeatsResponse(groupSeatsRequest.getTicketId(), null, false, groupSeatsRequest.getGroupSeatsRequestId());
         }
     }
 
