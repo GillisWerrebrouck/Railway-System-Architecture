@@ -92,7 +92,6 @@ public class TrainService {
 
 
 	public void requestMaintenanceForAccident(AccidentRequest request) {
-		request.setAccidentDate(LocalDateTime.now());
 		gateway.notifyAccident(request);
 		if (request.isEmergencyServiceRequired()) {
 			EmergencyRequest r = new EmergencyRequest(request.getTrainId(), request.getAccidentMessage());

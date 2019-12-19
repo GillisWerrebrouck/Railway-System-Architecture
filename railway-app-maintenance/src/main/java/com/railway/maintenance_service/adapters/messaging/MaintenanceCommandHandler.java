@@ -30,7 +30,7 @@ public class MaintenanceCommandHandler {
 	public void requestMaintenance(MaintenanceRequest request) {
 		logger.info("[Maintenance Command Handler] request maintenance command received");
 		
-		// a maintenance is schedule to take 1 day by default
+		// a maintenance is scheduled to take 1 day by default
 		LocalDateTime startDate = request.getMaintenanceDate();
 		LocalDateTime endDate = request.getMaintenanceDate().plusDays(1);
 		ScheduleItem scheduleItem = new ScheduleItem(request.getTrainId(), startDate, endDate, Status.SCHEDULED, request.getMaintenanceMessage(), MaintenanceType.MAINTENANCE);
@@ -47,7 +47,7 @@ public class MaintenanceCommandHandler {
 	public void notifyAccident(AccidentRequest request) {
 		logger.info("[Maintenance Command Handler] notifyAccident received");
 		
-		// a maintenance is schedule to take 1 day by default
+		// an accident is scheduled to take 2 hour by default
 		LocalDateTime startDate = request.getAccidentDate();
 		LocalDateTime endDate = request.getAccidentDate().plusHours(2);
 		ScheduleItem scheduleItem = new ScheduleItem(request.getTrainId(), startDate, endDate, Status.SCHEDULED, request.getAccidentMessage(),  MaintenanceType.ACCIDENT);

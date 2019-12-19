@@ -5,13 +5,11 @@ import java.time.LocalDateTime;
 public class AccidentRequest {
 	private String trainId;
 	private String accidentMessage;
-	private boolean emergencyServiceRequired;
 	private LocalDateTime accidentDate;
 	
-	public AccidentRequest(String trainId, String maintenanceMessage, boolean emergencyServiceRequired, LocalDateTime accidentDate) {
+	public AccidentRequest(String trainId, String maintenanceMessage, LocalDateTime accidentDate) {
 		this.trainId = trainId;
 		this.accidentMessage = maintenanceMessage;
-		this.emergencyServiceRequired = emergencyServiceRequired;
 		this.accidentDate=accidentDate;
 	}
 	
@@ -29,14 +27,6 @@ public class AccidentRequest {
 
 	public void setAccidentMessage(String accidentMessage) {
 		this.accidentMessage = accidentMessage;
-	}
-
-	public boolean isEmergencyServiceRequired() {
-		return emergencyServiceRequired;
-	}
-
-	public void setEmergencyServiceRequired(boolean emergencyServiceRequired) {
-		this.emergencyServiceRequired = emergencyServiceRequired;
 	}
 
 	public LocalDateTime getAccidentDate() {

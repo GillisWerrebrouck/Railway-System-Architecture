@@ -8,11 +8,11 @@ public class AccidentRequest {
 	private boolean emergencyServiceRequired;
 	private LocalDateTime accidentDate;
 	
-	public AccidentRequest(String trainId, String maintenanceMessage, boolean emergencyServiceRequired, LocalDateTime accidentDate) {
+	public AccidentRequest(String trainId, String maintenanceMessage, boolean emergencyServiceRequired) {
 		this.trainId = trainId;
 		this.accidentMessage = maintenanceMessage;
 		this.emergencyServiceRequired = emergencyServiceRequired;
-		this.accidentDate=accidentDate;
+		this.accidentDate= LocalDateTime.now();
 	}
 	
 	public String getTrainId() {
