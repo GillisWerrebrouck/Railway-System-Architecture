@@ -6,10 +6,10 @@ import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.stereotype.Repository;
 
 import com.railway.route_management_service.domain.Route;
+import com.railway.route_management_service.domain.RouteAssociation;
 import com.railway.route_management_service.helpers.Constants;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.UUID;
 
 @Repository
@@ -19,8 +19,13 @@ public interface RouteRepository extends Neo4jRepository<Route, Long> {
 
 	@Query("MATCH p=(:Route)-[:USES_STATION]-(x:Station)-[c:CONNECTED_WITH* { active:true }]-(y:Station)-[:USES_STATION]-(:Route)\n" +
 			"WHERE x.stationId={stationXId} AND y.stationId={stationYId}\n" +
-			"RETURN x.name as departureStation, y.name as arrivalStation,\n" +
+			"RETURN x.na"
+			+ "me as departureStation, y.name as arrivalStation,\n" +
 			"       reduce(distance = 0, connection IN c | distance + connection.distance) AS distance\n" +
 			"ORDER BY distance LIMIT 1")
 	RouteDetails getRouteDetails(UUID stationXId, UUID stationYId);
+	
+	//* { active:true }
+	@Query("MATCH p=(r:Route)-[n:USES_STATION]-(x:Station)-[c:CONNECTED_WITH]-(y:Station)-[t:USES_STATION]-(l:Route) WHERE n.connectionId IS NOT NULL RETURN DISTINCT ID(r) as routeId, n.connectionId as connectionId")
+	Collection<RouteAssociation> getRouteAssociations();
 }

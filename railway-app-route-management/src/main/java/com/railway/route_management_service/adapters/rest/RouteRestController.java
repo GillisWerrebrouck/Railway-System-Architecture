@@ -1,9 +1,12 @@
 package com.railway.route_management_service.adapters.rest;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 import com.railway.route_management_service.domain.RouteDetails;
+import com.railway.route_management_service.domain.RouteService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -34,13 +37,15 @@ public class RouteRestController {
 	protected final ConnectionRepository connectionRepository;
 	protected final RouteRepository routeRepository;
 	protected final RouteConnectionRepository routeConnectionRepository;
+	protected final RouteService routeService;
 	
 	@Autowired
-	public RouteRestController(StationRepository stationRepository, ConnectionRepository connectionRepository, RouteRepository routeRepository, RouteConnectionRepository routeConnectionRepository) {
+	public RouteRestController(StationRepository stationRepository, ConnectionRepository connectionRepository, RouteRepository routeRepository, RouteConnectionRepository routeConnectionRepository, RouteService routeService) {
 		this.stationRepository = stationRepository;
 		this.connectionRepository = connectionRepository;
 		this.routeRepository = routeRepository;
 		this.routeConnectionRepository = routeConnectionRepository;
+		this.routeService = routeService;
 	}
 	
 	@GetMapping("/route")
@@ -100,6 +105,13 @@ public class RouteRestController {
 								  + routeConnection.getStation().getId() +"\" could not be created: " + e.getMessage();
 			throw new QueryFailedException(errorMessage);
 		}
+	}
+	
+
+	@PostMapping("/update")
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
+	public void updateRouteConnections(@RequestBody UpdateRequest request) {
+		routeService.updateRouteConnections(request);
 	}
 	
 	@DeleteMapping("/route/{id}")
