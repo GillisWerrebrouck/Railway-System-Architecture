@@ -47,7 +47,7 @@ public class MaintenanceCommandHandler {
 	public void notifyAccident(AccidentRequest request) {
 		logger.info("[Maintenance Command Handler] notifyAccident received");
 		
-		// an accident is scheduled to take 2 hour by default
+		// an accident is scheduled to take 2 hours by default
 		LocalDateTime startDate = request.getAccidentDate();
 		LocalDateTime endDate = request.getAccidentDate().plusHours(2);
 		ScheduleItem scheduleItem = new ScheduleItem(request.getTrainId(), startDate, endDate, Status.SCHEDULED, request.getAccidentMessage(),  MaintenanceType.ACCIDENT);

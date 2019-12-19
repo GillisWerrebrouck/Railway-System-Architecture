@@ -82,10 +82,18 @@ public class TrainRestController {
 	
 	// report accident for a train
 	@PostMapping("/{id}/accident")
-	public void notifyAccident(@PathVariable String id, @RequestBody AccidentRequest request) {
+	public MaintenanceResponse notifyAccident(@PathVariable String id, @RequestBody AccidentRequest request) {
 		Train train = trainRepository.findById(id).orElse(null);
+		MaintenanceResponse response;
+		
+		if(train == null) {
+			response = new MaintenanceResponse("Failed to fetch train, accident notification aborted");
+			return response;
+		}
 		request.setTrainId(id);
 		trainService.requestMaintenanceForAccident(request);
+		response = new MaintenanceResponse("Successfully fetched train and sent accident notification");
+		return response;
 	}
 	
 	@DeleteMapping("/{id}")
