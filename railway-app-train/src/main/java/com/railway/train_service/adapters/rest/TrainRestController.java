@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.railway.train_service.adapters.messaging.AccidentRequest;
+import com.railway.train_service.adapters.messaging.AccidentResponse;
 import com.railway.train_service.adapters.messaging.MaintenanceRequest;
 import com.railway.train_service.adapters.messaging.MaintenanceResponse;
 import com.railway.train_service.domain.ReservationType;
@@ -76,6 +78,21 @@ public class TrainRestController {
 		} else {
 			response = new MaintenanceResponse("Failed to reserve train for maintenance on requested date");
 		}
+		return response;
+	}
+	
+	// report accident for a train
+	@PostMapping("/{id}/accident")
+	public AccidentResponse notifyAccident(@PathVariable String id, @RequestBody AccidentRequest request) {
+		Train train = trainRepository.findById(id).orElse(null);
+		AccidentResponse response;
+		if(train == null) {
+			response = new AccidentResponse("Failed to fetch train, accident request aborted");
+			return response;
+		}
+		request.setTrainId(id);
+		trainService.requestMaintenanceForAccident(request);
+		response = new AccidentResponse("Successfully fetched train and sent accident request");
 		return response;
 	}
 	

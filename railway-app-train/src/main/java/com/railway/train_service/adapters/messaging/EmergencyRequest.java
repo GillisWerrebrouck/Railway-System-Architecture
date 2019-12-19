@@ -1,4 +1,4 @@
-package com.railway.api_gateway.adapters.messaging;
+package com.railway.train_service.adapters.messaging;
 
 public class EmergencyRequest {
 

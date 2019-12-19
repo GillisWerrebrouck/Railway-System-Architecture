@@ -1,19 +1,23 @@
 package com.railway.api_gateway.domain;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.railway.api_gateway.adapters.messaging.EmergencyRequest;
-import com.railway.api_gateway.adapters.messaging.MessageGateway;
+
 
 @Service
 public class ApiGatewayService {
-	private MessageGateway gateway;
 
-	public ApiGatewayService(MessageGateway gateway) {
-		this.gateway = gateway;
-	}
+	private static Logger logger = LoggerFactory.getLogger(ApiGatewayService.class);
 	
-	public void sendEmergencyRequest(EmergencyRequest emergencyRequest) {
-		this.gateway.notifyEmergencyServices(emergencyRequest); 
+	public ApiGatewayService() {
+
+	}
+
+	public void sendEmergencyRequest(EmergencyRequest request) {
+		logger.info("called emergency services ---------------------  HELP!");
+		logger.info("details: " + request.getMessage());
 	}
 }
