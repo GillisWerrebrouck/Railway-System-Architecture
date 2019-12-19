@@ -10,6 +10,7 @@ public interface Channels {
 	static final String TRAIN_RESERVED = "train_reserved";
 	static final String DISCARD_TRAIN_RESERVATION = "discard_train_reservation";
 	static final String REQUEST_MAINTENANCE = "request_maintenance";
+	static final String CHANGE_TRAIN_STATUS = "change_train_status";
 
 	@Input(RESERVE_TRAIN)
 	SubscribableChannel reserveTrain();
@@ -22,4 +23,7 @@ public interface Channels {
 	
 	@Output(REQUEST_MAINTENANCE)
 	MessageChannel requestMaintenance();
+	
+	@Input(CHANGE_TRAIN_STATUS)
+	SubscribableChannel changeTrainStatus();
 }
