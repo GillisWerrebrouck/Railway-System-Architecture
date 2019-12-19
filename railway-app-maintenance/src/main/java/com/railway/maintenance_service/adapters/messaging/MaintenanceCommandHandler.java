@@ -9,6 +9,7 @@ import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.stereotype.Service;
 
 import com.railway.maintenance_service.domain.MaintenanceService;
+import com.railway.maintenance_service.domain.MaintenanceType;
 import com.railway.maintenance_service.domain.ScheduleItem;
 import com.railway.maintenance_service.domain.Status;
 import com.railway.maintenance_service.persistence.MaintenanceRepository;
@@ -32,12 +33,24 @@ public class MaintenanceCommandHandler {
 		// a maintenance is schedule to take 1 day by default
 		LocalDateTime startDate = request.getMaintenanceDate();
 		LocalDateTime endDate = request.getMaintenanceDate().plusDays(1);
-		ScheduleItem scheduleItem = new ScheduleItem(request.getTrainId(), startDate, endDate, Status.SCHEDULED, request.getMaintenanceMessage());
+		ScheduleItem scheduleItem = new ScheduleItem(request.getTrainId(), startDate, endDate, Status.SCHEDULED, request.getMaintenanceMessage(), MaintenanceType.MAINTENANCE);
 		
 		// reserve staff
 		StaffRequest staffRequest = new StaffRequest(4, StaffMemberType.MECHANIC, startDate, endDate);
 		scheduleItem.setRequestId(staffRequest.getRequestId());
 		maintenanceService.reserveStaff(staffRequest);
+		
+		maintenanceRepository.save(scheduleItem);
+	}
+	
+	@StreamListener(Channels.NOTIFY_ACCIDENT)
+	public void notifyAccident(AccidentRequest request) {
+		logger.info("[Maintenance Command Handler] notifyAccident received");
+		
+		// a maintenance is schedule to take 1 day by default
+		LocalDateTime startDate = request.getAccidentDate();
+		LocalDateTime endDate = request.getAccidentDate().plusHours(2);
+		ScheduleItem scheduleItem = new ScheduleItem(request.getTrainId(), startDate, endDate, Status.SCHEDULED, request.getAccidentMessage(),  MaintenanceType.ACCIDENT);
 		
 		maintenanceRepository.save(scheduleItem);
 	}

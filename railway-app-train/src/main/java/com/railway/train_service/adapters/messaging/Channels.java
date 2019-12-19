@@ -11,6 +11,7 @@ public interface Channels {
 	static final String DISCARD_TRAIN_RESERVATION = "discard_train_reservation";
 	static final String REQUEST_MAINTENANCE = "request_maintenance";
 	static final String NOTIFY_EMERGENCY_SERVICES = "notify_emergency_services";
+	static final String NOTIFY_ACCIDENT = "notify_accident";
 
 	@Input(RESERVE_TRAIN)
 	SubscribableChannel reserveTrain();
@@ -26,4 +27,7 @@ public interface Channels {
 	
 	@Output(NOTIFY_EMERGENCY_SERVICES)
 	MessageChannel notifyEmergencyServices();
+	
+	@Output(NOTIFY_ACCIDENT)
+	MessageChannel notifyAccident();
 }

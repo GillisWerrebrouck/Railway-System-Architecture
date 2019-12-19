@@ -1,4 +1,4 @@
-package com.railway.train_service.adapters.messaging;
+package com.railway.maintenance_service.adapters.messaging;
 
 import java.time.LocalDateTime;
 

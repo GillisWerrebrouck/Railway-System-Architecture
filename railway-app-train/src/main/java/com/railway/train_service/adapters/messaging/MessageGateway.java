@@ -10,4 +10,7 @@ public interface MessageGateway {
 	
 	@Gateway(requestChannel = Channels.NOTIFY_EMERGENCY_SERVICES)
 	public void requestEmergency(EmergencyRequest request);
+	
+	@Gateway(requestChannel = Channels.NOTIFY_ACCIDENT)
+	public void notifyAccident(AccidentRequest request);
 }

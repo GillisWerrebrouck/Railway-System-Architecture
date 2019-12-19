@@ -9,9 +9,13 @@ public interface Channels {
 	static final String REQUEST_MAINTENANCE = "request_maintenance";
 	static final String RESERVE_STAFF = "reserve_staff";
 	static final String STAFF_RESERVED = "staff_reserved";
+	static final String NOTIFY_ACCIDENT = "notify_accident";
 	
 	@Input(REQUEST_MAINTENANCE)
 	SubscribableChannel requestMaintenance();
+	
+	@Input(NOTIFY_ACCIDENT)
+	SubscribableChannel notifyAccident();
 	
 	@Output(RESERVE_STAFF)
 	MessageChannel reserveStaff();

@@ -11,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+
 @Entity
 public class ScheduleItem {
 	@Id
@@ -26,17 +27,19 @@ public class ScheduleItem {
 	private Status status;
 	private String maintenanceMessage;
 	private String trainId;
+	private MaintenanceType maintenanceType;
 	
 	@SuppressWarnings("unused")
 	private ScheduleItem() {}
 
-	public ScheduleItem(String trainId, LocalDateTime startDate, LocalDateTime endDate, Status status, String comment) {
+	public ScheduleItem(String trainId, LocalDateTime startDate, LocalDateTime endDate, Status status, String comment, MaintenanceType maintenanceType) {
 		this.trainId = trainId;
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.status = status;
 		this.maintenanceMessage = comment;
 		this.staffIds = new ArrayList<>();
+		this.maintenanceType= maintenanceType;
 	}
 
 	public Long getId() {
@@ -105,6 +108,15 @@ public class ScheduleItem {
 	
 	public void setTrainId(String trainId) {
 		this.trainId = trainId;
+	}
+	
+
+	public MaintenanceType getMaintenanceType() {
+		return maintenanceType;
+	}
+
+	public void setMaintenanceType(MaintenanceType maintenanceType) {
+		this.maintenanceType = maintenanceType;
 	}
 
 	@Override
