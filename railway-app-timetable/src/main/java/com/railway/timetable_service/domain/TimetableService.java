@@ -3,9 +3,11 @@ package com.railway.timetable_service.domain;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.railway.timetable_service.adapters.messaging.DelayRequest;
 import com.railway.timetable_service.adapters.messaging.RouteFetchedResponse;
 import com.railway.timetable_service.adapters.messaging.StationsResponse;
 import com.railway.timetable_service.adapters.messaging.TrainReservedResponse;
+import com.railway.timetable_service.adapters.messaging.UpdateDelayRequest;
 import com.railway.timetable_service.persistence.TimetableItemRepository;
 
 @Service
@@ -100,5 +102,19 @@ public class TimetableService {
 		if(timetableItem != null) {
 			this.createTimetableItemSaga.discardTrainReservation(trainReservedResponse.getTimetableId());
 		}
+	}
+
+	public void processExtraDelay(UpdateDelayRequest request) {
+		saveTimeTableItemWithDelay(request.getTimetableId(), request.getDelayInMinutes());
+	}
+
+	public void processDelay(DelayRequest request) {
+		saveTimeTableItemWithDelay(request.getTimetableId(), request.getDelayInMinutes());
+	}
+	
+	public void saveTimeTableItemWithDelay(Long id, int delay) {
+		TimetableItem tItem =  timetableItemRepository.findById(id).get();
+		tItem.setDelay(delay);
+		timetableItemRepository.save(tItem);
 	}
 }

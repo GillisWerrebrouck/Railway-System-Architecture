@@ -28,6 +28,8 @@ public class DelayService {
 	
 	public void sendDelay(DelayRequest delayRequest) {
 		logger.info("[Delay Service - sendDelay]" + delayRequest.getTimetableId() + ", " + delayRequest.getRouteId());
+		gateway.delayOccured_t(delayRequest);
 		gateway.delayOccured(delayRequest);
+		
 	}
 }   

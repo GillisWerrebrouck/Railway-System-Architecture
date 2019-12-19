@@ -172,7 +172,7 @@ public class StationService {
 							//logger.info("" + totalDelay);
 							LocalDateTime newArrivalTime = item.getArrivalDateTime().plusMinutes(totalDelay);
 							//check if the new arrivaltime causes a conflict with another train on the same platform
-							boolean overlap = !checkArrivalTime(p, newArrivalTime);
+							boolean overlap = overlaps(p, newArrivalTime, item.getId());
 							//if not set new delay and save
 							if(!overlap) {
 								item.setDelayInMinutes(totalDelay);
@@ -181,17 +181,17 @@ public class StationService {
 							}
 							else {
 								//search new platform starting on time = newArrivalTime 
-								Object[] pair = searchNewTimeSlot(station, newArrivalTime,0);
+								Object[] pair = searchNewTimeSlot(station, newArrivalTime,0, item.getId());
 								//found platform, arrivaltime and additional delay when nothing was available on newArrivalTime
 								LocalDateTime finalArrivalTime = (LocalDateTime) pair[0];
 								Platform platform = (Platform) pair[1];
 								int additionalDelay = (int) pair[2];
 								//change and save scheduleItem
 								item.setPlatform(platform);
-								item.setDelayInMinutes(totalDelay + additionalDelay);
+								// NOG BEKIJKEN
+								item.setDelayInMinutes((totalDelay + additionalDelay)/2);
 								scheduleItemRepository.save(item);
-								
-								//informTimetable(request.getTimetableId(), totalDelay + additionalDelay);
+								informTimetable(request.getTimetableId(), totalDelay + additionalDelay);
 							}
 						}
 					}
@@ -207,28 +207,36 @@ public class StationService {
 		
 	}
 
-	private Object[] searchNewTimeSlot(Station station, LocalDateTime newArrivalTime, int minutes) {
+	private Object[] searchNewTimeSlot(Station station, LocalDateTime newArrivalTime, int minutes, Long id) {
 		int i = 0;
 		//iterate all platforms
 		while (i < station.getPlatforms().size()) {
 			Platform p = station.getPlatforms().get(i);
 			//check if there is overlap here
-			boolean overlap = !checkArrivalTime(p, newArrivalTime);
+			boolean overlap = overlaps(p, newArrivalTime, id);
 			if(!overlap) {
 				Object[] pair = new Object [] {newArrivalTime, p, minutes};
 				return pair;
 			}
+			i++;
 		}
-		return searchNewTimeSlot(station, newArrivalTime.plusMinutes(1), minutes++);
+		return searchNewTimeSlot(station, newArrivalTime.plusMinutes(1), minutes++, id);
 	}
 
-	private boolean checkArrivalTime(Platform p, LocalDateTime newArrivalTime) {
+	// returns true if there is no overlap, else false
+	private boolean overlaps(Platform p, LocalDateTime newArrivalTime, Long id) {
 		for(ScheduleItem item : p.getReservedSlots()) {
-			if(item.getArrivalDateTime().isBefore(newArrivalTime) && item.getDepartureDateTime().isAfter(newArrivalTime.plusMinutes(8))) {
-				return false;
+			//current scheduleitem is not the one affected by the delay
+			if(item.getId() != id) {
+				if(item.getArrivalDateTime().isBefore(newArrivalTime) && item.getDepartureDateTime().isAfter(newArrivalTime)) {
+					return true;
+				}
+				if(item.getArrivalDateTime().isBefore(newArrivalTime.plusMinutes(8)) && item.getDepartureDateTime().isAfter(newArrivalTime.plusMinutes(8))) {
+					return true;
+				}
 			}
 		}
-		return true;
+		return false;
 	}
 
 	public void failedToFetchRoute(RouteFetchedResponse response) {

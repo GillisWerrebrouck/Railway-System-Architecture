@@ -8,5 +8,8 @@ public interface MessageGateway {
 
 	@Gateway(requestChannel = Channels.NOTIFY_DELAY)
 	public void delayOccured(DelayRequest delayRequest);
+	
+	@Gateway(requestChannel = Channels.NOTIFY_DELAY_T)
+	public void delayOccured_t(DelayRequest delayRequest);
 
 }

@@ -14,10 +14,17 @@ public interface Channels {
 	static final String TRAIN_RESERVED = "train_reserved";
 	static final String DISCARD_TRAIN_RESERVATION = "discard_train_reservation";
 	static final String DISCARD_STATION_RESERVATIONS = "discard_station_reservations";
+	static final String NOTIFY_EXTRA_DELAY = "notify_extra_delay";
+	static final String NOTIFY_DELAY = "notify_delay_t";
 	
 	@Output(GET_ROUTE)
 	MessageChannel getRoute();
 	
+	@Input(NOTIFY_DELAY)
+	SubscribableChannel notifyDelay();
+	
+	@Input(NOTIFY_EXTRA_DELAY)
+	SubscribableChannel extraDelay();
 	
 	@Input(ROUTE_FETCHED)
 	SubscribableChannel processRouteResponse();

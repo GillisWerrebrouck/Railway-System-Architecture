@@ -51,4 +51,11 @@ public class TimetableEventHandler {
 			this.timetableItemService.failedToCreateTimetableItem(response);
 		}
 	}
+	
+	@StreamListener(Channels.NOTIFY_EXTRA_DELAY)
+	public void processExtraDelay(UpdateDelayRequest request) {
+		if(request.getTimetableId() != null) {
+			this.timetableItemService.processExtraDelay(request);
+		} 
+	}
 }
