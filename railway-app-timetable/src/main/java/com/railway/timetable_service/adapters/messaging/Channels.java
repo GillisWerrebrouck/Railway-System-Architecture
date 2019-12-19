@@ -18,7 +18,7 @@ public interface Channels {
 	static final String GROUP_SEATS_RESERVED = "group_seats_reserved";
 	static final String DISCARD_RESERVED_SEATS = "discard_reserved_seats";
 	static final String GET_ROUTE_USAGE = "get_route_usage";
-	static final String GET_ROUTE_USAGE_CHECKED = "get_route_usage_checked";
+	static final String ROUTE_USAGE_CHECKED = "route_usage_checked";
 
 	@Output(GET_ROUTE)
 	MessageChannel getRoute();
@@ -56,6 +56,6 @@ public interface Channels {
 	@Input(GET_ROUTE_USAGE)
 	SubscribableChannel getRouteUsage();
 	
-	@Output(GET_ROUTE_USAGE_CHECKED)
-	MessageChannel getRouteUsageChecked();
+	@Output(ROUTE_USAGE_CHECKED)
+	MessageChannel routeUsageChecked();
 }

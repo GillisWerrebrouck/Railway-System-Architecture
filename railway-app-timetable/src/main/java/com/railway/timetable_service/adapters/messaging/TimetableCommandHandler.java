@@ -41,4 +41,10 @@ public class TimetableCommandHandler {
         logger.info("[Timetable Event Handler] discard reserved group seats");
         timetableItemService.discardReservedGroupSeats(groupSeatsRequest.getTimeTableId(), groupSeatsRequest.getAmountOfSeats());
     }
+    
+    @StreamListener(Channels.GET_ROUTE_USAGE)
+    @SendTo(Channels.ROUTE_USAGE_CHECKED)
+    public void checkRouteUsage(RouteUsageRequest request){
+        logger.info("[Timetable Event Handler] get route usage");
+    }
 }

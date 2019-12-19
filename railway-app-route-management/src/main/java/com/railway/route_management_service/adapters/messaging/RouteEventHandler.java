@@ -34,4 +34,9 @@ public class RouteEventHandler {
 		stationService.deleteStation(new Station(UUID.fromString(request.getId())));
 		logger.info("[Route Command Handler] station deleted");
 	}
+	
+	@StreamListener(Channels.ROUTE_USAGE_CHECKED)
+	public void routeUsageChecked(StationRequest request) {
+		logger.info("[Route Event Handler] route usage checked");
+	}
 }
