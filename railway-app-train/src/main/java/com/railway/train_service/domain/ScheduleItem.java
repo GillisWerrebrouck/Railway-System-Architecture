@@ -8,7 +8,7 @@ public class ScheduleItem {
 	private LocalDateTime endDateTime;
 	private ReservationType reservationType;
 	
-	public ScheduleItem(Long timetableId, ReservationType reservationType, LocalDateTime startDateTime, LocalDateTime endDateTime) {
+	public ScheduleItem(Long timetableId, ReservationType reservationType,LocalDateTime startDateTime, LocalDateTime endDateTime) {
 		this.timetableId = timetableId;
 		this.reservationType = reservationType;
 		this.startDateTime = startDateTime;

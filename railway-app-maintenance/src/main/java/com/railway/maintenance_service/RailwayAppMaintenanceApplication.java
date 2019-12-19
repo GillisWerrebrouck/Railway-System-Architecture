@@ -14,6 +14,7 @@ import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.context.annotation.Bean;
 
 import com.railway.maintenance_service.adapters.messaging.Channels;
+import com.railway.maintenance_service.domain.MaintenanceType;
 import com.railway.maintenance_service.domain.ScheduleItem;
 import com.railway.maintenance_service.domain.Status;
 import com.railway.maintenance_service.persistence.MaintenanceRepository;
@@ -30,7 +31,7 @@ public class RailwayAppMaintenanceApplication {
 	@Bean
 	public CommandLineRunner populateDatabase(MaintenanceRepository maintenanceRepository) {
 		return (args)->{
-			ScheduleItem scheduleItem01 = new ScheduleItem("5df29bec04c7bf325077c427", LocalDateTime.of(2018, Month.DECEMBER, 20, 13, 30, 0, 0), LocalDateTime.of(2018, Month.DECEMBER, 20, 15, 45, 0, 0), Status.SCHEDULED, "train wrecked");
+			ScheduleItem scheduleItem01 = new ScheduleItem("5df29bec04c7bf325077c427", LocalDateTime.of(2018, Month.DECEMBER, 20, 13, 30, 0, 0), LocalDateTime.of(2018, Month.DECEMBER, 20, 15, 45, 0, 0), Status.SCHEDULED, "train wrecked", MaintenanceType.MAINTENANCE);
 			
 			Collection<String> staffIds = new ArrayList<>();
 			staffIds.add("001");
