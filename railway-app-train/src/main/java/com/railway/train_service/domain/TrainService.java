@@ -6,7 +6,10 @@ import java.util.Iterator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+
 import com.railway.train_service.adapters.messaging.ChangeStatusRequest;
+import com.railway.train_service.adapters.messaging.AccidentRequest;
+import com.railway.train_service.adapters.messaging.EmergencyRequest;
 import com.railway.train_service.adapters.messaging.MaintenanceRequest;
 import com.railway.train_service.adapters.messaging.MessageGateway;
 import com.railway.train_service.persistence.TrainRepository;
@@ -94,6 +97,14 @@ public class TrainService {
 		if(train != null) {
 			train.setStatus(request.getStatus());
 			trainRepository.save(train);
+		}
+	}
+
+	public void requestMaintenanceForAccident(AccidentRequest request) {
+		gateway.notifyAccident(request);
+		if (request.isEmergencyServiceRequired()) {
+			EmergencyRequest r = new EmergencyRequest(request.getTrainId(), request.getAccidentMessage());
+			gateway.requestEmergency(r);
 		}
 	}
 }

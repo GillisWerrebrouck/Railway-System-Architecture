@@ -36,7 +36,7 @@ public class MaintenanceController {
 		return maintenanceRepository.findById(id).orElse(null);
 	}
 	
-	@PostMapping
+	@PostMapping("/status")
 	public void changeTrainStatus(@RequestBody ChangeStatusRequest request) {
 		maintenanceService.changeTrainStatus(request.getTrainId(), request.getStatus());
 	}
