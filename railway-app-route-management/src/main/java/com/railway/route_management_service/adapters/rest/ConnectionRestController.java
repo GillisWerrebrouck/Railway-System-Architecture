@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.railway.route_management_service.domain.Connection;
+import com.railway.route_management_service.domain.RouteService;
 import com.railway.route_management_service.domain.exception.BadRequestException;
 import com.railway.route_management_service.domain.exception.QueryFailedException;
 import com.railway.route_management_service.domain.exception.SelfReferentialNodeException;
@@ -22,8 +23,8 @@ import com.railway.route_management_service.persistence.StationRepository;
 @RestController
 @RequestMapping("/network/connection")
 public class ConnectionRestController extends RouteRestController {
-	public ConnectionRestController(StationRepository stationRepository, ConnectionRepository connectionRepository, RouteRepository routeRepository, RouteConnectionRepository routeConnectionRepository) {
-		super(stationRepository, connectionRepository, routeRepository, routeConnectionRepository);
+	public ConnectionRestController(StationRepository stationRepository, ConnectionRepository connectionRepository, RouteRepository routeRepository, RouteConnectionRepository routeConnectionRepository, RouteService routeService) {
+		super(stationRepository, connectionRepository, routeRepository, routeConnectionRepository, routeService);
 	}
 
 	@GetMapping
