@@ -3,6 +3,8 @@ package com.railway.timetable_service.domain;
 import com.railway.timetable_service.adapters.messaging.GroupSeatsRequest;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
