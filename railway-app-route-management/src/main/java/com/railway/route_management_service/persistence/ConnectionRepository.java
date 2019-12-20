@@ -27,4 +27,9 @@ public interface ConnectionRepository extends Neo4jRepository<Connection, Long> 
 
 	@Query("MATCH p=(r:Route)-[u:" + Constants.ROUTE_STATION_RELATIONSHIP + "]-(s1:Station)-[c:" + Constants.INTER_STATION_RELATIONSHIP + "]-(s2:Station) WHERE ID(r)={id} AND u.connectionId=ID(c) RETURN p")
 	Collection<Connection> findRouteById(Long id);
+	
+	@Query("MATCH p=(r1:Route)-[rc1:USES_STATION]-(x:Station)-[c:CONNECTED_WITH]-(y:Station)\n" + 
+			"WHERE ID(r1)={id} AND rc1.connectionId=ID(c)\n" + 
+			"RETURN p")
+	Collection<Connection> findConnectionsByRouteId(Long id);
 }

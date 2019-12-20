@@ -1,11 +1,16 @@
 package com.railway.timetable_service.domain;
 
+import java.util.Collection;
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.railway.timetable_service.adapters.messaging.Route;
 import com.railway.timetable_service.adapters.messaging.RouteFetchedResponse;
 import com.railway.timetable_service.adapters.messaging.StationsResponse;
 import com.railway.timetable_service.adapters.messaging.TrainReservedResponse;
+import com.railway.timetable_service.adapters.rest.ScheduleItemResponse;
 import com.railway.timetable_service.adapters.rest.TimetableItemRestAdapter;
 import com.railway.timetable_service.persistence.TimetableItemRepository;
 
@@ -106,5 +111,13 @@ public class TimetableService {
 	
 	public String getRouteName(Long routeId) {
 		return timetableItemRestAdapter.getRouteName(routeId);
+	}
+	
+	public Collection<Route> getRoutes(UUID startStationId, UUID endStationId) {
+		return timetableItemRestAdapter.getRoutes(startStationId, endStationId);
+	}
+	
+	public Collection<ScheduleItemResponse> getStationByTimetableItemId(Long timetableId) {
+		return timetableItemRestAdapter.getStationsByTimetableItemId(timetableId);
 	}
 }

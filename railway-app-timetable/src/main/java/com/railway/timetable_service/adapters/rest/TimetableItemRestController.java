@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Optional;
+import java.util.UUID;
 
 import javax.annotation.PostConstruct;
 
@@ -17,12 +17,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.async.DeferredResult;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.railway.timetable_service.RailwayAppTimetableApplication;
+import com.railway.timetable_service.adapters.messaging.Route;
 import com.railway.timetable_service.domain.CreateTimetableItemListener;
 import com.railway.timetable_service.domain.Status;
 import com.railway.timetable_service.domain.TimetableItem;
@@ -51,8 +51,8 @@ public class TimetableItemRestController implements CreateTimetableItemListener 
 		timetableService.registerCreateTimetableListener(this);
 	}
 	
-	@GetMapping
-	private Collection<TimetableItemResponse> getAllTimetableItems() throws JsonMappingException, JsonProcessingException {
+	@GetMapping("/all")
+	private Collection<TimetableItemResponse> getAllTimetableItems() {
 		Iterator<TimetableItem> timetableItems = timetableItemRepository.findAll().iterator();
 		Collection<TimetableItemResponse> response = new ArrayList<>();
 		
@@ -68,14 +68,39 @@ public class TimetableItemRestController implements CreateTimetableItemListener 
 		return response;
 	}
 	
+	@GetMapping("/{id}")
+	private TimetableItem getTimetableItemById(@PathVariable Long id) {
+		TimetableItem timetableItem = timetableItemRepository.findById(id).orElse(null);
+		
+		return timetableItem;
+	}
+	
+	@GetMapping
+	private Collection<TimetableItemResponse> getTimetableItemsByStartAndEndStation(@RequestParam UUID startStationId, @RequestParam UUID endStationId) {
+		Collection<Route> routes = timetableService.getRoutes(startStationId, endStationId);
+		Collection<TimetableItemResponse> response = new ArrayList<>();
+		
+		for(Route route : routes) {
+			// TODO beter query (by time and sort)
+			Collection<TimetableItem> timetableItems = timetableItemRepository.findByRouteId(route.getId());
+			
+			for(TimetableItem timetableItem : timetableItems) {
+				TimetableItemResponse timetableItemResponse = new TimetableItemResponse(timetableItem.getId(), timetableItem.getStartDateTime(), timetableItem.getEndDateTime(), timetableItem.getDelay(), timetableItem.getRouteId(), route.getName());
+				response.add(timetableItemResponse);
+			}
+		}
+		
+		return response;
+	}
+	
+	@GetMapping("/{timetableId}/route")
+	private Collection<ScheduleItemResponse> getStationsByTimetableItemId(@PathVariable Long timetableId) {
+		return timetableService.getStationByTimetableItemId(timetableId);
+	}
+	
 	@GetMapping("/route/{routeId}")
 	private Iterable<TimetableItem> getTimetableItemByRouteId(@PathVariable Long routeId) {
 		return timetableItemRepository.findByRouteId(routeId);
-	}
-	
-	@GetMapping("/{id}")
-	private Optional<TimetableItem> getTimetableItemById(@PathVariable Long id) {
-		return timetableItemRepository.findById(id);
 	}
 	
 	@PostMapping

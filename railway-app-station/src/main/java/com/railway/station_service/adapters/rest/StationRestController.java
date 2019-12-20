@@ -1,5 +1,6 @@
 package com.railway.station_service.adapters.rest;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -18,19 +19,23 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.railway.station_service.adapters.messaging.MessageGateway;
 import com.railway.station_service.domain.Platform;
+import com.railway.station_service.domain.ScheduleItemResponse;
 import com.railway.station_service.domain.Station;
 import com.railway.station_service.domain.exception.BadRequestException;
+import com.railway.station_service.persistence.ScheduleItemRepository;
 import com.railway.station_service.persistence.StationRepository;
 
 @RestController
 @RequestMapping("/station")
 public class StationRestController {
 	private final StationRepository stationRepository;
+	private final ScheduleItemRepository scheduleItemRepository;
 	private MessageGateway gateway;
 
 	@Autowired
-	public StationRestController(StationRepository stationRepository, MessageGateway gateway) {
+	public StationRestController(StationRepository stationRepository, ScheduleItemRepository scheduleItemRepository, MessageGateway gateway) {
 		this.stationRepository = stationRepository;
+		this.scheduleItemRepository = scheduleItemRepository;
 		this.gateway = gateway;
 	}
 
@@ -46,6 +51,11 @@ public class StationRestController {
 			return new ResponseEntity<>(station, HttpStatus.OK);
 		}
 		return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+	}
+	
+	@GetMapping("/timetable/{id}")
+	public Collection<ScheduleItemResponse> stationByTimetableId(@PathVariable Long id) {
+		return scheduleItemRepository.getScheduleItemsByTimetableId(id);
 	}
 	
 	@GetMapping("/{id}/platform")

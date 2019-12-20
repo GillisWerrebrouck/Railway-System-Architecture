@@ -7,6 +7,9 @@ public class Route {
 	private String name;
 	private Collection<RouteConnection> routeConnections;
 	
+	@SuppressWarnings("unused")
+	private Route() {}
+	
 	public Route(Long id, String name, Collection<RouteConnection> routeConnections) {
 		this.id = id;
 		this.name = name;
