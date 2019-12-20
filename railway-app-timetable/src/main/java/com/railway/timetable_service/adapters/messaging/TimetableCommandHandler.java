@@ -44,7 +44,10 @@ public class TimetableCommandHandler {
     
     @StreamListener(Channels.GET_ROUTE_USAGE)
     @SendTo(Channels.ROUTE_USAGE_CHECKED)
-    public void checkRouteUsage(RouteUsageRequest request){
+    public RouteUsageRequest checkRouteUsage(RouteUsageRequest request){
         logger.info("[Timetable Event Handler] get route usage");
+        //check usage
+        request.setUsed(timetableItemService.routeIsUsed(request));
+        return request;
     }
 }

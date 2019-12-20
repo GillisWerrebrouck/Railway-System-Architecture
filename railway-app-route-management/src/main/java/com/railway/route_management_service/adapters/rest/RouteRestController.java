@@ -108,6 +108,7 @@ public class RouteRestController {
 	}
 	
 
+	//infrabel asks to (de)activate list of connections 
 	@PostMapping("/update")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
 	public void updateRouteConnections(@RequestBody UpdateRequest request) {

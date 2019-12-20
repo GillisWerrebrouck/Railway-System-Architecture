@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.stereotype.Service;
 
+import com.railway.route_management_service.domain.RouteService;
 import com.railway.route_management_service.domain.Station;
 import com.railway.route_management_service.domain.StationService;
 
@@ -15,10 +16,12 @@ import com.railway.route_management_service.domain.StationService;
 public class RouteEventHandler {
 	private static Logger logger = LoggerFactory.getLogger(RouteCommandHandler.class);
 	private final StationService stationService;
+	private final RouteService routeService;
 
 	@Autowired
-	public RouteEventHandler(StationService stationService) {
+	public RouteEventHandler(StationService stationService, RouteService routeService) {
 		this.stationService = stationService;
+		this.routeService = routeService;
 	}
 	
 	@StreamListener(Channels.STATION_CREATED)
@@ -36,7 +39,8 @@ public class RouteEventHandler {
 	}
 	
 	@StreamListener(Channels.ROUTE_USAGE_CHECKED)
-	public void routeUsageChecked(StationRequest request) {
+	public void routeUsageChecked(RouteUsageRequest response) {
 		logger.info("[Route Event Handler] route usage checked");
+		routeService.onRouteUsageChecked(response);
 	}
 }

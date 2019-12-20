@@ -1,10 +1,15 @@
 package com.railway.timetable_service.domain;
 
 import com.railway.timetable_service.adapters.messaging.GroupSeatsRequest;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.railway.timetable_service.adapters.messaging.RouteFetchedResponse;
+import com.railway.timetable_service.adapters.messaging.RouteUsageRequest;
 import com.railway.timetable_service.adapters.messaging.StationsResponse;
 import com.railway.timetable_service.adapters.messaging.TrainReservedResponse;
 import com.railway.timetable_service.persistence.TimetableItemRepository;
@@ -127,5 +132,11 @@ public class TimetableService {
 			timetableItem.setReservedGroupSeats(timetableItem.getReservedGroupSeats() - amountOfSeats);
 			timetableItemRepository.save(timetableItem);
 		}
+	}
+
+	public boolean routeIsUsed(RouteUsageRequest request) {
+		//get all items in timetable with this route from now
+		List<TimetableItem> items = timetableItemRepository.findByRouteIdFromTime(request.getRouteId(), LocalDateTime.now());
+		return items.size() > 0;
 	}
 }
