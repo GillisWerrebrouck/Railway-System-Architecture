@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.railway.timetable_service.adapters.messaging.RouteFetchedResponse;
 import com.railway.timetable_service.adapters.messaging.StationsResponse;
+import com.railway.timetable_service.adapters.messaging.TrainOutOfServiceResponse;
 import com.railway.timetable_service.adapters.messaging.TrainReservedResponse;
 import com.railway.timetable_service.persistence.TimetableItemRepository;
 
@@ -100,6 +101,17 @@ public class TimetableService {
 		
 		if(timetableItem != null) {
 			this.createTimetableItemSaga.discardTrainReservation(trainReservedResponse.getTimetableId());
+		}
+	}
+	
+	public synchronized void trainReservationChanged(TrainOutOfServiceResponse trainOutOfServiceResponse) {
+		TimetableItem timetableItem = timetableItemRepository.findById(trainOutOfServiceResponse.getTimeTableId()).orElse(null);
+		// check if the response is for the request linked to the given timetableItem
+		if(timetableItem != null) {
+			timetableItem.setTrainId(trainOutOfServiceResponse.getTrainId());
+			timetableItemRepository.save(timetableItem);
+		} else {
+			throw new NullPointerException();
 		}
 	}
 

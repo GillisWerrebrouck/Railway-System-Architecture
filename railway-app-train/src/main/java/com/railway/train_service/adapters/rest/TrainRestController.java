@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.railway.train_service.adapters.messaging.AccidentRequest;
 import com.railway.train_service.adapters.messaging.MaintenanceRequest;
 import com.railway.train_service.adapters.messaging.MaintenanceResponse;
+import com.railway.train_service.adapters.messaging.TrainOutOfServiceRequest;
 import com.railway.train_service.domain.ReservationType;
 import com.railway.train_service.domain.Train;
 import com.railway.train_service.domain.TrainService;
@@ -93,6 +94,21 @@ public class TrainRestController {
 		request.setTrainId(id);
 		trainService.requestMaintenanceForAccident(request);
 		response = new MaintenanceResponse("Successfully fetched train and sent accident notification");
+		return response;
+	}
+	
+	// report accident for a train
+	@PostMapping("/{id}/train_out_of_service")
+	public MaintenanceResponse notifyTrainOutOfService(@PathVariable String id, @RequestBody TrainOutOfServiceRequest request) {
+		Train train = trainRepository.findById(id).orElse(null);
+		MaintenanceResponse response;
+			
+		if(train == null) {
+			response = new MaintenanceResponse("Failed to fetch train, train out of service notification aborted");
+			return response;
+		}
+		trainService.switchTrainReservationOfTrain(request, id);
+		response = new MaintenanceResponse("Successfully fetched train and new train(s) are reserved");
 		return response;
 	}
 	

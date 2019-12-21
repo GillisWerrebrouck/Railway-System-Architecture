@@ -3,6 +3,7 @@ package com.railway.timetable_service.adapters.messaging;
 import java.util.Collection;
 
 public class Route {
+	
 	private Long id;
 	private String name;
 	private Collection<RouteConnection> routeConnections;

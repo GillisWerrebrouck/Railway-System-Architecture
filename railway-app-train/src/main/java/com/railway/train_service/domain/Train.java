@@ -46,6 +46,10 @@ public class Train {
 		this.scheduleItems.add(scheduleItem);
 	}
 	
+	public boolean removeScheduleItem(ScheduleItem scheduleItem){
+		return this.scheduleItems.remove(scheduleItem);
+	}
+	
 	public String getId() {
 		return id;
 	}

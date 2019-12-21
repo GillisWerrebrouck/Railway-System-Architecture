@@ -51,4 +51,14 @@ public class TimetableEventHandler {
 		}
 	}
 
+	@StreamListener(Channels.NOTIFY_TRAIN_OUT_OF_SERVICE)
+	public void processTrainOutOfService(TrainOutOfServiceResponse response) {
+		if(response.getTimeTableId() != null) {
+			logger.info("[Timetable Event Handler] successfully rescheduled trains");
+			//this.timetableItemService.trainReserved(response);
+		} else {
+			logger.info("[Timetable Event Handler] failed to reserve train");
+			//this.timetableItemService.failedToCreateTimetableItem(response);
+		}
+	}
 }
