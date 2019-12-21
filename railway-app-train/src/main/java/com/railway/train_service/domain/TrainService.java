@@ -9,6 +9,8 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+
+import com.railway.train_service.adapters.messaging.ChangeStatusRequest;
 import com.railway.train_service.adapters.messaging.AccidentRequest;
 import com.railway.train_service.adapters.messaging.ChangeStatusRequest;
 import com.railway.train_service.adapters.messaging.EmergencyRequest;
@@ -117,24 +119,6 @@ public class TrainService {
 	public void requestMaintenance(MaintenanceRequest request) {
 		gateway.requestMaintenance(request);
 	}
-	
-	public void changeTrainStatus(ChangeStatusRequest request) {
-		Train train = trainRepository.findById(request.getTrainId()).orElse(null);
-		if(train != null) {
-			train.setStatus(request.getStatus());
-			if(train.getStatus().equals(TrainStatus.NONACTIVE))
-				this.switchTrainReservationOfTrain(new TrainOutOfServiceRequest(null,null), train.getId());
-			trainRepository.save(train);
-		}
-	}
-
-	public void requestMaintenanceForAccident(AccidentRequest request) {
-		gateway.notifyAccident(request);
-		if (request.isEmergencyServiceRequired()) {
-			EmergencyRequest r = new EmergencyRequest(request.getTrainId(), request.getAccidentMessage());
-			gateway.requestEmergency(r);
-		}
-	}
 
 	public boolean reserveTrainForMaintenance(ReservationType maintenanceReservation, LocalDateTime startDateTime,
 			LocalDateTime endDateTime, String id) {
@@ -150,5 +134,21 @@ public class TrainService {
 			return true;
 		}
 		return false;
+	}
+
+	public void changeTrainStatus(ChangeStatusRequest request) {
+		Train train = trainRepository.findById(request.getTrainId()).orElse(null);
+		if(train != null) {
+			train.setStatus(request.getStatus());
+			trainRepository.save(train);
+		}
+	}
+
+	public void requestMaintenanceForAccident(AccidentRequest request) {
+		gateway.notifyAccident(request);
+		if (request.isEmergencyServiceRequired()) {
+			EmergencyRequest r = new EmergencyRequest(request.getTrainId(), request.getAccidentMessage());
+			gateway.requestEmergency(r);
+		}
 	}
 }

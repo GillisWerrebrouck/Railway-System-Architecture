@@ -1,8 +1,7 @@
-package com.railway.train_service.adapters.messaging;
-
-import com.railway.train_service.domain.TrainStatus;
+package com.railway.maintenance_service.adapters.messaging;
 
 public class ChangeStatusRequest {
+	
 	private String trainId;
 	private TrainStatus status;
 	
@@ -26,4 +25,6 @@ public class ChangeStatusRequest {
 	public void setStatus(TrainStatus status) {
 		this.status = status;
 	}
+	
+	
 }
