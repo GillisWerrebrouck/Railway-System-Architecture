@@ -1,12 +1,14 @@
 package com.railway.timetable_service.adapters.messaging;
 
+import java.util.List;
+
 public class RouteUsageRequest {
-	private Long routeId;
+	private List<Long> routeIds;
 	private Long connectionId;
 	private boolean isUsed;
 
-	public RouteUsageRequest(Long routeId, Long connectionId, boolean isUsed) {
-		this.routeId = routeId;
+	public RouteUsageRequest(List<Long> routeIds, Long connectionId, boolean isUsed) {
+		this.routeIds = routeIds;
 		this.connectionId = connectionId;
 		this.isUsed = isUsed;
 	}
@@ -27,11 +29,11 @@ public class RouteUsageRequest {
 		this.isUsed = isUsed;
 	}
 
-	public Long getRouteId() {
-		return routeId;
+	public List<Long> getRouteIds() {
+		return routeIds;
 	}
 
-	public void setRouteId(Long routeId) {
-		this.routeId = routeId;
+	public void setRouteIds(List<Long> routeId) {
+		this.routeIds = routeId;
 	}
 }

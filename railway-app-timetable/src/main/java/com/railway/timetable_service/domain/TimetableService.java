@@ -137,9 +137,13 @@ public class TimetableService {
 		}
 	}
 
-	public boolean routeIsUsed(RouteUsageRequest request) {
-		//get all items in timetable with this route from now
-		List<TimetableItem> items = timetableItemRepository.findByRouteIdFromTime(request.getRouteId(), LocalDateTime.now());
-		return items.size() > 0;
+	public boolean areRoutesUsed(List<Long> routeIds) {
+		boolean areUsed = false;
+		for(Long routeId : routeIds) {
+			if (timetableItemRepository.findByRouteIdInFromNow(routeId).size() > 0) {
+				areUsed = true;
+			}
+		}
+		return areUsed;
 	}
 }

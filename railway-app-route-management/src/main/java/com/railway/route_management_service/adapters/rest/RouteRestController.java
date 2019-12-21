@@ -1,10 +1,7 @@
 package com.railway.route_management_service.adapters.rest;
 
 import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
 
-import com.railway.route_management_service.domain.RouteDetails;
 import com.railway.route_management_service.domain.RouteService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -105,14 +102,6 @@ public class RouteRestController {
 								  + routeConnection.getStation().getId() +"\" could not be created: " + e.getMessage();
 			throw new QueryFailedException(errorMessage);
 		}
-	}
-	
-
-	//infrabel asks to (de)activate list of connections 
-	@PostMapping("/update")
-    @ResponseStatus(value = HttpStatus.NO_CONTENT)
-	public void updateRouteConnections(@RequestBody UpdateRequest request) {
-		routeService.updateRouteConnections(request);
 	}
 	
 	@DeleteMapping("/route/{id}")

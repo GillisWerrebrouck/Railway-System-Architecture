@@ -1,14 +1,15 @@
 package com.railway.route_management_service.adapters.messaging;
 
 public class RouteUsageResponse {
-	private Long routeId;
 	private Long connectionId;
 	private boolean isUsed;
+	// new state
+	private boolean active;
 
-	public RouteUsageResponse(Long routeId, Long connectionId, boolean isUsed) {
-		this.routeId = routeId;
+	public RouteUsageResponse(Long connectionId, boolean isUsed, boolean active) {
 		this.connectionId = connectionId;
 		this.isUsed = isUsed;
+		this.active = active;
 	}
 
 	public Long getConnectionId() {
@@ -26,12 +27,12 @@ public class RouteUsageResponse {
 	public void setUsed(boolean isUsed) {
 		this.isUsed = isUsed;
 	}
-
-	public Long getRouteId() {
-		return routeId;
+	
+	public boolean isActive() {
+		return active;
 	}
-
-	public void setRouteId(Long routeId) {
-		this.routeId = routeId;
+	
+	public void setActive(boolean active) {
+		this.active = active;
 	}
 }

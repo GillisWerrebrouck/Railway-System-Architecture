@@ -6,13 +6,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.annotation.StreamListener;
-import org.springframework.integration.annotation.Gateway;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Service;
 
 @Service
 public class TimetableCommandHandler {
-
     private static Logger logger = LoggerFactory.getLogger(TimetableEventHandler.class);
     private final TimetableService timetableItemService;
     private final MessageGateway gateway;
@@ -45,13 +43,11 @@ public class TimetableCommandHandler {
         timetableItemService.discardReservedGroupSeats(groupSeatsRequest.getTimeTableId(), groupSeatsRequest.getAmountOfSeats());
     }
     
-    @StreamListener(Channels.GET_ROUTE_USAGE)
+    @StreamListener(Channels.CHECK_ROUTE_USAGE)
     @SendTo(Channels.ROUTE_USAGE_CHECKED)
     public RouteUsageResponse checkRouteUsage(RouteUsageRequest request){
-        logger.info("[Timetable Command Handler] get route usage");
-        //check usage
-        request.setUsed(timetableItemService.routeIsUsed(request));
-        logger.info("[Timetable Command Handler] get route usage2");
-        return new RouteUsageResponse(request.getRouteId(), request.getConnectionId(), request.isUsed());
+        logger.info("[Timetable Command Handler] check route usage command received");
+        boolean isUsed = timetableItemService.areRoutesUsed(request.getRouteIds());
+        return new RouteUsageResponse(request.getConnectionId(), isUsed);
     }
 }

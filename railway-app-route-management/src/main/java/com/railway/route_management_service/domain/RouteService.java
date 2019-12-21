@@ -1,14 +1,16 @@
 package com.railway.route_management_service.domain;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import com.railway.route_management_service.adapters.messaging.MessageGateway;
-import com.railway.route_management_service.adapters.messaging.RouteDetailRequest;
 import com.railway.route_management_service.adapters.messaging.RouteUsageRequest;
 import com.railway.route_management_service.adapters.messaging.RouteUsageResponse;
-import com.railway.route_management_service.adapters.rest.UpdateRequest;
+import com.railway.route_management_service.adapters.rest.UpdateConnectionListener;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,12 +23,14 @@ public class RouteService {
 	private final ConnectionRepository connectionRepository;
 	private final RouteRepository routeRepository;
 	private final MessageGateway gateway;
+	private final Set<UpdateConnectionListener> listeners;
 	
 	@Autowired
 	public RouteService(ConnectionRepository connectionRepository, RouteRepository routeRepository, MessageGateway gateway) {
 		this.connectionRepository = connectionRepository;
 		this.routeRepository = routeRepository;
 		this.gateway = gateway;
+		this.listeners = new HashSet<>(5);
 	}
 	
 	public Collection<Connection> getRouteConnections(Long routeId) {
@@ -41,43 +45,29 @@ public class RouteService {
 		return routeRepository.getRouteDetails(stationX, stationY);
 	}
 
-	//a connection can always be set active (if it exists) because before it was nonactive so it certainly wasnt used in timetable
-	//if we want to set a connection non active then a check has to be performed
-	public void updateRouteConnections(UpdateRequest request) {
-		//get all routeids, each linked with a connectionid used in that route
-		Collection<RouteAssociation> routeAssociations = routeRepository.getRouteAssociations();
-		for (RouteAssociation ra : routeAssociations) {
-			//if connectionids to be set (non)active contains current ras connectionid then proceed
-			if (request.getConnectionIds().contains(ra.getConnectionId())) {
-				//get connection
-				Connection c = connectionRepository.findById(ra.getConnectionId()).get();
-				//if connection exists
-				if (c != null) {
-					//if connection status equals action we want to do, then nothing has to be done
-					if(c.isActive() != request.isActive()) {
-						//if we want to set status to nonactive, we have to check if that is possible
-						if(!request.isActive()) {
-							//TODO: routeids als bijhouden als al geweest
-							RouteUsageRequest r = new RouteUsageRequest(ra.getRouteId(), ra.getConnectionId(), false);
-							gateway.getRouteUsage(r);
-							System.out.println("lakz");
-						} else {
-							c.setActive(request.isActive());
-						}
-					}
-				}
-			}
-		}	
+	public void checkRouteUsage(Long connectionId) {
+		Collection<Route> routes = routeRepository.getAllRoutesByConnectionId(connectionId);
+		
+		List<Long> routeIds = new ArrayList<>();
+		routes.forEach(r -> routeIds.add(r.getId()));
+		
+		RouteUsageRequest request = new RouteUsageRequest(routeIds, connectionId);
+		gateway.getRouteUsage(request);
 	}
 
-	//eventhandler for getrouteUsage: response contains checked routeId, connectionId for which it was checked and a boolean isUsed
-	public void routeUsageChecked(RouteUsageResponse response) {
-		if(!response.isUsed()) {
-			Connection c = connectionRepository.findById(response.getConnectionId()).get();
-			c.setActive(false);
-		} else {
-			System.out.println("[on routeusagechecked] route is in gebruik");
-			//was in gebruik, bericht teruggeven aan infrabel?
+	public void updateConnection(RouteUsageResponse response) {
+		// update connection if not used
+		if (!response.isUsed()) {
+			Connection connection = connectionRepository.findById(response.getConnectionId()).orElse(null);
+			if(connection == null) return;
+			connection.setActive(response.isActive());
+			connectionRepository.save(connection);
 		}
+		
+		this.listeners.forEach(l -> l.onResult(response));
+	}
+
+	public void registerUpdateConnectionListener(UpdateConnectionListener listener) {
+		this.listeners.add(listener);
 	}
 }

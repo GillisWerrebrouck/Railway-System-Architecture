@@ -6,7 +6,7 @@ import org.springframework.integration.annotation.MessagingGateway;
 @MessagingGateway
 public interface MessageGateway {
 	
-	@Gateway(requestChannel = Channels.GET_ROUTE_USAGE)
+	@Gateway(requestChannel = Channels.CHECK_ROUTE_USAGE)
 	public void getRouteUsage(RouteUsageRequest routeUsageRequest);
 
 }

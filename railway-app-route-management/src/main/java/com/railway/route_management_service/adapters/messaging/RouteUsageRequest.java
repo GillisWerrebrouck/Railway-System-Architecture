@@ -1,14 +1,14 @@
 package com.railway.route_management_service.adapters.messaging;
 
-public class RouteUsageRequest {
-	private Long routeId;
-	private Long connectionId;
-	private boolean isUsed;
+import java.util.List;
 
-	public RouteUsageRequest(Long routeId, Long connectionId, boolean isUsed) {
-		this.routeId = routeId;
+public class RouteUsageRequest {
+	private List<Long> routeIds;
+	private Long connectionId;
+
+	public RouteUsageRequest(List<Long> routeIds, Long connectionId) {
+		this.routeIds = routeIds;
 		this.connectionId = connectionId;
-		this.isUsed = isUsed;
 	}
 
 	public Long getConnectionId() {
@@ -19,19 +19,11 @@ public class RouteUsageRequest {
 		this.connectionId = connectionId;
 	}
 
-	public boolean isUsed() {
-		return isUsed;
+	public List<Long> getRouteIds() {
+		return routeIds;
 	}
 
-	public void setUsed(boolean isUsed) {
-		this.isUsed = isUsed;
-	}
-
-	public Long getRouteId() {
-		return routeId;
-	}
-
-	public void setRouteId(Long routeId) {
-		this.routeId = routeId;
+	public void setRouteId(List<Long> routeIds) {
+		this.routeIds = routeIds;
 	}
 }

@@ -14,7 +14,6 @@ import org.springframework.context.annotation.Bean;
 import com.railway.route_management_service.adapters.messaging.Channels;
 import com.railway.route_management_service.domain.Connection;
 import com.railway.route_management_service.domain.Route;
-import com.railway.route_management_service.domain.RouteAssociation;
 import com.railway.route_management_service.domain.RouteConnection;
 import com.railway.route_management_service.domain.Station;
 import com.railway.route_management_service.persistence.ConnectionRepository;
@@ -131,12 +130,6 @@ public class RailwayAppRouteManagementApplication {
 			logger.info("Station03: " + station03.toString());
 			logger.info("Station04: " + station04.toString());
 			logger.info("Station05: " + station05.toString());
-			
-			Collection<RouteAssociation> r = routeRepository.getRouteAssociations();
-			
-			for(RouteAssociation routeas : r) {
-				logger.info(routeas.getRouteId() + "-"+ routeas.getConnectionId());
-			}
 		};
 	}
 }
