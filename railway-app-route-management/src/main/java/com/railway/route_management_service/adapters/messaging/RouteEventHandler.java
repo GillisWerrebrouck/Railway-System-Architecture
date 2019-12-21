@@ -39,8 +39,8 @@ public class RouteEventHandler {
 	}
 	
 	@StreamListener(Channels.ROUTE_USAGE_CHECKED)
-	public void routeUsageChecked(RouteUsageRequest response) {
+	public void routeUsageChecked(RouteUsageResponse response) {
 		logger.info("[Route Event Handler] route usage checked");
-		routeService.onRouteUsageChecked(response);
+		routeService.routeUsageChecked(response);
 	}
 }

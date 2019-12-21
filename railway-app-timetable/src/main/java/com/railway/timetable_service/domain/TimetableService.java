@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.railway.timetable_service.adapters.messaging.RouteFetchedResponse;
 import com.railway.timetable_service.adapters.messaging.RouteUsageRequest;
+import com.railway.timetable_service.adapters.messaging.RouteUsageResponse;
 import com.railway.timetable_service.adapters.messaging.StationsResponse;
 import com.railway.timetable_service.adapters.messaging.TrainReservedResponse;
 import com.railway.timetable_service.persistence.TimetableItemRepository;

@@ -7,6 +7,7 @@ import java.util.UUID;
 import com.railway.route_management_service.adapters.messaging.MessageGateway;
 import com.railway.route_management_service.adapters.messaging.RouteDetailRequest;
 import com.railway.route_management_service.adapters.messaging.RouteUsageRequest;
+import com.railway.route_management_service.adapters.messaging.RouteUsageResponse;
 import com.railway.route_management_service.adapters.rest.UpdateRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,8 +57,10 @@ public class RouteService {
 					if(c.isActive() != request.isActive()) {
 						//if we want to set status to nonactive, we have to check if that is possible
 						if(!request.isActive()) {
+							//TODO: routeids als bijhouden als al geweest
 							RouteUsageRequest r = new RouteUsageRequest(ra.getRouteId(), ra.getConnectionId(), false);
 							gateway.getRouteUsage(r);
+							System.out.println("lakz");
 						} else {
 							c.setActive(request.isActive());
 						}
@@ -68,11 +71,12 @@ public class RouteService {
 	}
 
 	//eventhandler for getrouteUsage: response contains checked routeId, connectionId for which it was checked and a boolean isUsed
-	public void onRouteUsageChecked(RouteUsageRequest response) {
+	public void routeUsageChecked(RouteUsageResponse response) {
 		if(!response.isUsed()) {
 			Connection c = connectionRepository.findById(response.getConnectionId()).get();
 			c.setActive(false);
 		} else {
+			System.out.println("[on routeusagechecked] route is in gebruik");
 			//was in gebruik, bericht teruggeven aan infrabel?
 		}
 	}
