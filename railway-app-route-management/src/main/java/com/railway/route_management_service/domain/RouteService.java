@@ -1,7 +1,9 @@
 package com.railway.route_management_service.domain;
 
 import java.util.Collection;
+import java.util.UUID;
 
+import com.railway.route_management_service.adapters.messaging.RouteDetailRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,5 +27,9 @@ public class RouteService {
 	
 	public Route getRoute(Long routeId) {
 		return routeRepository.findById(routeId).orElse(null);
+	}
+
+	public RouteDetails getRouteDetails(UUID stationX, UUID stationY){
+		return routeRepository.getRouteDetails(stationX, stationY);
 	}
 }
