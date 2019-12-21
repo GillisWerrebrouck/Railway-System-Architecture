@@ -97,21 +97,6 @@ public class TrainRestController {
 		return response;
 	}
 	
-	// report accident for a train
-	@PostMapping("/{id}/train_out_of_service")
-	public MaintenanceResponse notifyTrainOutOfService(@PathVariable String id, @RequestBody TrainOutOfServiceRequest request) {
-		Train train = trainRepository.findById(id).orElse(null);
-		MaintenanceResponse response;
-			
-		if(train == null) {
-			response = new MaintenanceResponse("Failed to fetch train, train out of service notification aborted");
-			return response;
-		}
-		trainService.switchTrainReservationOfTrain(request, id);
-		response = new MaintenanceResponse("Successfully fetched train and new train(s) are reserved");
-		return response;
-	}
-	
 	@DeleteMapping("/{id}")
 	void deleteTrain(@PathVariable String id) {
 		trainRepository.deleteById(id);
