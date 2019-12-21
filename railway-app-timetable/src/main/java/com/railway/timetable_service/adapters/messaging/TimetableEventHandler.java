@@ -50,5 +50,15 @@ public class TimetableEventHandler {
 			this.timetableItemService.failedToCreateTimetableItem(response);
 		}
 	}
-
+	
+	@StreamListener(Channels.STAFF_RESERVED)
+	public void processStaffReservedResponse(StaffResponse response) {
+		if(response.getStaffIds().size() != 0) {
+			logger.info("[Timetable Event Handler] successfully reserved staff");
+			this.timetableItemService.staffReserved(response);
+		} else {
+			logger.info("[Timetable Event Handler] failed to reserve staff");
+			this.timetableItemService.failedToCreateTimetableItem(response);
+		}
+	}
 }
