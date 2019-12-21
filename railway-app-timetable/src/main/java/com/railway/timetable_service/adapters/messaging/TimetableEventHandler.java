@@ -55,10 +55,10 @@ public class TimetableEventHandler {
 	public void processTrainOutOfService(TrainOutOfServiceResponse response) {
 		if(response.getTimeTableId() != null) {
 			logger.info("[Timetable Event Handler] successfully rescheduled trains");
-			//this.timetableItemService.trainReserved(response);
+			this.timetableItemService.trainReservationChanged(response);
 		} else {
 			logger.info("[Timetable Event Handler] failed to reserve train");
-			//this.timetableItemService.failedToCreateTimetableItem(response);
+			throw new NullPointerException("No Timetable Id was specified.");
 		}
 	}
 }
