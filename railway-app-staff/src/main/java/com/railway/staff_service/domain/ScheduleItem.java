@@ -8,17 +8,27 @@ import org.springframework.data.annotation.Id;
 public class ScheduleItem {
 	@Id
 	private UUID id;
+	private UUID requestId;
 	private LocalDateTime startDate;
 	private LocalDateTime endDate;
 	
-	public ScheduleItem(LocalDateTime startDate, LocalDateTime endDate) {
+	public ScheduleItem(UUID requestId, LocalDateTime startDate, LocalDateTime endDate) {
 		this.id = UUID.randomUUID();
+		this.requestId = requestId;
 		this.startDate = startDate;
 		this.endDate = endDate;
 	}
 	
 	public UUID getId() {
 		return id;
+	}
+	
+	public UUID getRequestId() {
+		return requestId;
+	}
+	
+	public void setRequestId(UUID requestId) {
+		this.requestId = requestId;
 	}
 	
 	public LocalDateTime getStartDate() {

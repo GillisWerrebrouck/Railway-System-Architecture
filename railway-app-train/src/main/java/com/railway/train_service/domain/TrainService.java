@@ -63,6 +63,7 @@ public class TrainService {
 				ScheduleItem scheduleItem = schedule.next();
 				if(scheduleItem.getTimetableId() == timetableId) {
 					schedule.remove();
+					trainRepository.save(train);
 					break;
 				}
 			}

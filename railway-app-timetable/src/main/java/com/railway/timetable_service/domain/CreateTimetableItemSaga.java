@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -214,12 +215,13 @@ public class CreateTimetableItemSaga {
 		logger.info("[Create Timetable Item Saga] failed to reserve stations");
 		
 		discardTrainReservation(timetableItem.getId());
-		discardStaffReservations(timetableItem.getStaffIds(), timetableItem.getStartDateTime(), timetableItem.getEndDateTime());
+		discardStaffReservations(timetableItem.getTrainOperatorRequestId());
+		discardStaffReservations(timetableItem.getTrainConductorRequestId());
 		
 		this.createTimetableItemFailed(timetableItem);
 	}
 	
-	public void discardTrainReservation(Long timetableItemId) {
+	public void discardTrainReservation(Long timetableItemId) {		
 		DiscardReservationRequest request = new DiscardReservationRequest(timetableItemId);
 		gateway.discardTrainReservation(request);
 	}
@@ -228,13 +230,14 @@ public class CreateTimetableItemSaga {
 		logger.info("[Create Timetable Item Saga] failed to reserve train");
 
 		discardStationReservations(timetableItem.getId());
-		discardStaffReservations(timetableItem.getStaffIds(), timetableItem.getStartDateTime(), timetableItem.getEndDateTime());
+		discardStaffReservations(timetableItem.getTrainOperatorRequestId());
+		discardStaffReservations(timetableItem.getTrainConductorRequestId());
 		
 		this.createTimetableItemFailed(timetableItem);
 	}
 
-	private void discardStaffReservations(List<String> staffIds, LocalDateTime startDateTime, LocalDateTime endDateTime) {
-		DiscardStaffReservationRequest request = new DiscardStaffReservationRequest(staffIds, startDateTime, endDateTime);
+	public void discardStaffReservations(UUID requestId) {
+		DiscardStaffReservationRequest request = new DiscardStaffReservationRequest(requestId);
 		gateway.discardStaffReservation(request);
 	}
 
@@ -243,11 +246,13 @@ public class CreateTimetableItemSaga {
 
 		discardStationReservations(timetableItem.getId());
 		discardTrainReservation(timetableItem.getId());
+		discardStaffReservations(timetableItem.getTrainOperatorRequestId());
+		discardStaffReservations(timetableItem.getTrainConductorRequestId());
 		
 		this.createTimetableItemFailed(timetableItem);
 	}
 	
-	public void discardStationReservations(Long timetableItemId) {
+	public void discardStationReservations(Long timetableItemId) {		
 		DiscardReservationRequest request = new DiscardReservationRequest(timetableItemId);
 		gateway.discardStationReservations(request);
 	}
