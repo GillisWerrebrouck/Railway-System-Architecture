@@ -107,6 +107,11 @@ public class TimetableItemRestController implements CreateTimetableItemListener 
 		return timetableService.getStationByTimetableItemId(timetableId);
 	}
 	
+	@GetMapping("/{timetableId}/specifics")
+	private SpecificsResponse getSpecifics(@PathVariable Long timetableId) throws Exception {
+		return timetableService.getSpecifics(timetableId);
+	}
+	
 	@GetMapping("/route/{routeId}")
 	private Iterable<TimetableItem> getTimetableItemByRouteId(@PathVariable Long routeId) {
 		return timetableItemRepository.findByRouteId(routeId);

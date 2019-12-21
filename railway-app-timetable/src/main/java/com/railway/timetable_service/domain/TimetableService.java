@@ -12,6 +12,7 @@ import com.railway.timetable_service.adapters.messaging.RouteFetchedResponse;
 import com.railway.timetable_service.adapters.messaging.StationsResponse;
 import com.railway.timetable_service.adapters.messaging.TrainReservedResponse;
 import com.railway.timetable_service.adapters.rest.ScheduleItemResponse;
+import com.railway.timetable_service.adapters.rest.SpecificsResponse;
 import com.railway.timetable_service.adapters.rest.TimetableItemRestAdapter;
 import com.railway.timetable_service.persistence.TimetableItemRepository;
 
@@ -122,6 +123,14 @@ public class TimetableService {
 	public Collection<ScheduleItemResponse> getStationByTimetableItemId(Long timetableId) {
 		return timetableItemRestAdapter.getStationsByTimetableItemId(timetableId);
 	}
+	
+	public SpecificsResponse getSpecifics(Long timetableId) throws Exception {
+		TimetableItem timetableItem = timetableItemRepository.findById(timetableId).orElse(null);
+		if(timetableItem != null){
+			return timetableItemRestAdapter.getSpecifics(timetableItem.getTrainId());
+		}
+		throw new Exception("Timetable id doesn't exist");
+	}
 
 	public void reserveGroupSeats(GroupSeatsRequest groupSeatsRequest) throws NotEnoughGroupSeatsException {
 		TimetableItem timetableItem = timetableItemRepository.findById(groupSeatsRequest.getTimeTableId()).orElse(null);
@@ -141,8 +150,8 @@ public class TimetableService {
 		}
 	}
 
-	public synchronized void discardReservedGroupSeats(Long timeTableId, int amountOfSeats) {
-		TimetableItem timetableItem = timetableItemRepository.findById(timeTableId).orElse(null);
+	public synchronized void discardReservedGroupSeats(Long timetableId, int amountOfSeats) {
+		TimetableItem timetableItem = timetableItemRepository.findById(timetableId).orElse(null);
 		if(timetableItem != null){
 			timetableItem.setReservedGroupSeats(timetableItem.getReservedGroupSeats() - amountOfSeats);
 			timetableItemRepository.save(timetableItem);

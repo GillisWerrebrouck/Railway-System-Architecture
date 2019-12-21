@@ -1,5 +1,6 @@
 package com.railway.timetable_service.adapters.rest;
 
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
@@ -65,6 +66,31 @@ public class TimetableItemRestAdapter {
 			return stations;
 		}
 		
+		return null;
+	}
+
+	public SpecificsResponse getSpecifics(String trainId) {
+		RestTemplate restTemplate = new RestTemplate();
+		String url = "http://localhost:2003/train";
+		ResponseEntity<String> trainResponse = restTemplate.getForEntity(url + "/" + trainId, String.class);
+		
+		if(trainResponse != null && trainResponse.getStatusCode().compareTo(HttpStatus.OK) == 0) {
+			ObjectMapper mapper = new ObjectMapper();
+			JsonNode root;
+			try {
+				root = mapper.readTree(trainResponse.getBody());
+				SpecificsResponse response = new SpecificsResponse(
+						trainId, 
+						TrainType.valueOf(root.path("type").asText()), 
+						root.path("totalCapacity").asInt(), 
+						FuelType.valueOf(root.path("technicaldetails").path("fuel").asText()), 
+						LocalDate.parse(root.path("technicaldetails").path("lastCheck").asText())
+				);
+				return response;
+			} catch (JsonProcessingException e) {
+				logger.debug(e.getMessage());
+			}
+		}
 		return null;
 	}
 }
