@@ -1,5 +1,6 @@
 package com.railway.timetable_service.adapters.rest;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -76,13 +77,14 @@ public class TimetableItemRestController implements CreateTimetableItemListener 
 	}
 	
 	@GetMapping
-	private Collection<TimetableItemResponse> getTimetableItemsByStartAndEndStation(@RequestParam UUID startStationId, @RequestParam UUID endStationId) {
+	private Collection<TimetableItemResponse> getTimetableItemsByStartAndEndStation(@RequestParam UUID startStationId, @RequestParam UUID endStationId,
+			@RequestParam String fromDate, @RequestParam String toDate) {
 		Collection<Route> routes = timetableService.getRoutes(startStationId, endStationId);
 		Collection<TimetableItemResponse> response = new ArrayList<>();
 		
 		for(Route route : routes) {
 			// TODO beter query (by time and sort)
-			Collection<TimetableItem> timetableItems = timetableItemRepository.findByRouteId(route.getId());
+			Collection<TimetableItem> timetableItems = timetableItemRepository.findByRouteIdAndStartDateTimeBetween(route.getId(), LocalDateTime.parse(fromDate), LocalDateTime.parse(toDate));
 			
 			for(TimetableItem timetableItem : timetableItems) {
 				TimetableItemResponse timetableItemResponse = new TimetableItemResponse(timetableItem.getId(), timetableItem.getStartDateTime(), timetableItem.getEndDateTime(), timetableItem.getDelay(), timetableItem.getRouteId(), route.getName());
