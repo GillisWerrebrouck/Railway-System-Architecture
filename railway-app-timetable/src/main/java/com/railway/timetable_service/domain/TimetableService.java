@@ -137,7 +137,7 @@ public class TimetableService {
 			timetableItem.setReservedGroupSeats(timetableItem.getReservedGroupSeats() + toReserveSeats);
 			timetableItemRepository.save(timetableItem);
 		}else{
-			throw new NotEnoughGroupSeatsException();
+			throw new NotEnoughGroupSeatsException("Requested amount of group seats (" + toReserveSeats + ") exceeds available amount of group seats (" + (timetableItem.getGroupCapacity()-timetableItem.getReservedGroupSeats()) + ")");
 		}
 	}
 
