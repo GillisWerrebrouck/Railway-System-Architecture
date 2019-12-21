@@ -12,5 +12,5 @@ public interface TimetableItemRepository extends CrudRepository<TimetableItem, L
 	@Query("SELECT t FROM TimetableItem t WHERE routeId = ?1 AND startDateTime>=CURRENT_DATE")
 	List<TimetableItem> findByRouteId(Long routeId);
 	
-	List<TimetableItem> findByRouteIdAndStartDateTimeBetween(Long routeId, LocalDateTime fromDate, LocalDateTime toDate);
+	List<TimetableItem> findByRouteIdAndStartDateTimeBetweenOrderByStartDateTime(Long routeId, LocalDateTime fromDate, LocalDateTime toDate);
 }

@@ -1,6 +1,7 @@
 package com.railway.timetable_service.adapters.rest;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -78,17 +79,23 @@ public class TimetableItemRestController implements CreateTimetableItemListener 
 	
 	@GetMapping
 	private Collection<TimetableItemResponse> getTimetableItemsByStartAndEndStation(@RequestParam UUID startStationId, @RequestParam UUID endStationId,
-			@RequestParam String fromDate, @RequestParam String toDate) {
+			@RequestParam String fromDate, @RequestParam String toDate) throws Exception {
 		Collection<Route> routes = timetableService.getRoutes(startStationId, endStationId);
 		Collection<TimetableItemResponse> response = new ArrayList<>();
 		
 		for(Route route : routes) {
-			// TODO beter query (by time and sort)
-			Collection<TimetableItem> timetableItems = timetableItemRepository.findByRouteIdAndStartDateTimeBetween(route.getId(), LocalDateTime.parse(fromDate), LocalDateTime.parse(toDate));
-			
-			for(TimetableItem timetableItem : timetableItems) {
-				TimetableItemResponse timetableItemResponse = new TimetableItemResponse(timetableItem.getId(), timetableItem.getStartDateTime(), timetableItem.getEndDateTime(), timetableItem.getDelay(), timetableItem.getRouteId(), route.getName());
-				response.add(timetableItemResponse);
+			try {
+				LocalDateTime fromDateTime = LocalDateTime.parse(fromDate);
+				LocalDateTime toDateTime = LocalDateTime.parse(toDate);
+
+				Collection<TimetableItem> timetableItems = timetableItemRepository.findByRouteIdAndStartDateTimeBetweenOrderByStartDateTime(route.getId(), fromDateTime, toDateTime);
+				
+				for(TimetableItem timetableItem : timetableItems) {
+					TimetableItemResponse timetableItemResponse = new TimetableItemResponse(timetableItem.getId(), timetableItem.getStartDateTime(), timetableItem.getEndDateTime(), timetableItem.getDelay(), timetableItem.getRouteId(), route.getName());
+					response.add(timetableItemResponse);
+				}
+			} catch (DateTimeParseException e) {
+				throw new Exception("Could not convert request parameters to correct type: " + e.getMessage());
 			}
 		}
 		
