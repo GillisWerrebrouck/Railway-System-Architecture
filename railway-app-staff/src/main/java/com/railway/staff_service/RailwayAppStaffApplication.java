@@ -1,6 +1,5 @@
 package com.railway.staff_service;
 
-import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -13,7 +12,6 @@ import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.context.annotation.Bean;
 
 import com.railway.staff_service.adapters.messaging.Channels;
-import com.railway.staff_service.domain.ScheduleItem;
 import com.railway.staff_service.domain.StaffMember;
 import com.railway.staff_service.domain.StaffMemberType;
 import com.railway.staff_service.persistence.StaffMembersRepository;
@@ -40,6 +38,8 @@ public class RailwayAppStaffApplication {
 			StaffMember staffMember06 = new StaffMember("Charles", "Werner", new GregorianCalendar(1972, Calendar.SEPTEMBER, 2).getTime(), StaffMemberType.CONDUCTOR);
 			StaffMember staffMember07 = new StaffMember("Juliette", "Massey", new GregorianCalendar(1971, Calendar.OCTOBER, 4).getTime(), StaffMemberType.MECHANIC);
 			StaffMember staffMember08 = new StaffMember("Brent", "Chang", new GregorianCalendar(1973, Calendar.JULY, 30).getTime(), StaffMemberType.MECHANIC);
+			StaffMember staffMember09 = new StaffMember("Morgan", "Allen", new GregorianCalendar(1975, Calendar.JANUARY, 13).getTime(), StaffMemberType.CONDUCTOR);
+			StaffMember staffMember10 = new StaffMember("Alexia", "Carter", new GregorianCalendar(1978, Calendar.APRIL, 25).getTime(), StaffMemberType.CONDUCTOR);
 
 //			ScheduleItem scheduleItem01 = new ScheduleItem(LocalDateTime.of(2019, Calendar.DECEMBER, 18, 13, 0, 0, 0), LocalDateTime.of(2019, Calendar.DECEMBER, 18, 15, 0, 0, 0));
 //			ScheduleItem scheduleItem02 = new ScheduleItem(LocalDateTime.of(2019, Calendar.DECEMBER, 18, 15, 0, 0, 0), LocalDateTime.of(2019, Calendar.DECEMBER, 18, 18, 0, 0, 0));
@@ -61,15 +61,19 @@ public class RailwayAppStaffApplication {
 			staffMemberRepository.save(staffMember06);
 			staffMemberRepository.save(staffMember07);
 			staffMemberRepository.save(staffMember08);
+			staffMemberRepository.save(staffMember09);
+			staffMemberRepository.save(staffMember10);
 			
 			logger.info("StaffMember01: " + staffMember01.toString());
 			logger.info("StaffMember02: " + staffMember02.toString());
 			logger.info("StaffMember03: " + staffMember03.toString());
 			logger.info("StaffMember04: " + staffMember04.toString());
-			logger.info("StaffMember04: " + staffMember05.toString());
-			logger.info("StaffMember04: " + staffMember06.toString());
-			logger.info("StaffMember04: " + staffMember07.toString());
-			logger.info("StaffMember04: " + staffMember08.toString());
+			logger.info("StaffMember05: " + staffMember05.toString());
+			logger.info("StaffMember06: " + staffMember06.toString());
+			logger.info("StaffMember07: " + staffMember07.toString());
+			logger.info("StaffMember08: " + staffMember08.toString());
+			logger.info("StaffMember09: " + staffMember09.toString());
+			logger.info("StaffMember10: " + staffMember10.toString());
 		};
 	}
 }

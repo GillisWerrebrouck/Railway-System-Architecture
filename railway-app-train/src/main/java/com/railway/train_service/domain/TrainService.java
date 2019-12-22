@@ -149,7 +149,7 @@ public class TrainService {
 	public void requestMaintenanceForAccident(AccidentRequest request) {
 		gateway.notifyAccident(request);
 		if (request.isEmergencyServiceRequired()) {
-			EmergencyRequest r = new EmergencyRequest(request.getTrainId(), request.getAccidentMessage());
+			EmergencyRequest r = new EmergencyRequest(request.getTimetableId(), request.getAccidentMessage());
 			gateway.requestEmergency(r);
 		}
 	}

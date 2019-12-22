@@ -31,9 +31,10 @@ public class RailwayAppTimetableApplication {
 	@Bean
 	public CommandLineRunner populateDatabase(TimetableItemRepository timetableItemRepository) {
 		return (args) ->{
+//			create timetable items with a POST (REST) request instead
 //			logger.info("Populating database with timetable items");
 //
-			timetableItemRepository.deleteAll();
+//			timetableItemRepository.deleteAll();
 //
 //			List<Long> staffIds = new ArrayList<Long>();
 //			staffIds.add(1L);

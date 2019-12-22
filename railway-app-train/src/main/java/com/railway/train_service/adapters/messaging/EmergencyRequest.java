@@ -1,22 +1,20 @@
 package com.railway.train_service.adapters.messaging;
 
 public class EmergencyRequest {
-
-
-	private String trainId;
+	private Long timetableId;
 	private String message;
 	
-	public EmergencyRequest(String trainId, String message) {
-		this.trainId = trainId;
+	public EmergencyRequest(Long timetableId, String message) {
+		this.timetableId = timetableId;
 		this.message = message;
 	}
 
-	public String getTrainId() {
-		return trainId;
+	public Long getTimetableId() {
+		return timetableId;
 	}
-
-	public void setTrainId(String trainId) {
-		this.trainId = trainId;
+	
+	public void setTimetableId(Long timetableId) {
+		this.timetableId = timetableId;
 	}
 
 	public String getMessage() {
