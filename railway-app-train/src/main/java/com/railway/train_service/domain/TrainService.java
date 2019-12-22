@@ -3,7 +3,6 @@ package com.railway.train_service.domain;
 import java.time.LocalDateTime;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import com.railway.train_service.adapters.messaging.ChangeStatusRequest;
 import com.railway.train_service.adapters.messaging.AccidentRequest;
-import com.railway.train_service.adapters.messaging.ChangeStatusRequest;
 import com.railway.train_service.adapters.messaging.EmergencyRequest;
 import com.railway.train_service.adapters.messaging.MaintenanceRequest;
 import com.railway.train_service.adapters.messaging.MessageGateway;
@@ -36,29 +34,7 @@ public class TrainService {
 		
 		for(Train train : trains) {
 			Iterable<ScheduleItem> schedule = train.getScheduleItems();
-			if(isTrainAvailable(schedule, startDateTime, endDateTime)) {
-				reservedTrain = train;
-				ScheduleItem scheduleItem = new ScheduleItem(timetableId, reservationType, startDateTime, endDateTime);
-				reservedTrain.addScheduleItem(scheduleItem);
-				trainRepository.save(reservedTrain);
-				break;
-			}
-		}
-		
-		return reservedTrain;
-	}
-	
-	public synchronized Train reserveTrain(ScheduleItem item, TrainType trainType) {
-		Long timetableId = item.getTimetableId();
-		ReservationType reservationType = item.getReservationType();
-		LocalDateTime startDateTime = item.getStartDateTime();
-		LocalDateTime endDateTime = item.getEndDateTime();
-		Iterable<Train> trains = trainRepository.getAllTrainsByType(trainType);
-		Train reservedTrain = null;
-		
-		for(Train train : trains) {
-			Iterable<ScheduleItem> schedule = train.getScheduleItems();
-			if(isTrainAvailable(schedule, startDateTime, endDateTime)) {
+			if(train.getStatus() == TrainStatus.ACTIVE && isTrainAvailable(schedule, startDateTime, endDateTime)) {
 				reservedTrain = train;
 				ScheduleItem scheduleItem = new ScheduleItem(timetableId, reservationType, startDateTime, endDateTime);
 				reservedTrain.addScheduleItem(scheduleItem);
@@ -98,21 +74,42 @@ public class TrainService {
 		}
 	}
 	
-	public synchronized void switchTrainReservationsOfTrain(TrainOutOfServiceRequest request, String trainId) {
-		Train train = trainRepository.findById(trainId).get();
+	public synchronized void switchTrainReservationsOfTrain(String trainId) {
+		Train train = trainRepository.findById(trainId).orElse(null);
+		if(train == null) return;
+		
 		List<ScheduleItem> scheduleItems = train.getScheduleItems()
 												.stream()
 												.filter(item -> item.getStartDateTime().isAfter(LocalDateTime.now()))
 												.collect(Collectors.toList());
-		for(ScheduleItem scheduleItem : scheduleItems) {	
-			Train newTrain = this.reserveTrain(scheduleItem, train.getType());//old train can't be selected because it is still assigned to the current schedule
-			train.removeScheduleItem(scheduleItem);
-			if(newTrain == null) 
+		
+		Iterator<ScheduleItem> schedule = scheduleItems.iterator();
+		
+		while(schedule.hasNext()) {
+			ScheduleItem scheduleItem = schedule.next();
+			// maintenance schedule items can still exist on a train that is inactive
+			if (scheduleItem.getReservationType() == ReservationType.MAINTENANCE_RESERVATION) continue;
+			
+			// the old train can't be reserved because it is still assigned to the current schedule
+			Train newTrain = this.reserveTrain(
+				scheduleItem.getTimetableId(), 
+				scheduleItem.getReservationType(), 
+				scheduleItem.getStartDateTime(),
+				scheduleItem.getEndDateTime(), 
+				train.getType()
+			);
+			scheduleItems.removeIf(s -> s.getTimetableId() == scheduleItem.getTimetableId());
+			train.setScheduleItems(scheduleItems);
+			trainRepository.save(train);
+			
+			TrainOutOfServiceRequest request = new TrainOutOfServiceRequest();
+			if(newTrain == null) {
 				request.setTrainId(null);
-			else 
+			} else {
 				request.setTrainId(newTrain.getId());
+			}
+			
 			request.setTimeTableId(scheduleItem.getTimetableId());
-			trainRepository.save(newTrain);
 			gateway.notifyTrainOutOfService(request);
 		}
 	}
@@ -142,7 +139,7 @@ public class TrainService {
 		if(train != null) {
 			train.setStatus(request.getStatus());
 			if(request.getStatus().equals(TrainStatus.NONACTIVE)) {
-				this.switchTrainReservationsOfTrain(new TrainOutOfServiceRequest(null,null), train.getId());
+				this.switchTrainReservationsOfTrain(train.getId());
 			}
 			trainRepository.save(train);
 		}

@@ -9,6 +9,10 @@ public class TrainOutOfServiceRequest {
 		this.timeTableId = timeTableId;
 	}
 
+	public TrainOutOfServiceRequest() {
+		this(null, null);
+	}
+
 	public String getTrainId() {
 		return trainId;
 	}
