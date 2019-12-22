@@ -149,6 +149,7 @@ public class StationService {
 	
 	private void getStationsFromDatabase(List<StationOnRoute> stations, DelayRequest request) {
 		for (StationOnRoute s : stations) {
+			int requestDelay = request.getDelayInMinutes();
 			UUID id = UUID.fromString(s.getStationId());
 			Station station = stationRepository.findById(id).get();
 			if (station != null) {
@@ -163,7 +164,8 @@ public class StationService {
 						if(item.getTimetableId() == request.getTimetableId()) {
 							logger.info("[getStationsFromDatabase] scheduleItem found ");
 							//original scheduleitem can already have delay -> so total delay is calculated
-							int totalDelay = item.getDelayInMinutes() + request.getDelayInMinutes();
+							int totalDelay = item.getDelayInMinutes() + requestDelay;
+							requestDelay = 0;
 							//logger.info("" + totalDelay);
 							LocalDateTime newArrivalTime = item.getArrivalDateTime().plusMinutes(totalDelay);
 							//check if the new arrivaltime causes a conflict with another train on the same platform

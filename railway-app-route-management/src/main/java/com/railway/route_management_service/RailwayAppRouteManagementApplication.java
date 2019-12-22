@@ -28,11 +28,11 @@ public class RailwayAppRouteManagementApplication {
 		SpringApplication.run(RailwayAppRouteManagementApplication.class, args);
 	}
 	
-	@SuppressWarnings("unused")
+	//@SuppressWarnings("unused")
 	@Bean
 	public CommandLineRunner populateDatabase(StationRepository stationRepository, ConnectionRepository connectionRepository, RouteRepository routeRepository) {
 		return (args) ->{
-			/*
+			
 			logger.info("Populating graph database with test data ...");
 
 			stationRepository.deleteAll();
@@ -129,7 +129,7 @@ public class RailwayAppRouteManagementApplication {
 			logger.info("Station02: " + station02.toString());
 			logger.info("Station03: " + station03.toString());
 			logger.info("Station04: " + station04.toString());
-			logger.info("Station05: " + station05.toString());*/
+			logger.info("Station05: " + station05.toString());
 		};
 	}
 }
