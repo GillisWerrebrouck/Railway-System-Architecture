@@ -14,6 +14,7 @@ import com.railway.timetable_service.adapters.messaging.RouteFetchedResponse;
 import com.railway.timetable_service.adapters.messaging.RouteUsageRequest;
 import com.railway.timetable_service.adapters.messaging.RouteUsageResponse;
 import com.railway.timetable_service.adapters.messaging.StationsResponse;
+import com.railway.timetable_service.adapters.messaging.TrainOutOfServiceResponse;
 import com.railway.timetable_service.adapters.messaging.TrainReservedResponse;
 import com.railway.timetable_service.persistence.TimetableItemRepository;
 
@@ -108,6 +109,19 @@ public class TimetableService {
 		
 		if(timetableItem != null) {
 			this.createTimetableItemSaga.discardTrainReservation(trainReservedResponse.getTimetableId());
+		}
+	}
+	
+	public synchronized void trainReservationChanged(TrainOutOfServiceResponse trainOutOfServiceResponse) {
+		TimetableItem timetableItem = timetableItemRepository.findById(trainOutOfServiceResponse.getTimeTableId()).orElse(null);
+		if(timetableItem != null) {
+			timetableItem.setTrainId(trainOutOfServiceResponse.getTrainId());
+			if(trainOutOfServiceResponse.getTrainId() == null) {
+				timetableItem.setTrainReservationStatus(Status.AUTO_RESCHEDULE_FAILED);
+			}
+			timetableItemRepository.save(timetableItem);
+		} else {
+			throw new NullPointerException();
 		}
 	}
 

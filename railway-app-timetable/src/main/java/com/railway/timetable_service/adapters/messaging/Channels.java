@@ -19,6 +19,7 @@ public interface Channels {
 	static final String DISCARD_RESERVED_SEATS = "discard_reserved_seats";
 	static final String CHECK_ROUTE_USAGE = "check_route_usage";
 	static final String ROUTE_USAGE_CHECKED = "route_usage_checked";
+	static final String NOTIFY_TRAIN_OUT_OF_SERVICE = "notify_train_out_of_service";
 
 	@Output(GET_ROUTE)
 	MessageChannel getRoute();
@@ -58,4 +59,7 @@ public interface Channels {
 	
 	@Output(ROUTE_USAGE_CHECKED)
 	MessageChannel routeUsageChecked();
+  
+	@Input(NOTIFY_TRAIN_OUT_OF_SERVICE)
+	SubscribableChannel processTrainOutOfService();
 }
