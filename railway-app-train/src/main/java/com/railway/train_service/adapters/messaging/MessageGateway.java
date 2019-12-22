@@ -5,6 +5,7 @@ import org.springframework.integration.annotation.MessagingGateway;
 
 @MessagingGateway
 public interface MessageGateway {
+	
 	@Gateway(requestChannel = Channels.REQUEST_MAINTENANCE)
 	public void requestMaintenance(MaintenanceRequest request);
 	
@@ -13,4 +14,7 @@ public interface MessageGateway {
 	
 	@Gateway(requestChannel = Channels.NOTIFY_ACCIDENT)
 	public void notifyAccident(AccidentRequest request);
+	
+	@Gateway(requestChannel = Channels.NOTIFY_TRAIN_OUT_OF_SERVICE)
+	public void notifyTrainOutOfService(TrainOutOfServiceRequest request);
 }

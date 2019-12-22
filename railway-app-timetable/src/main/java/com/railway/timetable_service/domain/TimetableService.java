@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.railway.timetable_service.adapters.messaging.RouteFetchedResponse;
 import com.railway.timetable_service.adapters.messaging.StaffResponse;
 import com.railway.timetable_service.adapters.messaging.StationsResponse;
+import com.railway.timetable_service.adapters.messaging.TrainOutOfServiceResponse;
 import com.railway.timetable_service.adapters.messaging.TrainReservedResponse;
 import com.railway.timetable_service.persistence.TimetableItemRepository;
 
@@ -142,6 +143,19 @@ public class TimetableService {
 				timetableItemRepository.save(timetableItem);
 				this.createTimetableItemSaga.onStaffReserved(timetableItem);
 			}
+		}
+	}
+	
+	public synchronized void trainReservationChanged(TrainOutOfServiceResponse trainOutOfServiceResponse) {
+		TimetableItem timetableItem = timetableItemRepository.findById(trainOutOfServiceResponse.getTimeTableId()).orElse(null);
+		if(timetableItem != null) {
+			timetableItem.setTrainId(trainOutOfServiceResponse.getTrainId());
+			if(trainOutOfServiceResponse.getTrainId() == null) {
+				timetableItem.setTrainReservationStatus(Status.AUTO_RESCHEDULE_FAILED);
+			}
+			timetableItemRepository.save(timetableItem);
+		} else {
+			throw new NullPointerException();
 		}
 	}
 
