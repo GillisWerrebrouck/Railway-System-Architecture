@@ -53,7 +53,6 @@ public class TrainRestController {
 		return train;
 	}
 
-	// request maintenance for a train
 	@PostMapping("/{id}/maintenance")
 	public MaintenanceResponse notifyMaintenance(@PathVariable String id, @RequestBody MaintenanceRequest request) {
 		Train train = trainRepository.findById(id).orElse(null);
@@ -80,7 +79,6 @@ public class TrainRestController {
 		return response;
 	}
 	
-	// report accident for a train
 	@PostMapping("/{id}/accident")
 	public MaintenanceResponse notifyAccident(@PathVariable String id, @RequestBody AccidentRequest request) {
 		Train train = trainRepository.findById(id).orElse(null);

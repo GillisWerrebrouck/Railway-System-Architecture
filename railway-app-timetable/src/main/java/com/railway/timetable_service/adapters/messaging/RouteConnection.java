@@ -1,9 +1,13 @@
 package com.railway.timetable_service.adapters.messaging;
 
 public class RouteConnection {
+	
 	private Long id;
 	private Station station;
 	private boolean startOfRoute;
+	
+	@SuppressWarnings("unused")
+	private RouteConnection() {}
 	
 	public RouteConnection(Long id, Station station, boolean startOfRoute) {
 		this.id = id;

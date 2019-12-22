@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.railway.maintenance_service.adapters.messaging.InfrastructureDamageRequest;
+import com.railway.maintenance_service.adapters.messaging.ChangeStatusRequest;
 import com.railway.maintenance_service.domain.MaintenanceService;
 import com.railway.maintenance_service.domain.ScheduleItem;
 import com.railway.maintenance_service.persistence.MaintenanceRepository;
@@ -41,5 +42,10 @@ public class MaintenanceController {
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
 	public void notifyInfrastructureDamage(@RequestBody InfrastructureDamageRequest request) {
 		maintenanceService.requestInfrastructureDamage(request);
+	}
+  
+	@PostMapping("/status")
+	public void changeTrainStatus(@RequestBody ChangeStatusRequest request) {
+		maintenanceService.changeTrainStatus(request.getTrainId(), request.getStatus());
 	}
 }
