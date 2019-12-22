@@ -10,7 +10,7 @@ public class AccidentRequest {
 	public AccidentRequest(String trainId, String maintenanceMessage, LocalDateTime accidentDate) {
 		this.trainId = trainId;
 		this.accidentMessage = maintenanceMessage;
-		this.accidentDate=accidentDate;
+		this.accidentDate = accidentDate;
 	}
 	
 	public String getTrainId() {

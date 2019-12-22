@@ -1,24 +1,33 @@
 package com.railway.timetable_service.domain;
 
+import java.util.Collection;
+import java.util.UUID;
+
 import com.railway.timetable_service.adapters.messaging.GroupSeatsRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.railway.timetable_service.adapters.messaging.Route;
 import com.railway.timetable_service.adapters.messaging.RouteFetchedResponse;
 import com.railway.timetable_service.adapters.messaging.StationsResponse;
 import com.railway.timetable_service.adapters.messaging.TrainOutOfServiceResponse;
 import com.railway.timetable_service.adapters.messaging.TrainReservedResponse;
+import com.railway.timetable_service.adapters.rest.ScheduleItemResponse;
+import com.railway.timetable_service.adapters.rest.SpecificsResponse;
+import com.railway.timetable_service.adapters.rest.TimetableItemRestAdapter;
 import com.railway.timetable_service.persistence.TimetableItemRepository;
 
 @Service
 public class TimetableService {	
 	private final CreateTimetableItemSaga createTimetableItemSaga;
 	private final TimetableItemRepository timetableItemRepository;
+	private final TimetableItemRestAdapter timetableItemRestAdapter;
 	
 	@Autowired
-	public TimetableService(CreateTimetableItemSaga createTimetableItemSaga, TimetableItemRepository timetableItemRepository) {
+	public TimetableService(CreateTimetableItemSaga createTimetableItemSaga, TimetableItemRepository timetableItemRepository, TimetableItemRestAdapter timetableItemRestAdapter) {
 		this.createTimetableItemSaga = createTimetableItemSaga;
 		this.timetableItemRepository = timetableItemRepository;
+		this.timetableItemRestAdapter = timetableItemRestAdapter;
 	}
 	
 	public void createTimetableItem(TimetableItem timetableItem, TimetableRequest timetableRequest) {
@@ -104,6 +113,26 @@ public class TimetableService {
 		}
 	}
 	
+	public String getRouteName(Long routeId) {
+		return timetableItemRestAdapter.getRouteName(routeId);
+	}
+	
+	public Collection<Route> getRoutes(UUID startStationId, UUID endStationId) {
+		return timetableItemRestAdapter.getRoutes(startStationId, endStationId);
+	}
+	
+	public Collection<ScheduleItemResponse> getStationByTimetableItemId(Long timetableId) {
+		return timetableItemRestAdapter.getStationsByTimetableItemId(timetableId);
+	}
+	
+	public SpecificsResponse getSpecifics(Long timetableId) throws Exception {
+		TimetableItem timetableItem = timetableItemRepository.findById(timetableId).orElse(null);
+		if(timetableItem != null){
+			return timetableItemRestAdapter.getSpecifics(timetableItem.getTrainId());
+		}
+		throw new Exception("Timetable id doesn't exist");
+  	}
+  
 	public synchronized void trainReservationChanged(TrainOutOfServiceResponse trainOutOfServiceResponse) {
 		TimetableItem timetableItem = timetableItemRepository.findById(trainOutOfServiceResponse.getTimeTableId()).orElse(null);
 		if(timetableItem != null) {
@@ -131,12 +160,12 @@ public class TimetableService {
 			timetableItem.setReservedGroupSeats(timetableItem.getReservedGroupSeats() + toReserveSeats);
 			timetableItemRepository.save(timetableItem);
 		}else{
-			throw new NotEnoughGroupSeatsException();
+			throw new NotEnoughGroupSeatsException("Requested amount of group seats (" + toReserveSeats + ") exceeds available amount of group seats (" + (timetableItem.getGroupCapacity()-timetableItem.getReservedGroupSeats()) + ")");
 		}
 	}
 
-	public synchronized void discardReservedGroupSeats(Long timeTableId, int amountOfSeats) {
-		TimetableItem timetableItem = timetableItemRepository.findById(timeTableId).orElse(null);
+	public synchronized void discardReservedGroupSeats(Long timetableId, int amountOfSeats) {
+		TimetableItem timetableItem = timetableItemRepository.findById(timetableId).orElse(null);
 		if(timetableItem != null){
 			timetableItem.setReservedGroupSeats(timetableItem.getReservedGroupSeats() - amountOfSeats);
 			timetableItemRepository.save(timetableItem);
