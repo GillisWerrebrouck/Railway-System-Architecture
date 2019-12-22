@@ -1,16 +1,9 @@
 package com.railway.delay_service.domain;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.stream.endpoint.BindingsEndpoint.State;
 import org.springframework.stereotype.Service;
 
 import com.railway.delay_service.adapters.messaging.DelayRequest;
@@ -28,8 +21,11 @@ public class DelayService {
 	
 	public void sendDelay(DelayRequest delayRequest) {
 		logger.info("[Delay Service - sendDelay]" + delayRequest.getTimetableId() + ", " + delayRequest.getRouteId());
+		//processing delay started
+		delayRequest.setState(DelayState.STARTED);
+		//send delay to timetable
 		gateway.delayOccured_t(delayRequest);
-		gateway.delayOccured(delayRequest);
-		
+		//send delay to station
+		gateway.delayOccured(delayRequest);		
 	}
 }   

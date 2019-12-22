@@ -17,5 +17,5 @@ public interface MessageGateway {
 	public void getRoute(RouteRequest routeRequest);
 	
 	@Gateway(requestChannel = Channels.NOTIFY_EXTRA_DELAY)
-	public void notifyDelay(UpdateDelayRequest updateDelayRequest);
+	public void notifyExtraDelay(UpdateDelayRequest updateDelayRequest);
 }

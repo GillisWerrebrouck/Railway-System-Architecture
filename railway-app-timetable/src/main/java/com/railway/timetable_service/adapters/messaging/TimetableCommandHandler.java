@@ -25,4 +25,10 @@ public class TimetableCommandHandler {
 		logger.info("[Timetable Command Handler] notify delay command received");
 		timetableService.processDelay(request);
 	}
+	
+	@StreamListener(Channels.NOTIFY_EXTRA_DELAY)
+	public void notifyExtraDelay(UpdateDelayRequest request) {
+		logger.info("[Timetable Command Handler] notify extra delay command received");
+		timetableService.processExtraDelay(request);
+	}
 }

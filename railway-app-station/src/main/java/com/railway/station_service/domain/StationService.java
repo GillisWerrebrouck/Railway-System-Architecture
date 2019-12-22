@@ -80,21 +80,19 @@ public class StationService {
 	}
 	
 	public void processDelay(DelayRequest delayRequest) {
-		
+		delayRequest.setState(DelayState.PENDING);
 		RouteRequest request = new RouteRequest(delayRequest.getTimetableId(), delayRequest.getRouteId());
+		//to later check if recieved route fetched event is for this delayRequest
 		delayRequest.setRouteRequestId(request.getRequestId());
 		requests.put(delayRequest.getRouteRequestId(), delayRequest);
 		gateway.getRoute(request);
-		//gateway.delayOccured(delayRequest);
 	}
 
 	//fetching routes to get all the stations on that route that will be affected by the delay
 	public void routeFetched(RouteFetchedResponse routeFetchedResponse) {
 		//get delayrequest corresponding to this route fetch call
-		DelayRequest dr = requests.containsKey(routeFetchedResponse.getRequestId())? requests.get(routeFetchedResponse.getRequestId()) : null;
-		if( dr != null) {
-			logger.info("lukt");
-			
+		DelayRequest dr = requests.containsKey(routeFetchedResponse.getRequestId()) ? requests.get(routeFetchedResponse.getRequestId()) : null;
+		if(dr != null) {
 			//find first station of route that will be affected by delay 
 			//if no start station is present in delay request then all stations on the given route are notified of the delay
 			StationOnRoute startStation = null;
@@ -132,10 +130,7 @@ public class StationService {
 				}
 				stations.add(current);
 				previous=current;
-				
-				
 			}
-			logger.info(stations.toString());
 			getStationsFromDatabase(stations, dr);
 		}
 		
@@ -188,8 +183,8 @@ public class StationService {
 								int additionalDelay = (int) pair[2];
 								//change and save scheduleItem
 								item.setPlatform(platform);
-								// NOG BEKIJKEN
-								item.setDelayInMinutes((totalDelay + additionalDelay)/2);
+								// TODO: totalDelay + additionalDelay sometimes dubbel
+								item.setDelayInMinutes(totalDelay + additionalDelay);
 								scheduleItemRepository.save(item);
 								informTimetable(request.getTimetableId(), totalDelay + additionalDelay);
 							}
@@ -203,7 +198,7 @@ public class StationService {
 	private void informTimetable(Long timetableId, int delayInMinutes) {
 		// create delay request with timetableid and full delay in minutes
 		UpdateDelayRequest request = new UpdateDelayRequest(timetableId, delayInMinutes);
-		gateway.notifyDelay(request);
+		gateway.notifyExtraDelay(request);
 		
 	}
 
