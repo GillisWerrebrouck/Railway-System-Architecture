@@ -23,8 +23,12 @@ public interface RouteRepository extends Neo4jRepository<Route, Long> {
 
 	@Query("MATCH p=(:Route)-[:USES_STATION]-(x:Station)-[c:CONNECTED_WITH* { active:true }]-(y:Station)-[:USES_STATION]-(:Route)\n" +
 			"WHERE x.stationId={stationXId} AND y.stationId={stationYId}\n" +
-			"RETURN x.name as departureStation, y.name as arrivalStation,\n" +
+			"RETURN x.na"
+			+ "me as departureStation, y.name as arrivalStation,\n" +
 			"       reduce(distance = 0, connection IN c | distance + connection.distance) AS distance\n" +
 			"ORDER BY distance LIMIT 1")
 	RouteDetails getRouteDetails(UUID stationXId, UUID stationYId);
+	
+	@Query("MATCH (r:Route)-[n:USES_STATION {connectionId: {connectionId}}]-(x:Station) RETURN DISTINCT r")
+	Collection<Route> getAllRoutesByConnectionId(Long connectionId);
 }

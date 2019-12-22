@@ -2,6 +2,7 @@ package com.railway.route_management_service.adapters.rest;
 
 import java.util.ArrayList;
 import java.util.Collection;
+
 import java.util.Iterator;
 import java.util.Optional;
 import java.util.UUID;
@@ -23,6 +24,7 @@ import com.railway.route_management_service.domain.Connection;
 import com.railway.route_management_service.domain.Route;
 import com.railway.route_management_service.domain.RouteConnection;
 import com.railway.route_management_service.domain.Station;
+import com.railway.route_management_service.domain.RouteService;
 import com.railway.route_management_service.domain.exception.BadRequestException;
 import com.railway.route_management_service.domain.exception.QueryFailedException;
 import com.railway.route_management_service.persistence.ConnectionRepository;
@@ -37,13 +39,15 @@ public class RouteRestController {
 	protected final ConnectionRepository connectionRepository;
 	protected final RouteRepository routeRepository;
 	protected final RouteConnectionRepository routeConnectionRepository;
+	protected final RouteService routeService;
 	
 	@Autowired
-	public RouteRestController(StationRepository stationRepository, ConnectionRepository connectionRepository, RouteRepository routeRepository, RouteConnectionRepository routeConnectionRepository) {
+	public RouteRestController(StationRepository stationRepository, ConnectionRepository connectionRepository, RouteRepository routeRepository, RouteConnectionRepository routeConnectionRepository, RouteService routeService) {
 		this.stationRepository = stationRepository;
 		this.connectionRepository = connectionRepository;
 		this.routeRepository = routeRepository;
 		this.routeConnectionRepository = routeConnectionRepository;
+		this.routeService = routeService;
 	}
 	
 	@GetMapping("/route/all")

@@ -11,13 +11,14 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class TimetableCommandHandler {
-
     private static Logger logger = LoggerFactory.getLogger(TimetableEventHandler.class);
     private final TimetableService timetableItemService;
+    private final MessageGateway gateway;
 
     @Autowired
-    public TimetableCommandHandler(TimetableService timetableItemService) {
+    public TimetableCommandHandler(TimetableService timetableItemService, MessageGateway gateway) {
         this.timetableItemService = timetableItemService;
+        this.gateway = gateway;
     }
 
     @StreamListener(Channels.RESERVE_GROUP_SEATS)
@@ -40,5 +41,13 @@ public class TimetableCommandHandler {
     public void discardReservedGroupSeats(GroupSeatsRequest groupSeatsRequest){
         logger.info("[Timetable Event Handler] discard reserved group seats");
         timetableItemService.discardReservedGroupSeats(groupSeatsRequest.getTimeTableId(), groupSeatsRequest.getAmountOfSeats());
+    }
+    
+    @StreamListener(Channels.CHECK_ROUTE_USAGE)
+    @SendTo(Channels.ROUTE_USAGE_CHECKED)
+    public RouteUsageResponse checkRouteUsage(RouteUsageRequest request){
+        logger.info("[Timetable Command Handler] check route usage command received");
+        boolean isUsed = timetableItemService.areRoutesUsed(request.getRouteIds());
+        return new RouteUsageResponse(request.getConnectionId(), isUsed);
     }
 }
