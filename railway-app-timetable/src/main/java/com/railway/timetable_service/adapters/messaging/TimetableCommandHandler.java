@@ -22,7 +22,7 @@ public class TimetableCommandHandler {
 	
 	@StreamListener(Channels.NOTIFY_DELAY)
 	public void notifyDelay(DelayRequest request) {
-		//logger.info("[Station Command Handler] notify delay command received");
+		logger.info("[Timetable Command Handler] notify delay command received");
 		timetableService.processDelay(request);
 	}
 }

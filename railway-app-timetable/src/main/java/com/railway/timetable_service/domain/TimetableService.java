@@ -105,6 +105,7 @@ public class TimetableService {
 	}
 
 	public void processExtraDelay(UpdateDelayRequest request) {
+		System.out.println("Process extra delay : " + request.getDelayInMinutes());
 		saveTimeTableItemWithDelay(request.getTimetableId(), request.getDelayInMinutes());
 	}
 
@@ -116,5 +117,6 @@ public class TimetableService {
 		TimetableItem tItem =  timetableItemRepository.findById(id).get();
 		tItem.setDelay(delay);
 		timetableItemRepository.save(tItem);
+		System.out.println("Process delay : done");
 	}
 }
