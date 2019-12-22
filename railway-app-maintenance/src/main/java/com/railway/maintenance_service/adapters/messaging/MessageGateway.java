@@ -7,4 +7,7 @@ import org.springframework.integration.annotation.MessagingGateway;
 public interface MessageGateway {
 	@Gateway(requestChannel = Channels.RESERVE_STAFF)
 	public void reserveStaff(StaffRequest request);
+	
+	@Gateway(requestChannel = Channels.NOTIFY_INFRASTRUCTURE_DAMAGED)
+	public void requestInfrastructureDamaged(InfrastructureDamagedRequest request);
 }
