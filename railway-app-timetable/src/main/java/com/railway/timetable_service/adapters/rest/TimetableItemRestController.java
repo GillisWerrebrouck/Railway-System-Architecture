@@ -124,14 +124,19 @@ public class TimetableItemRestController implements CreateTimetableItemListener 
 		DeferredResult<TimetableItem> deferredResult = new DeferredResult<>(10000l);
 		
 		if(!isValidTimetableRequest(timetableRequest)) {
-			deferredResult.setErrorResult("Request must contain the following fields in the body; \"routeId\", \"startDateTime\" and \"requestedTrainType\"");
+			deferredResult.setErrorResult("Request must contain the following fields in the body; \"routeId\", \"startDateTime\", \"requestedTrainType\" and \"amountOfTrainConductors\"");
 		}
 		
 		deferredResult.onTimeout(() -> {
 			deferredResult.setErrorResult("Request timeout occurred");
 		});
 		
-		TimetableItem timetableItem = new TimetableItem(timetableRequest.getRouteId(), timetableRequest.getStartDateTime(), timetableRequest.getRequestedTrainType());
+		TimetableItem timetableItem = new TimetableItem(
+			timetableRequest.getRouteId(), 
+			timetableRequest.getStartDateTime(), 
+			timetableRequest.getRequestedTrainType(), 
+			timetableRequest.getAmountOfTrainConductors()
+		);
 		
 		timetableItemRepository.save(timetableItem);
 		
@@ -143,7 +148,7 @@ public class TimetableItemRestController implements CreateTimetableItemListener 
 	}
 
 	private boolean isValidTimetableRequest(TimetableRequest request) {
-		return request.getRouteId() != null && request.getStartDateTime() != null && request.getRequestedTrainType() != null;
+		return request.getRouteId() != null && request.getStartDateTime() != null && request.getRequestedTrainType() != null && request.getAmountOfTrainConductors() != 0;
 	}
 
 	private void performSuccessfulResponse(TimetableItem timetableItem) {

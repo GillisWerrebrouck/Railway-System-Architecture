@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +42,7 @@ public class StaffService {
 		}
 		
 		if(response.getStaffIds().size() == amount) {
-			reserveStaffMembers(response.getStaffIds(), startDate, endDate);
+			reserveStaffMembers(requestId, response.getStaffIds(), startDate, endDate);
 			response.setResponseMessage("Successfully reserved all requested staff members");
 		} else {
 			response.setStaffIds(new ArrayList<>());
@@ -66,13 +67,28 @@ public class StaffService {
 		return isAvailable;
 	}
 
-	private void reserveStaffMembers(Collection<String> staffIds, LocalDateTime startDate, LocalDateTime endDate) {
-		ScheduleItem scheduleItem = new ScheduleItem(startDate, endDate);
+	private void reserveStaffMembers(UUID requestId, Collection<String> staffIds, LocalDateTime startDate, LocalDateTime endDate) {
+		ScheduleItem scheduleItem = new ScheduleItem(requestId, startDate, endDate);
 		
 		for(String staffId : staffIds) {
 			StaffMember staffMember = staffMembersRepository.findById(staffId).orElse(null);
 			staffMember.addScheduleItem(scheduleItem);
 			staffMembersRepository.save(staffMember);
+		}
+	}
+
+	public void discardStaffReservations(UUID requestId) {
+		Iterable<StaffMember> staff = staffMembersRepository.findAll();
+		
+		for(StaffMember staffMember : staff) {
+			Iterator<ScheduleItem> schedule = staffMember.getScheduleItems().iterator();
+			while(schedule.hasNext()) {
+				ScheduleItem scheduleItem = schedule.next();
+				if(scheduleItem.getRequestId().compareTo(requestId) == 0) {
+					schedule.remove();
+					staffMembersRepository.save(staffMember);
+				}
+			}
 		}
 	}
 }
