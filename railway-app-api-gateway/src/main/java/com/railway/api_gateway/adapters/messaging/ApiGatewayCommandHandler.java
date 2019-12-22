@@ -19,4 +19,9 @@ public class ApiGatewayCommandHandler {
 	public void notifyErmergencyServices(EmergencyRequest request) {
 		APIService.sendEmergencyRequest(request);
 	}
+	
+	@StreamListener(Channels.NOTIFY_INFRASTRUCTURE_DAMAGE)
+	public void notifyInfrastructureDamage(InfrastructureDamageRequest request) {
+		APIService.sendInfrastructureDamageRequest(request);
+	}
 }
