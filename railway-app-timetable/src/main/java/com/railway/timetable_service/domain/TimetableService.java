@@ -109,6 +109,9 @@ public class TimetableService {
 		// check if the response is for the request linked to the given timetableItem
 		if(timetableItem != null) {
 			timetableItem.setTrainId(trainOutOfServiceResponse.getTrainId());
+			if(trainOutOfServiceResponse.getTrainId() == null) {
+				timetableItem.setTrainReservationStatus(Status.FAILED);
+			}
 			timetableItemRepository.save(timetableItem);
 		} else {
 			throw new NullPointerException();
