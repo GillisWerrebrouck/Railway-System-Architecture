@@ -1,6 +1,7 @@
 package com.railway.route_management_service.adapters.rest;
 
 import java.util.Collection;
+import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.railway.route_management_service.domain.Connection;
+import com.railway.route_management_service.domain.RouteService;
 import com.railway.route_management_service.domain.Station;
 import com.railway.route_management_service.domain.exception.QueryFailedException;
 import com.railway.route_management_service.persistence.ConnectionRepository;
@@ -24,8 +26,8 @@ import com.railway.route_management_service.persistence.StationRepository;
 @RestController
 @RequestMapping("/network/station")
 public class StationRestController extends RouteRestController{
-	public StationRestController(StationRepository stationRepository, ConnectionRepository connectionRepository, RouteRepository routeRepository, RouteConnectionRepository routeConnectionRepository) {
-		super(stationRepository, connectionRepository, routeRepository, routeConnectionRepository);
+	public StationRestController(StationRepository stationRepository, ConnectionRepository connectionRepository, RouteRepository routeRepository, RouteConnectionRepository routeConnectionRepository, RouteService routeService) {
+		super(stationRepository, connectionRepository, routeRepository, routeConnectionRepository, routeService);
 	}
 
 	@GetMapping
@@ -48,7 +50,7 @@ public class StationRestController extends RouteRestController{
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
 	public void createStation(@RequestBody Station station) throws QueryFailedException {
 		try {
-			this.stationRepository.createStation(station.getName());
+			this.stationRepository.createStation(UUID.randomUUID(), station.getName());
 		} catch (Exception e) {
 			String errorMessage = "Station with name \"" + station.getName() + "\" could not be created: " + e.getMessage();
 			throw new QueryFailedException(errorMessage);

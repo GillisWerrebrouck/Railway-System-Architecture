@@ -1,4 +1,4 @@
-package com.railway.maintenance_service.domain;
+package com.railway.timetable_service.adapters.rest;
 
 public enum FuelType {
 	ELECTRIC,
