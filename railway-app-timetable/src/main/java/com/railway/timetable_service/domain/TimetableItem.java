@@ -34,10 +34,13 @@ public class TimetableItem {
 	private UUID trainRequestId;
 	private TrainType requestedTrainType;
 	private UUID stationsRequestId;
-	
+
+	private UUID trainOperatorRequestId;
+	private UUID trainConductorRequestId;
+	private int requestedTrainConductorsAmount;
 	@Column
-    @ElementCollection(targetClass=Long.class, fetch=FetchType.EAGER)
-	private List<Long> staffIds = new ArrayList<Long>();
+    @ElementCollection(targetClass=String.class, fetch=FetchType.EAGER)
+	private List<String> staffIds = new ArrayList<String>();
 	
 	private Status routeStatus;
 	private Status trainReservationStatus;
@@ -47,7 +50,7 @@ public class TimetableItem {
 	@SuppressWarnings("unused")
 	private TimetableItem() {}
 
-	public TimetableItem(LocalDateTime startDate, LocalDateTime endDateTime, Long routeId, String trainId, TrainType requestedTrainType, List<Long> staffIds) {
+	public TimetableItem(LocalDateTime startDate, LocalDateTime endDateTime, Long routeId, String trainId, TrainType requestedTrainType, List<String> staffIds, int requestedTrainConductorsAmount) {
 		this.startDateTime = startDate;
 		this.endDateTime = endDateTime;
 		this.delay = 0;
@@ -59,6 +62,9 @@ public class TimetableItem {
 		this.groupCapacity = 0;
 		this.requestedTrainType = requestedTrainType;
 		this.stationsRequestId = null;
+		this.trainOperatorRequestId = null;
+		this.trainConductorRequestId = null;
+		this.requestedTrainConductorsAmount = requestedTrainConductorsAmount;
 		this.staffIds = staffIds;
 		this.routeStatus = Status.UNKNOWN;
 		this.trainReservationStatus = Status.UNKNOWN;
@@ -66,8 +72,8 @@ public class TimetableItem {
 		this.staffReservationStatus = Status.UNKNOWN;
 	}
 
-	public TimetableItem(Long routeId, LocalDateTime startDate, TrainType requestedTrainType) {
-		this(startDate, null, routeId, null, requestedTrainType, new ArrayList<Long>());
+	public TimetableItem(Long routeId, LocalDateTime startDate, TrainType requestedTrainType, int requestedStaffAmount) {
+		this(startDate, null, routeId, null, requestedTrainType, new ArrayList<String>(), requestedStaffAmount);
 	}
 	
 	public Long getId() {
@@ -146,15 +152,39 @@ public class TimetableItem {
 		this.stationsRequestId = stationsRequestId;
 	}
 
-	public List<Long> getStaffIds() {
+	public List<String> getStaffIds() {
 		return staffIds;
 	}
 	
-	public void setStaffIds(List<Long> staffIds) {
+	public UUID getTrainOperatorRequestId() {
+		return trainOperatorRequestId;
+	}
+	
+	public void setTrainOperatorRequestId(UUID trainOperatorRequestId) {
+		this.trainOperatorRequestId = trainOperatorRequestId;
+	}
+	
+	public UUID getTrainConductorRequestId() {
+		return trainConductorRequestId;
+	}
+	
+	public void setTrainConductorRequestId(UUID trainConductorRequestId) {
+		this.trainConductorRequestId = trainConductorRequestId;
+	}
+	
+	public int getRequestedTrainConductorsAmount() {
+		return requestedTrainConductorsAmount;
+	}
+	
+	public void setRequestedTrainConductorsAmount(int requestedTrainConductorsAmount) {
+		this.requestedTrainConductorsAmount = requestedTrainConductorsAmount;
+	}
+	
+	public void setStaffIds(List<String> staffIds) {
 		this.staffIds = staffIds;
 	}
 	
-	public void addStaffIds(Long staffId) {
+	public void addStaffId(String staffId) {
 		this.staffIds.add(staffId);
 	}
 	
