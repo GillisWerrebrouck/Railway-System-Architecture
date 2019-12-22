@@ -38,7 +38,7 @@ public class MaintenanceController {
 	}
 	
 	@PostMapping("/infrastructure_damage")
-    @ResponseStatus(value = HttpStatus.NO_CONTENT)
+	@ResponseStatus(value = HttpStatus.NO_CONTENT)
 	public void notifyInfrastructureDamage(@RequestBody InfrastructureDamageRequest request) {
 		maintenanceService.requestInfrastructureDamage(request);
 	}
