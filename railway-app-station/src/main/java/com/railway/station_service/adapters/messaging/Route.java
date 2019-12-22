@@ -2,7 +2,6 @@ package com.railway.station_service.adapters.messaging;
 
 import java.util.Collection;
 
-
 public class Route {
 	private Long id;
 	private String name;

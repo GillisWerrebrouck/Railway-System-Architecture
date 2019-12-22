@@ -51,11 +51,6 @@ public class RailwayAppStationApplication {
 			createStation(UUID.fromString("5b659978-1c39-4372-97ec-a6e4d1418ef3"), "Zottegem", "Stationsplein 12", "Zottegem", "Oost-Vlaanderen", "België");
 			createStation(UUID.fromString("b44c17fc-6df1-4808-83d6-838f5637c9c7"), "Denderleeuw", "Stationsplein", "Denderleeuw", "Oost-Vlaanderen", "België");
 			createStation(UUID.fromString("05cce0f7-1409-4224-926a-db3b4c4a8ce5"), "Brussel-Zuid", "Fonsnylaan 47b", "Brussel", "Brussels", "België");
-			
-			logger.info("----------------------------ITEMS--------------------------------");
-			for(ScheduleItem s : scheduleItemRepository.findAll()) {
-				logger.info(s.toString());
-			}
 		};
 	}
 	

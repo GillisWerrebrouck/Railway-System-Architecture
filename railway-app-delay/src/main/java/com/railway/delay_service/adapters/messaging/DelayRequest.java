@@ -2,8 +2,6 @@ package com.railway.delay_service.adapters.messaging;
 
 import java.util.UUID;
 
-import com.railway.delay_service.domain.DelayState;
-
 public class DelayRequest {
 
 	private Long timetableId;
@@ -11,22 +9,15 @@ public class DelayRequest {
 	private Long startStationId;
 	private int delayInMinutes;
 	private String reasonForDelay;
-	private DelayState state;
 	private UUID routeRequestId;
-	
-	
 
-
-
-	public DelayRequest(Long timetableId, Long routeId, Long startStationId, int delayInMinutes, String reasonForDelay, DelayState state) {
+	public DelayRequest(Long timetableId, Long routeId, Long startStationId, int delayInMinutes, String reasonForDelay) {
 		this.timetableId = timetableId;
 		this.routeId = routeId;
 		this.startStationId = startStationId;
 		this.delayInMinutes = delayInMinutes;
 		this.reasonForDelay = reasonForDelay;
-		this.state = state;
 	}
-
 
 	public Long getTimetableId() {
 		return timetableId;
@@ -76,17 +67,7 @@ public class DelayRequest {
 	public void setReasonForDelay(String reasonForDelay) {
 		this.reasonForDelay = reasonForDelay;
 	}
-
-
-	public DelayState getState() {
-		return state;
-	}
-
-
-	public void setState(DelayState state) {
-		this.state = state;
-	}
-
+	
 
 	public UUID getRouteRequestId() {
 		return routeRequestId;
@@ -96,6 +77,5 @@ public class DelayRequest {
 	public void setRouteRequestId(UUID routeRequestId) {
 		this.routeRequestId = routeRequestId;
 	}
-	
 	
 }

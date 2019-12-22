@@ -28,11 +28,9 @@ public class RailwayAppRouteManagementApplication {
 		SpringApplication.run(RailwayAppRouteManagementApplication.class, args);
 	}
 	
-	//@SuppressWarnings("unused")
 	@Bean
 	public CommandLineRunner populateDatabase(StationRepository stationRepository, ConnectionRepository connectionRepository, RouteRepository routeRepository) {
 		return (args) ->{
-			
 			logger.info("Populating graph database with test data ...");
 
 			stationRepository.deleteAll();

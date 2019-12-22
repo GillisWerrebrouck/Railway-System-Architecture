@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.railway.timetable_service.adapters.messaging.DelayRequest;
-import com.railway.timetable_service.adapters.messaging.DelayState;
 import com.railway.timetable_service.adapters.messaging.RouteFetchedResponse;
 import com.railway.timetable_service.adapters.messaging.StationsResponse;
 import com.railway.timetable_service.adapters.messaging.TrainReservedResponse;
@@ -66,7 +65,6 @@ public class TimetableService {
 	}
 	
 	public synchronized void routeFetched(RouteFetchedResponse routeFetchedResponse) {
-		System.out.println("[timetable route fecth] "+routeFetchedResponse.getTimetableId()+ ", "+ routeFetchedResponse.getRouteId());
 		TimetableItem timetableItem = timetableItemRepository.findById(routeFetchedResponse.getTimetableId()).orElse(null);
 		// check if the response is for the request linked to the given timetableItem
 		if(timetableItem != null && timetableItem.getRouteRequestId().compareTo(routeFetchedResponse.getRequestId()) == 0) {
@@ -106,7 +104,6 @@ public class TimetableService {
 	}
 
 	public void processExtraDelay(UpdateDelayRequest request) {
-		System.out.println("Process extra delay : " + request.getDelayInMinutes());
 		saveTimeTableItemWithDelay(request.getTimetableId(), request.getDelayInMinutes());
 	}
 
@@ -118,6 +115,5 @@ public class TimetableService {
 		TimetableItem tItem =  timetableItemRepository.findById(id).get();
 		tItem.setDelay(delay);
 		timetableItemRepository.save(tItem);
-		System.out.println("Process delay : done");
 	}
 }

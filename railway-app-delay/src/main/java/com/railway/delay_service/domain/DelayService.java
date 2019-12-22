@@ -21,8 +21,6 @@ public class DelayService {
 	
 	public void sendDelay(DelayRequest delayRequest) {
 		logger.info("[Delay Service - sendDelay]" + delayRequest.getTimetableId() + ", " + delayRequest.getRouteId());
-		//processing delay started
-		delayRequest.setState(DelayState.STARTED);
 		//send delay to timetable
 		gateway.delayOccured_t(delayRequest);
 		//send delay to station

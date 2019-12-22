@@ -3,7 +3,6 @@ package com.railway.station_service.adapters.messaging;
 import java.util.Collection;
 import java.util.UUID;
 
-
 public class RouteFetchedResponse {
 	private Long routeId;
 	private Long timetableId;

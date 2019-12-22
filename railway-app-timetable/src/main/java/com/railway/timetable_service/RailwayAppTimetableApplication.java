@@ -31,7 +31,6 @@ public class RailwayAppTimetableApplication {
 	@Bean
 	public CommandLineRunner populateDatabase(TimetableItemRepository timetableItemRepository) {
 		return (args) ->{
-			/*
 			logger.info("Populating database with timetable items");
 
 			timetableItemRepository.deleteAll();
@@ -58,11 +57,7 @@ public class RailwayAppTimetableApplication {
 			logger.info(timetableItem02.toString());
 			logger.info(timetableItem03.toString());
 			logger.info(timetableItem04.toString());
-			logger.info(timetableItem05.toString());*/
-			logger.info("--------------------timetableItems-----------------------------");
-			for(TimetableItem t : timetableItemRepository.findAll()) {
-				logger.info(t.toString());
-			}
+			logger.info(timetableItem05.toString());
 		};
 	}
 }
