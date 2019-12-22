@@ -1,6 +1,7 @@
 package com.railway.timetable_service.adapters.messaging;
 
 public class RouteConnection {
+	
 	private Long id;
 	private Station station;
 	private boolean startOfRoute;

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.railway.timetable_service.adapters.messaging.Route;
 import com.railway.timetable_service.adapters.messaging.RouteFetchedResponse;
 import com.railway.timetable_service.adapters.messaging.StationsResponse;
+import com.railway.timetable_service.adapters.messaging.TrainOutOfServiceResponse;
 import com.railway.timetable_service.adapters.messaging.TrainReservedResponse;
 import com.railway.timetable_service.adapters.rest.ScheduleItemResponse;
 import com.railway.timetable_service.adapters.rest.SpecificsResponse;
@@ -130,6 +131,19 @@ public class TimetableService {
 			return timetableItemRestAdapter.getSpecifics(timetableItem.getTrainId());
 		}
 		throw new Exception("Timetable id doesn't exist");
+  }
+  
+	public synchronized void trainReservationChanged(TrainOutOfServiceResponse trainOutOfServiceResponse) {
+		TimetableItem timetableItem = timetableItemRepository.findById(trainOutOfServiceResponse.getTimeTableId()).orElse(null);
+		if(timetableItem != null) {
+			timetableItem.setTrainId(trainOutOfServiceResponse.getTrainId());
+			if(trainOutOfServiceResponse.getTrainId() == null) {
+				timetableItem.setTrainReservationStatus(Status.AUTO_RESCHEDULE_FAILED);
+			}
+			timetableItemRepository.save(timetableItem);
+		} else {
+			throw new NullPointerException();
+		}
 	}
 
 	public void reserveGroupSeats(GroupSeatsRequest groupSeatsRequest) throws NotEnoughGroupSeatsException {

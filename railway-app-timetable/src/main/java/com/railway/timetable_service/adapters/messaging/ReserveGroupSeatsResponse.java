@@ -3,7 +3,6 @@ package com.railway.timetable_service.adapters.messaging;
 import java.util.UUID;
 
 public class ReserveGroupSeatsResponse {
-
     private Long ticketId;
     private Long timeTableId;
     private boolean groupSeatsReserved;

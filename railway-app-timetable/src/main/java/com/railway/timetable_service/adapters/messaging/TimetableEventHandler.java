@@ -51,4 +51,14 @@ public class TimetableEventHandler {
 		}
 	}
 
+	@StreamListener(Channels.NOTIFY_TRAIN_OUT_OF_SERVICE)
+	public void processTrainOutOfService(TrainOutOfServiceResponse response) {
+		if(response.getTimeTableId() != null) {
+			logger.info("[Timetable Event Handler] successfully rescheduled train");
+			this.timetableItemService.trainReservationChanged(response);
+		} else {
+			logger.info("[Timetable Event Handler] failed to reserve new train");
+			throw new NullPointerException("No Timetable Id was specified.");
+		}
+	}
 }
