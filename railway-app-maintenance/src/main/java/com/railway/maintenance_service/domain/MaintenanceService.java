@@ -22,7 +22,7 @@ public class MaintenanceService {
   
 	public void requestInfrastructureDamage(InfrastructureDamageRequest infrastructureDamageRequest) {
 		gateway.requestInfrastructureDamage(infrastructureDamageRequest);
-  }
+  	}
   
 	public void changeTrainStatus(String trainId, TrainStatus status) {
 		ChangeStatusRequest request = new ChangeStatusRequest(trainId, status);
