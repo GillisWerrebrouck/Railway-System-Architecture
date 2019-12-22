@@ -109,7 +109,7 @@ public class TimetableService {
 		if(timetableItem != null) {
 			timetableItem.setTrainId(trainOutOfServiceResponse.getTrainId());
 			if(trainOutOfServiceResponse.getTrainId() == null) {
-				timetableItem.setTrainReservationStatus(Status.FAILED);
+				timetableItem.setTrainReservationStatus(Status.AUTO_RESCHEDULE_FAILED);
 			}
 			timetableItemRepository.save(timetableItem);
 		} else {
