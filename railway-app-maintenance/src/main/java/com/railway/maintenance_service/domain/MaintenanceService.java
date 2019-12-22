@@ -2,7 +2,7 @@ package com.railway.maintenance_service.domain;
 
 import org.springframework.stereotype.Service;
 
-import com.railway.maintenance_service.adapters.messaging.InfrastructureDamagedRequest;
+import com.railway.maintenance_service.adapters.messaging.InfrastructureDamageRequest;
 import com.railway.maintenance_service.adapters.messaging.MessageGateway;
 import com.railway.maintenance_service.adapters.messaging.StaffRequest;
 
@@ -18,7 +18,7 @@ public class MaintenanceService {
 		gateway.reserveStaff(request);
 	}
 	
-	public void requestInfrastructureDamaged(InfrastructureDamagedRequest infrastructureDamagedRequest) {
-		gateway.requestInfrastructureDamaged(infrastructureDamagedRequest);
+	public void requestInfrastructureDamage(InfrastructureDamageRequest infrastructureDamageRequest) {
+		gateway.requestInfrastructureDamage(infrastructureDamageRequest);
 	}
 }

@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.railway.api_gateway.adapters.messaging.EmergencyRequest;
-import com.railway.api_gateway.adapters.messaging.InfrastructureDamagedRequest;
+import com.railway.api_gateway.adapters.messaging.InfrastructureDamageRequest;
 
 
 @Service
@@ -22,8 +22,8 @@ public class ApiGatewayService {
 		logger.info("details: " + request.getMessage());
 	}
 	
-	public void sendInfrastructureDamagedRequest(InfrastructureDamagedRequest request) {
-		logger.info("Train with ID: "+ request.getTrainId() + " was damaged.");
+	public void sendInfrastructureDamageRequest(InfrastructureDamageRequest request) {
+		logger.info("Damage on location: "+ request.getLocation() + " ");
 		logger.info("Specifics: " + request.getMessage());
 	}
 }

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.railway.maintenance_service.adapters.messaging.InfrastructureDamagedRequest;
+import com.railway.maintenance_service.adapters.messaging.InfrastructureDamageRequest;
 import com.railway.maintenance_service.domain.MaintenanceService;
 import com.railway.maintenance_service.domain.ScheduleItem;
 import com.railway.maintenance_service.persistence.MaintenanceRepository;
@@ -19,12 +19,12 @@ import com.railway.maintenance_service.persistence.MaintenanceRepository;
 @RequestMapping("/maintenance/schedule")
 public class MaintenanceController {
 	private MaintenanceRepository maintenanceRepository;
-	private MaintenanceService service;
+	private MaintenanceService maintenanceService;
 
 	@Autowired
-	public MaintenanceController(MaintenanceRepository maintenanceRepository, MaintenanceService service) {
+	public MaintenanceController(MaintenanceRepository maintenanceRepository, MaintenanceService maintenanceService) {
 		this.maintenanceRepository = maintenanceRepository;
-		this.service = service;
+		this.maintenanceService = maintenanceService;
 	}
 	
 	@GetMapping
@@ -37,9 +37,9 @@ public class MaintenanceController {
 		return maintenanceRepository.findById(id).orElse(null);
 	}
 	
-	@PostMapping("/infrastructure_damaged")
+	@PostMapping("/infrastructure_damage")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
-	public void notifyInfrastructureDamaged(@RequestBody InfrastructureDamagedRequest request) {
-		service.requestInfrastructureDamaged(request);
+	public void notifyInfrastructureDamage(@RequestBody InfrastructureDamageRequest request) {
+		maintenanceService.requestInfrastructureDamage(request);
 	}
 }

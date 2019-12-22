@@ -10,7 +10,7 @@ public interface Channels {
 	static final String RESERVE_STAFF = "reserve_staff";
 	static final String STAFF_RESERVED = "staff_reserved";
 	static final String NOTIFY_ACCIDENT = "notify_accident";
-	static final String NOTIFY_INFRASTRUCTURE_DAMAGED = "notify_infrastructure_damaged";
+	static final String NOTIFY_INFRASTRUCTURE_DAMAGE = "notify_infrastructure_damage";
 	
 	@Input(REQUEST_MAINTENANCE)
 	SubscribableChannel requestMaintenance();
@@ -24,6 +24,6 @@ public interface Channels {
 	@Input(STAFF_RESERVED)
 	SubscribableChannel staffReserved();
 
-	@Output(NOTIFY_INFRASTRUCTURE_DAMAGED)
-	MessageChannel notifyInfrastructureDamaged();
+	@Output(NOTIFY_INFRASTRUCTURE_DAMAGE)
+	MessageChannel notifyInfrastructureDamage();
 }
