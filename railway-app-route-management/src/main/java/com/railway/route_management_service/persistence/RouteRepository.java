@@ -15,6 +15,11 @@ import java.util.UUID;
 public interface RouteRepository extends Neo4jRepository<Route, Long> {
 	@Query("MATCH (r:Route)-[u:" + Constants.ROUTE_STATION_RELATIONSHIP + "]-(s:Station) WHERE ID(u)={id} DELETE u")
 	void deleteRouteStationRelationshipById(Long id);
+	
+	@Query("MATCH p=(r1:Route)-[rc1:USES_STATION]-(x:Station)-[c:CONNECTED_WITH*]-(y:Station)-[rc2:USES_STATION]-(r2:Route)\n" + 
+			"WHERE x.stationId = {startStationId} AND y.stationId = {endStationId} AND r1=r2 AND ALL(z IN nodes(p) WHERE (z)-[:USES_STATION]-() )\n" + 
+			"RETURN distinct r1")
+	Collection<Route> getRoutes(UUID startStationId, UUID endStationId);
 
 	@Query("MATCH p=(:Route)-[:USES_STATION]-(x:Station)-[c:CONNECTED_WITH* { active:true }]-(y:Station)-[:USES_STATION]-(:Route)\n" +
 			"WHERE x.stationId={stationXId} AND y.stationId={stationYId}\n" +

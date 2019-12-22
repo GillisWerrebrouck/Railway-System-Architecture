@@ -6,6 +6,9 @@ public class RouteConnection {
 	private Station station;
 	private boolean startOfRoute;
 	
+	@SuppressWarnings("unused")
+	private RouteConnection() {}
+	
 	public RouteConnection(Long id, Station station, boolean startOfRoute) {
 		this.id = id;
 		this.station = station;

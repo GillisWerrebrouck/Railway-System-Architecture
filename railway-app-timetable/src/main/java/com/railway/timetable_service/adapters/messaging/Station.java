@@ -6,6 +6,9 @@ public class Station {
 	private String stationId;
 	private String name;
 	
+	@SuppressWarnings("unused")
+	private Station() {}
+	
 	public Station(Long id, String stationId, String name) {
 		this.id = id;
 		this.stationId = stationId;
