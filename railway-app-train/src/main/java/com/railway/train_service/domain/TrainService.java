@@ -98,7 +98,7 @@ public class TrainService {
 		}
 	}
 	
-	public synchronized void switchTrainReservationOfTrain(TrainOutOfServiceRequest request, String trainId) {
+	public synchronized void switchTrainReservationsOfTrain(TrainOutOfServiceRequest request, String trainId) {
 		Train train = trainRepository.findById(trainId).get();
 		List<ScheduleItem> scheduleItems = train.getScheduleItems()
 												.stream()
@@ -106,12 +106,13 @@ public class TrainService {
 												.collect(Collectors.toList());
 		for(ScheduleItem scheduleItem : scheduleItems) {	
 			Train newTrain = this.reserveTrain(scheduleItem, train.getType());//old train can't be selected because it is still assigned to the current schedule
-			if(newTrain == null) {
-				
-			}
 			train.removeScheduleItem(scheduleItem);
+			if(newTrain == null) 
+				request.setTrainId(null);
+			else 
+				request.setTrainId(newTrain.getId());
 			request.setTimeTableId(scheduleItem.getTimetableId());
-			request.setTrainId(newTrain.getId());
+			trainRepository.save(newTrain);
 			gateway.notifyTrainOutOfService(request);
 		}
 	}
@@ -140,6 +141,9 @@ public class TrainService {
 		Train train = trainRepository.findById(request.getTrainId()).orElse(null);
 		if(train != null) {
 			train.setStatus(request.getStatus());
+			if(request.getStatus().equals(TrainStatus.NONACTIVE)) {
+				this.switchTrainReservationsOfTrain(new TrainOutOfServiceRequest(null,null), train.getId());
+			}
 			trainRepository.save(train);
 		}
 	}
