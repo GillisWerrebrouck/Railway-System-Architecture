@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.railway.train_service.adapters.messaging.AccidentRequest;
 import com.railway.train_service.adapters.messaging.MaintenanceRequest;
 import com.railway.train_service.adapters.messaging.MaintenanceResponse;
-import com.railway.train_service.adapters.messaging.TrainOutOfServiceRequest;
 import com.railway.train_service.domain.ReservationType;
 import com.railway.train_service.domain.Train;
 import com.railway.train_service.domain.TrainService;
@@ -54,7 +53,6 @@ public class TrainRestController {
 		return train;
 	}
 
-	// request maintenance for a train
 	@PostMapping("/{id}/maintenance")
 	public MaintenanceResponse notifyMaintenance(@PathVariable String id, @RequestBody MaintenanceRequest request) {
 		Train train = trainRepository.findById(id).orElse(null);
@@ -81,7 +79,6 @@ public class TrainRestController {
 		return response;
 	}
 	
-	// report accident for a train
 	@PostMapping("/{id}/accident")
 	public MaintenanceResponse notifyAccident(@PathVariable String id, @RequestBody AccidentRequest request) {
 		Train train = trainRepository.findById(id).orElse(null);

@@ -106,7 +106,6 @@ public class TimetableService {
 	
 	public synchronized void trainReservationChanged(TrainOutOfServiceResponse trainOutOfServiceResponse) {
 		TimetableItem timetableItem = timetableItemRepository.findById(trainOutOfServiceResponse.getTimeTableId()).orElse(null);
-		// check if the response is for the request linked to the given timetableItem
 		if(timetableItem != null) {
 			timetableItem.setTrainId(trainOutOfServiceResponse.getTrainId());
 			if(trainOutOfServiceResponse.getTrainId() == null) {
