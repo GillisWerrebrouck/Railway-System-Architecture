@@ -131,7 +131,7 @@ public class TimetableService {
 			return timetableItemRestAdapter.getSpecifics(timetableItem.getTrainId());
 		}
 		throw new Exception("Timetable id doesn't exist");
-  }
+  	}
   
 	public synchronized void trainReservationChanged(TrainOutOfServiceResponse trainOutOfServiceResponse) {
 		TimetableItem timetableItem = timetableItemRepository.findById(trainOutOfServiceResponse.getTimeTableId()).orElse(null);
