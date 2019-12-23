@@ -13,7 +13,7 @@ public interface TimetableItemRepository extends CrudRepository<TimetableItem, L
 	@Query("SELECT t FROM TimetableItem t WHERE routeId = ?1 AND startDateTime>=CURRENT_DATE")
 	List<TimetableItem> findByRouteId(Long routeId);
 	
-	@Query("SELECT t FROM TimetableItem t WHERE t.startDateTime >= CURRENT_DATE AND routeId = ?1")
+	@Query("SELECT t FROM TimetableItem t WHERE t.endDateTime >= CURRENT_DATE AND routeId = ?1")
 	List<TimetableItem> findByRouteIdInFromNow(Long routeId);
   
 	@Query("SELECT t FROM TimetableItem t WHERE t.trainOperatorRequestId=?1 OR t.trainConductorRequestId=?1")

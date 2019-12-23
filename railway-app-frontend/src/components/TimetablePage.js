@@ -8,6 +8,13 @@ export default class TimetablePage extends Component {
     this.state = {
       isLoading: true,
       timetable: [],
+      newTimetableItem: {
+        routeId: null,
+        startDateTime: null,
+        requestedTrainType: "IR",
+        amountOfTrainConductors: null,
+      },
+      createTimetableItemErrorResponse: "",
     };
   }
 
@@ -34,6 +41,27 @@ export default class TimetablePage extends Component {
     });
   }
 
+  createTimetableItemFormChangeHandler = (event) => {
+    const name = event.target.name;
+    const value = event.target.value;
+
+    let newTimetableItem = {...this.state.newTimetableItem};
+    newTimetableItem[name] = value;
+    this.setState({ newTimetableItem });
+  }
+
+  createTimetableItem = (event) => {
+    event.preventDefault();
+    endpoints.postNewTimetableItem(this.state.newTimetableItem)
+      .then(result => { 
+        if(typeof result.data === "string") {
+          this.setState({ createTimetableItemErrorResponse: result.data });
+        } else {
+          window.location.reload();
+        }
+      });
+  }
+
   render() {
     return (
       <div>
@@ -56,6 +84,49 @@ export default class TimetablePage extends Component {
         ) : (
           <p>Loading...</p>
         )}
+
+        <h3>Create a timetable item</h3>
+        <form onSubmit={this.createTimetableItem}>
+          <label>Route ID: </label>
+          <input
+            type='number'
+            name='routeId'
+            onChange={this.createTimetableItemFormChangeHandler}
+          />
+          <br />
+
+          <label>Start datetime: </label>
+          <input
+            type='datetime'
+            name='startDateTime'
+            onChange={this.createTimetableItemFormChangeHandler}
+          />
+          <span>&nbsp;format: yyyy-mm-ddThh:mm:00.000</span>
+          <br />
+
+          <label>Train type: </label>
+          <select name='requestedTrainType' onChange={this.createTimetableItemFormChangeHandler}>
+            <option value="IR">IR</option>
+            <option value="IC">IC</option>
+            <option value="P">P</option>
+          </select>
+          <br />
+
+          <label>#Train conductors: </label>
+          <input
+            type='number'
+            name='amountOfTrainConductors'
+            onChange={this.createTimetableItemFormChangeHandler}
+          />
+          <br />
+
+          <input
+            type='submit'
+            value='CREATE'
+          />
+        </form>
+
+        <p>{this.state.createTimetableItemErrorResponse}</p>
       </div>
     );
   }
