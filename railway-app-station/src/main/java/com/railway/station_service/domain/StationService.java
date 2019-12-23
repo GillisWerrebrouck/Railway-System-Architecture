@@ -68,8 +68,10 @@ public class StationService {
 		boolean isPlatformAvailable = true;
 		
 		for(ScheduleItem scheduleItem : reservedSlots) {
-			if(!(arrivalDateTime.isBefore(scheduleItem.getArrivalDateTime()) && departureDateTime.isBefore(scheduleItem.getArrivalDateTime()) || 
-					arrivalDateTime.isAfter(scheduleItem.getDepartureDateTime()) && departureDateTime.isAfter(scheduleItem.getDepartureDateTime()))) {
+			LocalDateTime arrivalTimeWithDelay = scheduleItem.getArrivalDateTime().plusMinutes(scheduleItem.getDelayInMinutes());
+			LocalDateTime departureTimeWithDelay = scheduleItem.getDepartureDateTime().plusMinutes(scheduleItem.getDelayInMinutes());
+			if(!(arrivalDateTime.isBefore(arrivalTimeWithDelay) && departureDateTime.isBefore(arrivalTimeWithDelay) || 
+					arrivalDateTime.isAfter(departureTimeWithDelay) && departureDateTime.isAfter(departureTimeWithDelay))) {
 				isPlatformAvailable = false;
 			}
 		}
