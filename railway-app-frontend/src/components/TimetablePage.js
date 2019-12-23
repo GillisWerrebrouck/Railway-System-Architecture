@@ -8,6 +8,12 @@ export default class TimetablePage extends Component {
     this.state = {
       isLoading: true,
       timetable: [],
+      newTimetableItem: {
+        routeId: null,
+        startDateTime: null,
+        requestedTrainType: null,
+        amountOfTrainConductors: null
+      },
     };
   }
 
@@ -34,6 +40,16 @@ export default class TimetablePage extends Component {
     });
   }
 
+  formChangeHandler(event) {
+    const name = event.target.name;
+    const value = event.target.value;
+    this.setState({ newTimetableItem: { [name]: value } });
+  }
+
+  createTimetableItem() {
+    
+  }
+
   render() {
     return (
       <div>
@@ -56,6 +72,46 @@ export default class TimetablePage extends Component {
         ) : (
           <p>Loading...</p>
         )}
+
+        <h3>{this.state.newTimetableItem.routeId} Create a timetable item</h3>
+        <form onSubmit={this.createTimetableItem}>
+          <label>Route ID: </label>
+          <input
+            type='number'
+            name='routeId'
+            onChange={this.formChangeHandler}
+          />
+          <br />
+
+          <label>Start datetime: </label>
+          <input
+            type='datetime'
+            name='startDateTime'
+            onChange={this.formChangeHandler}
+          />
+          <br />
+
+          <label>Train type: </label>
+          <select value={this.state.newTimetableItem.requestedTrainType}>
+            <option value="IR">IR</option>
+            <option value="IC">IC</option>
+            <option value="P">P</option>
+          </select>
+          <br />
+
+          <label>#Train conductors: </label>
+          <input
+            type='number'
+            name='amountOfTrainConductors'
+            onChange={this.formChangeHandler}
+          />
+          <br />
+
+          <input
+            type='submit'
+            value='CREATE'
+          />
+        </form>
       </div>
     );
   }
