@@ -32,8 +32,8 @@ export default class NetworkPage extends Component {
           <td>{country}</td>
           <td>{platforms.length}</td>
         </tr>
-      )
-    })
+      );
+    });
   }
 
   render() {
@@ -61,6 +61,6 @@ export default class NetworkPage extends Component {
           <p>Loading...</p>
         )}
       </div>
-    )
+    );
   }
 }

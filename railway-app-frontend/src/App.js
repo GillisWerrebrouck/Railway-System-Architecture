@@ -12,6 +12,7 @@ import NetworkPage from './components/NetworkPage';
 import TimetablePage from './components/TimetablePage'
 import StaffPage from './components/StaffPage';
 import TrainPage from './components/TrainPage';
+import TicketPage from './components/TicketPage';
 
 class App extends Component {
   render() {
@@ -26,6 +27,7 @@ class App extends Component {
               <li> <Link to="/timetable">Timetable</Link> </li>
               <li> <Link to="/staff">Staff</Link> </li>
               <li> <Link to="/train">Train</Link> </li>
+              <li> <Link to="/ticket">Ticket</Link> </li>
             </ul>
         </div>
         <div className="App-intro">
@@ -34,6 +36,7 @@ class App extends Component {
             <Route path="/timetable" component={TimetablePage} />
             <Route path="/staff" component={StaffPage} />
             <Route path="/train" component={TrainPage} />
+            <Route path="/ticket" component={TicketPage} />
             <Redirect to="/" />
           </Switch>
         </div>
