@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import endpoints from '../api/endpoints';
+import { NEO4J_URI, NEO4J_USER, NEO4J_PASSWORD } from '../api/constants'
+import { ResponsiveNeoGraph } from "./NeoGraph";
 
 export default class NetworkPage extends Component {
   constructor(props) {
@@ -40,6 +42,12 @@ export default class NetworkPage extends Component {
     return (
       <div>
         <h2>Network</h2>
+        <ResponsiveNeoGraph
+          containerId={"network-graph"}
+          neo4jUri={NEO4J_URI}
+          neo4jUser={NEO4J_USER}
+          neo4jPassword={NEO4J_PASSWORD}
+        />
 
         <h3>Stations</h3>
         {!this.state.isLoading ? (
