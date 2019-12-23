@@ -138,7 +138,59 @@ public class RouteRestController {
 	// get the connections of a predefined route by route id
 	@GetMapping("/route/{id}/connections")
 	public Collection<Connection> getRouteConnectionsByRouteId(@PathVariable Long id) {
-		return this.connectionRepository.findRouteById(id);
+		Route route = this.routeRepository.findById(id).orElse(null);
+		
+		Collection<Connection> orderedConnections = new ArrayList<>();
+		
+		Station station = getStart(route);
+		UUID previousStationId = UUID.fromString(station.getStationId());
+		Collection<Connection> connections = this.connectionRepository.findConnectionsByRouteId(route.getId());
+		
+		// loop over all stations on the route
+		while(connections.size() > 0) {
+			// get the next station on this route
+			Connection connection = getNextRoutePart(connections, previousStationId);
+			orderedConnections.add(connection);
+			if(connection.getStationX().getStationId().compareTo(previousStationId.toString()) == 0) {
+				station = connection.getStationY();
+			} else {
+				station = connection.getStationX();
+			}
+			connections.removeIf(r -> r.getId() == connection.getId());
+			previousStationId=UUID.fromString(station.getStationId());
+		}
+		
+		return orderedConnections;
+	}
+
+	// get the connections of a predefined route by route id
+	@GetMapping("/route/{id}/stations")
+	public Collection<Station> getRouteStationsByRouteId(@PathVariable Long id) {
+		Route route = this.routeRepository.findById(id).orElse(null);
+		
+		Collection<Station> orderedStations = new ArrayList<>();
+		
+		Station station = getStart(route);
+		orderedStations.add(station);
+		UUID previousStationId = UUID.fromString(station.getStationId());
+		Collection<Connection> connections = this.connectionRepository.findConnectionsByRouteId(route.getId());
+		
+		// loop over all stations on the route
+		while(connections.size() > 0) {
+			// get the next station on this route
+			Connection connection = getNextRoutePart(connections, previousStationId);
+			if(connection.getStationX().getStationId().compareTo(previousStationId.toString()) == 0) {
+				station = connection.getStationY();
+				orderedStations.add(station);
+			} else {
+				station = connection.getStationX();
+				orderedStations.add(station);
+			}
+			connections.removeIf(r -> r.getId() == connection.getId());
+			previousStationId=UUID.fromString(station.getStationId());
+		}
+		
+		return orderedStations;
 	}
 	
 	// create a new route node
