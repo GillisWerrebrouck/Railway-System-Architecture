@@ -23,6 +23,13 @@ const endpoints = {
                 .catch(error => { reject(error); });
         });
     },
+    getTimetable: () => {
+        return new Promise((resolve, reject) => {
+            axios.get(URL + '/timetable/all', { responseType: 'json' })
+                .then(result => { resolve(result); })
+                .catch(error => { reject(error); });
+        });
+    },
 }
 
 export default endpoints;

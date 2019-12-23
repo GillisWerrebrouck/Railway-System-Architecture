@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { Component } from 'react';
 
-const TicketPage = () => (
-  <div>
-    <h2>Ticket</h2>
-  </div>
-);
+export default class TicketPage extends Component {
+  render() {
+    return (
+      <div>
+        <h2>Ticket</h2>
 
-export default TicketPage;
+      </div>
+    );
+  }
+}
