@@ -30,6 +30,27 @@ const endpoints = {
                 .catch(error => { reject(error); });
         });
     },
+    getRoutes: () => {
+        return new Promise((resolve, reject) => {
+            axios.get(URL + '/network/route/all', { responseType: 'json' })
+                .then(result => { resolve(result); })
+                .catch(error => { reject(error); });
+        });
+    },
+    getStationsOnRoute: (routeId) => {
+        return new Promise((resolve, reject) => {
+            axios.get(URL + `/network/route/${routeId}/stations`, { responseType: 'json' })
+                .then(result => { resolve(result); })
+                .catch(error => { reject(error); });
+        });
+    },
+    getConnectionsOnRoute: (routeId) => {
+        return new Promise((resolve, reject) => {
+            axios.get(URL + `/network/route/${routeId}/connections`, { responseType: 'json' })
+                .then(result => { resolve(result); })
+                .catch(error => { reject(error); });
+        });
+    },
 }
 
 export default endpoints;
