@@ -15,7 +15,6 @@ export default class TrainPage extends Component {
     endpoints.getTrains()
       .then((result) => {
         this.setState({ trains: result.data, isLoading: false });
-        console.log(result);
       });
   }
 
