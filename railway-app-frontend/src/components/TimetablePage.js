@@ -11,9 +11,10 @@ export default class TimetablePage extends Component {
       newTimetableItem: {
         routeId: null,
         startDateTime: null,
-        requestedTrainType: null,
+        requestedTrainType: "IR",
         amountOfTrainConductors: null
       },
+      createTimetableItemErrorResponse: "",
     };
   }
 
@@ -40,14 +41,25 @@ export default class TimetablePage extends Component {
     });
   }
 
-  formChangeHandler(event) {
+  formChangeHandler = (event) => {
     const name = event.target.name;
     const value = event.target.value;
-    this.setState({ newTimetableItem: { [name]: value } });
+
+    let newTimetableItem = {...this.state.newTimetableItem};
+    newTimetableItem[name] = value;
+    this.setState({ newTimetableItem });
   }
 
-  createTimetableItem() {
-    
+  createTimetableItem = (event) => {
+    event.preventDefault();
+    endpoints.postNewTimetableItem(this.state.newTimetableItem)
+      .then(error => { 
+        if(typeof error.data === "string") {
+          this.setState({ createTimetableItemErrorResponse: error.data });
+        } else {
+          window.location.reload();
+        }
+      });
   }
 
   render() {
@@ -73,7 +85,7 @@ export default class TimetablePage extends Component {
           <p>Loading...</p>
         )}
 
-        <h3>{this.state.newTimetableItem.routeId} Create a timetable item</h3>
+        <h3>Create a timetable item</h3>
         <form onSubmit={this.createTimetableItem}>
           <label>Route ID: </label>
           <input
@@ -89,10 +101,11 @@ export default class TimetablePage extends Component {
             name='startDateTime'
             onChange={this.formChangeHandler}
           />
+          <span>&nbsp;format: yyyy-mm-ddThh:mm:00.000</span>
           <br />
 
           <label>Train type: </label>
-          <select value={this.state.newTimetableItem.requestedTrainType}>
+          <select name='requestedTrainType' onChange={this.formChangeHandler}>
             <option value="IR">IR</option>
             <option value="IC">IC</option>
             <option value="P">P</option>
@@ -112,6 +125,8 @@ export default class TimetablePage extends Component {
             value='CREATE'
           />
         </form>
+
+        <p>{this.state.createTimetableItemErrorResponse}</p>
       </div>
     );
   }

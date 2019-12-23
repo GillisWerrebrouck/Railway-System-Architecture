@@ -51,9 +51,9 @@ const endpoints = {
                 .catch(error => { reject(error); });
         });
     },
-    postNewTimetableItem: (routeId, startDateTime, requestedTrainType, amountOfTrainConductors) => {
+    postNewTimetableItem: (newTimetableItem) => {
         return new Promise((resolve, reject) => {
-            axios.post(URL + '/timetable', { routeId, startDateTime, requestedTrainType, amountOfTrainConductors })
+            axios.post(URL + '/timetable', newTimetableItem, { headers: { 'Content-Type': 'application/json' } })
                 .then(result => { resolve(result); })
                 .catch(error => { reject(error); });
         });
