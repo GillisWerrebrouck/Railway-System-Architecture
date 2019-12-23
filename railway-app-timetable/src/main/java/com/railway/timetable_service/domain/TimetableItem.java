@@ -32,6 +32,7 @@ public class TimetableItem {
 	private UUID trainRequestId;
 	private TrainType requestedTrainType;
 	private UUID stationsRequestId;
+	private String reasonForDelay;
 	
 	@Column
     @ElementCollection(targetClass=Long.class, fetch=FetchType.EAGER)
@@ -45,7 +46,7 @@ public class TimetableItem {
 	@SuppressWarnings("unused")
 	private TimetableItem() {}
 
-	public TimetableItem(LocalDateTime startDate, LocalDateTime endDateTime, Long routeId, String trainId, TrainType requestedTrainType, List<Long> staffIds) {
+	public TimetableItem(LocalDateTime startDate, LocalDateTime endDateTime, Long routeId, String trainId, TrainType requestedTrainType, List<Long> staffIds, String reasonForDelay) {
 		this.startDateTime = startDate;
 		this.endDateTime = endDateTime;
 		this.delay = 0;
@@ -60,10 +61,11 @@ public class TimetableItem {
 		this.trainReservationStatus = Status.UNKNOWN;
 		this.stationsReservationStatus = Status.UNKNOWN;
 		this.staffReservationStatus = Status.UNKNOWN;
+		this.reasonForDelay = reasonForDelay;
 	}
 
 	public TimetableItem(Long routeId, LocalDateTime startDate, TrainType requestedTrainType) {
-		this(startDate, null, routeId, null, requestedTrainType, new ArrayList<Long>());
+		this(startDate, null, routeId, null, requestedTrainType, new ArrayList<Long>(), null);
 	}
 	
 	public Long getId() {
@@ -186,6 +188,14 @@ public class TimetableItem {
 		this.staffReservationStatus = staffReservationStatus;
 	}
 	
+	public String getReasonForDelay() {
+		return reasonForDelay;
+	}
+
+	public void setReasonForDelay(String reasonForDelay) {
+		this.reasonForDelay = reasonForDelay;
+	}
+
 	@Override
 	public String toString() {
 		return "Route " + this.routeId + ": " + this.startDateTime.toString() + " - " + this.endDateTime.toString();

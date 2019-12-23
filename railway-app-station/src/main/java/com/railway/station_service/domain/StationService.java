@@ -211,7 +211,7 @@ public class StationService {
 			item.setPlatform(platform);
 			item.setDelayInMinutes(totalDelay + additionalDelay);
 			scheduleItemRepository.save(item);
-			informTimetable(request.getTimetableId(), totalDelay + additionalDelay);
+			informTimetable(request.getTimetableId(), additionalDelay);
 		}
 	}
 
@@ -241,10 +241,12 @@ public class StationService {
 		for(ScheduleItem item : p.getReservedSlots()) {
 			//current scheduleitem is not the one affected by the delay
 			if(item.getId() != id) {
-				if(item.getArrivalDateTime().isBefore(newArrivalTime) && item.getDepartureDateTime().isAfter(newArrivalTime)) {
+				LocalDateTime arrivalTimeWIthDelay = item.getArrivalDateTime().plusMinutes(item.getDelayInMinutes());
+				LocalDateTime departureTimeWithDelay = item.getDepartureDateTime().plusMinutes(item.getDelayInMinutes());
+				if(arrivalTimeWIthDelay.isBefore(newArrivalTime) && departureTimeWithDelay.isAfter(newArrivalTime)) {
 					return true;
 				}
-				if(item.getArrivalDateTime().isBefore(newArrivalTime.plusMinutes(8)) && item.getDepartureDateTime().isAfter(newArrivalTime.plusMinutes(8))) {
+				if(arrivalTimeWIthDelay.isBefore(newArrivalTime.plusMinutes(8)) && departureTimeWithDelay.isAfter(newArrivalTime.plusMinutes(8))) {
 					return true;
 				}
 			}

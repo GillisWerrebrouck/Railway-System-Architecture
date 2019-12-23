@@ -104,16 +104,18 @@ public class TimetableService {
 	}
 
 	public void processExtraDelay(UpdateDelayRequest request) {
-		saveTimeTableItemWithDelay(request.getTimetableId(), request.getDelayInMinutes());
+		saveTimeTableItemWithDelay(request.getTimetableId(), request.getDelayInMinutes(), null);
 	}
 
 	public void processDelay(DelayRequest request) {
-		saveTimeTableItemWithDelay(request.getTimetableId(), request.getDelayInMinutes());
+		saveTimeTableItemWithDelay(request.getTimetableId(), request.getDelayInMinutes(), request.getReasonForDelay());
 	}
 	
-	public void saveTimeTableItemWithDelay(Long id, int delay) {
+	public void saveTimeTableItemWithDelay(Long id, int delay,String reason) {
 		TimetableItem tItem =  timetableItemRepository.findById(id).get();
-		tItem.setDelay(delay);
+		int totalDelay = tItem.getDelay() + delay;
+		tItem.setDelay(totalDelay);
+		tItem.setReasonForDelay(reason == null ? tItem.getReasonForDelay() : reason);
 		timetableItemRepository.save(tItem);
 	}
 }
