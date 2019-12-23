@@ -12,7 +12,7 @@ export default class TimetablePage extends Component {
         routeId: null,
         startDateTime: null,
         requestedTrainType: "IR",
-        amountOfTrainConductors: null
+        amountOfTrainConductors: null,
       },
       createTimetableItemErrorResponse: "",
     };
@@ -41,7 +41,7 @@ export default class TimetablePage extends Component {
     });
   }
 
-  formChangeHandler = (event) => {
+  createTimetableItemFormChangeHandler = (event) => {
     const name = event.target.name;
     const value = event.target.value;
 
@@ -53,9 +53,9 @@ export default class TimetablePage extends Component {
   createTimetableItem = (event) => {
     event.preventDefault();
     endpoints.postNewTimetableItem(this.state.newTimetableItem)
-      .then(error => { 
-        if(typeof error.data === "string") {
-          this.setState({ createTimetableItemErrorResponse: error.data });
+      .then(result => { 
+        if(typeof result.data === "string") {
+          this.setState({ createTimetableItemErrorResponse: result.data });
         } else {
           window.location.reload();
         }
@@ -91,7 +91,7 @@ export default class TimetablePage extends Component {
           <input
             type='number'
             name='routeId'
-            onChange={this.formChangeHandler}
+            onChange={this.createTimetableItemFormChangeHandler}
           />
           <br />
 
@@ -99,13 +99,13 @@ export default class TimetablePage extends Component {
           <input
             type='datetime'
             name='startDateTime'
-            onChange={this.formChangeHandler}
+            onChange={this.createTimetableItemFormChangeHandler}
           />
           <span>&nbsp;format: yyyy-mm-ddThh:mm:00.000</span>
           <br />
 
           <label>Train type: </label>
-          <select name='requestedTrainType' onChange={this.formChangeHandler}>
+          <select name='requestedTrainType' onChange={this.createTimetableItemFormChangeHandler}>
             <option value="IR">IR</option>
             <option value="IC">IC</option>
             <option value="P">P</option>
@@ -116,7 +116,7 @@ export default class TimetablePage extends Component {
           <input
             type='number'
             name='amountOfTrainConductors'
-            onChange={this.formChangeHandler}
+            onChange={this.createTimetableItemFormChangeHandler}
           />
           <br />
 

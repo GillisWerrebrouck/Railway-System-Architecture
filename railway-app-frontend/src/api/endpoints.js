@@ -58,6 +58,13 @@ const endpoints = {
                 .catch(error => { reject(error); });
         });
     },
+    postChangeConnectionState: (connection) => {
+        return new Promise((resolve, reject) => {
+            axios.put(URL + '/network/connection', connection, { headers: { 'Content-Type': 'application/json' } })
+                .then(result => { resolve(result); })
+                .catch(error => { reject(error); });
+        });
+    },
 }
 
 export default endpoints;

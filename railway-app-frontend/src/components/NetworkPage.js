@@ -12,6 +12,10 @@ export default class NetworkPage extends Component {
       isStationsLoading: true,
       routes: [],
       stations: [],
+      changeConnectionState: {
+        id: null,
+        active: true,
+      },
     };
   }
 
@@ -88,6 +92,26 @@ export default class NetworkPage extends Component {
     });
   }
 
+  changeConnectionFormChangeHandler = (event) => {
+    const name = event.target.name;
+    const value = event.target.value;
+
+    let changeConnectionState = {...this.state.changeConnectionState};
+    changeConnectionState[name] = value;
+    this.setState({ changeConnectionState });
+  }
+
+  changeConnectionState = (event) => {
+    event.preventDefault();
+
+    let changeConnectionState = {...this.state.changeConnectionState};
+    changeConnectionState.active = changeConnectionState.active == "true";
+    this.setState({ changeConnectionState });
+
+    endpoints.postChangeConnectionState(this.state.changeConnectionState)
+      .then(() => { window.location.reload(); });
+  }
+
   render() {
     return (
       <div>
@@ -134,6 +158,33 @@ export default class NetworkPage extends Component {
         ) : (
           <p>Loading...</p>
         )}
+
+        <h3>Change connection status</h3>
+        <p>
+          A connection between two stations has a status (active/non-active). 
+          Only connections that aren't used in any timetable items (from datetime now) can be set inactive.
+        </p>
+        <form onSubmit={this.changeConnectionState}>
+          <label>Connection ID: </label>
+          <input
+            type='number'
+            name='id'
+            onChange={this.changeConnectionFormChangeHandler}
+          />
+          <br />
+
+          <label>Status: </label>
+          <select name='active' onChange={this.changeConnectionFormChangeHandler}>
+            <option value="true">active</option>
+            <option value="false">non-active</option>
+          </select>
+          <br />
+
+          <input
+            type='submit'
+            value='SET'
+          />
+        </form>
       </div>
     );
   }
