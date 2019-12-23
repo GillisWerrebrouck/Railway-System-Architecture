@@ -1,9 +1,23 @@
-import React from 'react';
+import React, { Component } from 'react';
+import axios from 'axios';
 
-const NetworkPage = () => (
-  <div>
-    <h2>Network</h2>
-  </div>
-);
+export default class NetworkPage extends Component {
+  constructor(props) {
+    super(props);
 
-export default NetworkPage;
+    this.getStations();
+  }
+
+  getStations() {
+    axios.get('http://localhost:8080/station')
+      .then(res => console.log(res.data));
+  }
+
+  render() {
+    return (
+      <div>
+        <h2>Network</h2>
+      </div>
+    )
+  }
+}
