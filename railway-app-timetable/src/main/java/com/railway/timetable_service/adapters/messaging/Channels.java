@@ -16,6 +16,8 @@ public interface Channels {
 	static final String STAFF_RESERVED = "staff_reserved";
 	static final String DISCARD_TRAIN_RESERVATION = "discard_train_reservation";
 	static final String DISCARD_STATION_RESERVATIONS = "discard_station_reservations";
+	static final String NOTIFY_EXTRA_DELAY = "notify_extra_delay";
+	static final String NOTIFY_DELAY = "notify_delay_t";
 	static final String DISCARD_STAFF_RESERVATIONS = "discard_staff_reservations";
 	static final String RESERVE_GROUP_SEATS = "reserve_group_seats";
 	static final String GROUP_SEATS_RESERVED = "group_seats_reserved";
@@ -23,9 +25,15 @@ public interface Channels {
 	static final String CHECK_ROUTE_USAGE = "check_route_usage";
 	static final String ROUTE_USAGE_CHECKED = "route_usage_checked";
 	static final String NOTIFY_TRAIN_OUT_OF_SERVICE = "notify_train_out_of_service";
-
+  
 	@Output(GET_ROUTE)
 	MessageChannel getRoute();
+	
+	@Input(NOTIFY_DELAY)
+	SubscribableChannel notifyDelay();
+	
+	@Input(NOTIFY_EXTRA_DELAY)
+	SubscribableChannel extraDelay();
 	
 	@Input(ROUTE_FETCHED)
 	SubscribableChannel processRouteResponse();

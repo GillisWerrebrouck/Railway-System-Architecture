@@ -13,12 +13,10 @@ import org.springframework.stereotype.Service;
 public class TimetableCommandHandler {
     private static Logger logger = LoggerFactory.getLogger(TimetableEventHandler.class);
     private final TimetableService timetableItemService;
-    private final MessageGateway gateway;
 
     @Autowired
-    public TimetableCommandHandler(TimetableService timetableItemService, MessageGateway gateway) {
+    public TimetableCommandHandler(TimetableService timetableItemService) {
         this.timetableItemService = timetableItemService;
-        this.gateway = gateway;
     }
 
     @StreamListener(Channels.RESERVE_GROUP_SEATS)
@@ -49,5 +47,17 @@ public class TimetableCommandHandler {
         logger.info("[Timetable Command Handler] check route usage command received");
         boolean isUsed = timetableItemService.areRoutesUsed(request.getRouteIds());
         return new RouteUsageResponse(request.getConnectionId(), isUsed);
+    }
+  
+    @StreamListener(Channels.NOTIFY_DELAY)
+    public void notifyDelay(DelayRequest request) {
+      logger.info("[Timetable Command Handler] notify delay command received");
+      timetableItemService.processDelay(request);
+    }
+
+    @StreamListener(Channels.NOTIFY_EXTRA_DELAY)
+    public void notifyExtraDelay(UpdateDelayRequest request) {
+      logger.info("[Timetable Command Handler] notify extra delay command received");
+      timetableItemService.processExtraDelay(request);
     }
 }

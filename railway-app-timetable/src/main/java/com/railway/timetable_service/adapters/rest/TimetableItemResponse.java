@@ -7,23 +7,33 @@ public class TimetableItemResponse {
 
 	private LocalDateTime startDateTime;
 	private LocalDateTime endDateTime;
-	
+
 	private int delay;
+	private String reasonForDelay;
 
 	private Long routeId;
 	private String route;
 	
-	public TimetableItemResponse(Long id, LocalDateTime startDateTime, LocalDateTime endDateTime, int delay, Long routeId, String route) {
+	public TimetableItemResponse(Long id, Long routeId, String route, LocalDateTime startDateTime, LocalDateTime endDateTime, int delay, String reasonForDelay) {
 		this.id = id;
+		this.routeId = routeId;
+		this.route = route;
 		this.startDateTime = startDateTime;
 		this.endDateTime = endDateTime;
 		this.delay = delay;
-		this.routeId = routeId;
-		this.route = route;
+		this.reasonForDelay = reasonForDelay;
 	}
 	
 	public Long getId() {
 		return id;
+	}
+	
+	public Long getRouteId() {
+		return routeId;
+	}
+	
+	public String getRoute() {
+		return route;
 	}
 	
 	public LocalDateTime getStartDateTime() {
@@ -38,11 +48,7 @@ public class TimetableItemResponse {
 		return delay;
 	}
 	
-	public Long getRouteId() {
-		return routeId;
-	}
-	
-	public String getRoute() {
-		return route;
+	public String getReasonForDelay() {
+		return reasonForDelay;
 	}
 }

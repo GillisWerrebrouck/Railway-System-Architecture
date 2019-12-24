@@ -1,7 +1,5 @@
 package com.railway.ticket_sale_service.adapters.messaging;
 
-import com.fasterxml.uuid.Generators;
-
 import java.util.UUID;
 
 public class RouteDetailRequest {
