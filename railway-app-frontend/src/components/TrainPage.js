@@ -85,7 +85,7 @@ export default class TrainPage extends Component {
           <p>Loading...</p>
         )}
 
-	<h3>Set train active/non-active</h3>
+	<h3>Set train active/non-active</h3> 
         <form onSubmit={this.changeStatus}>
           <label>Train ID: </label>
           <input
