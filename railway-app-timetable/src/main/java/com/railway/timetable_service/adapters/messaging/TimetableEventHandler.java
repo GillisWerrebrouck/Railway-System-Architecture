@@ -58,4 +58,26 @@ public class TimetableEventHandler {
 			this.timetableItemService.processExtraDelay(request);
 		} 
 	}
+  
+	@StreamListener(Channels.STAFF_RESERVED)
+	public void processStaffReservedResponse(StaffResponse response) {
+		if(response.getStaffIds().size() != 0) {
+			logger.info("[Timetable Event Handler] successfully reserved staff");
+			this.timetableItemService.staffReserved(response);
+		} else {
+			logger.info("[Timetable Event Handler] failed to reserve staff");
+			this.timetableItemService.failedToCreateTimetableItem(response);
+		}
+	}
+  
+	@StreamListener(Channels.NOTIFY_TRAIN_OUT_OF_SERVICE)
+	public void processTrainOutOfService(TrainOutOfServiceResponse response) {
+		if(response.getTimeTableId() != null) {
+			logger.info("[Timetable Event Handler] successfully rescheduled train");
+			this.timetableItemService.trainReservationChanged(response);
+		} else {
+			logger.info("[Timetable Event Handler] failed to reserve new train");
+			throw new NullPointerException("No Timetable Id was specified.");
+		}
+	}
 }

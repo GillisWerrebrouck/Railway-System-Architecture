@@ -27,4 +27,11 @@ public class StaffCommandHandler {
 		StaffResponse response = staffService.reserveStaff(request.getRequestId(), request.getAmount(), request.getStaffMemberType(), request.getStartDate(), request.getEndDate());
 		return response;
 	}
+	
+	@StreamListener(Channels.DISCARD_STAFF_RESERVATIONS)
+	public void discardStaffReservations(DiscardStaffReservationRequest request) {
+		logger.info("[Staff Command Handler] discard staff request command received");
+		
+		staffService.discardStaffReservations(request.getRequestId());
+	}
 }

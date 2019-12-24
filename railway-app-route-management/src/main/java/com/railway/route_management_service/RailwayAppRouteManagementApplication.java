@@ -1,5 +1,6 @@
 package com.railway.route_management_service;
 
+import java.util.Collection;
 import java.util.UUID;
 
 import org.slf4j.Logger;
@@ -119,9 +120,24 @@ public class RailwayAppRouteManagementApplication {
 			RouteConnection routeCon11 = new RouteConnection(route03, station02, false, con01.getId());
 			RouteConnection routeCon12 = new RouteConnection(route03, station01, false, null);
 
+			Route route04 = new Route("Deinze - Zottegem");
+			RouteConnection routeCon13 = new RouteConnection(route04, station07, true, con11.getId());
+			RouteConnection routeCon14 = new RouteConnection(route04, station06, false, con03.getId());
+			RouteConnection routeCon15 = new RouteConnection(route04, station01, false, con05.getId());
+			RouteConnection routeCon16 = new RouteConnection(route04, station11, false, null);
+			
+			Route route05 = new Route("Gent-Sint-Pieters - Brussel-Zuid");
+			RouteConnection routeCon17 = new RouteConnection(route05, station01, true, con01.getId());
+			RouteConnection routeCon18 = new RouteConnection(route05, station02, false, con08.getId());
+			RouteConnection routeCon19 = new RouteConnection(route05, station11, false, con14.getId());
+			RouteConnection routeCon20 = new RouteConnection(route05, station12, false, con15.getId());
+			RouteConnection routeCon21 = new RouteConnection(route05, station13, false, null);
+
 			routeRepository.save(route01);
 			routeRepository.save(route02);
 			routeRepository.save(route03);
+			routeRepository.save(route04);
+			routeRepository.save(route05);
 
 			logger.info("Station01: " + station01.toString());
 			logger.info("Station02: " + station02.toString());

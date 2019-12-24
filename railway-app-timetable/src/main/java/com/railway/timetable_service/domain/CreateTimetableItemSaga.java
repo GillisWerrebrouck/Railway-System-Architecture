@@ -3,8 +3,10 @@ package com.railway.timetable_service.domain;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,11 +14,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.railway.timetable_service.adapters.messaging.DiscardReservationRequest;
+import com.railway.timetable_service.adapters.messaging.DiscardStaffReservationRequest;
 import com.railway.timetable_service.adapters.messaging.MessageGateway;
 import com.railway.timetable_service.adapters.messaging.RouteConnection;
 import com.railway.timetable_service.adapters.messaging.RouteFetchedResponse;
 import com.railway.timetable_service.adapters.messaging.RoutePart;
 import com.railway.timetable_service.adapters.messaging.RouteRequest;
+import com.railway.timetable_service.adapters.messaging.StaffMemberType;
+import com.railway.timetable_service.adapters.messaging.StaffRequest;
 import com.railway.timetable_service.adapters.messaging.Station;
 import com.railway.timetable_service.adapters.messaging.StationRequest;
 import com.railway.timetable_service.adapters.messaging.StationsRequest;
@@ -73,10 +78,9 @@ public class CreateTimetableItemSaga {
 		
 		reserveAllStations(timetableItem, startStation, allRouteConnections);
 		reserveTrain(timetableItem);
-		
-		// TODO: reserve staff
+		reserveAllStaff(timetableItem);
 	}
-	
+
 	private void reserveAllStations(TimetableItem timetableItem, Station startStation, Collection<RoutePart> allRouteConnections) {
 		StationsRequest stationsRequest = new StationsRequest(timetableItem.getId());
 		
@@ -159,11 +163,27 @@ public class CreateTimetableItemSaga {
 		timetableItem.setTrainReservationStatus(Status.PENDING);
 		timetableItemRepository.save(timetableItem);
 	}
+	
+	private void reserveAllStaff(TimetableItem timetableItem) {
+		StaffRequest staffRequest1 = new StaffRequest(1, StaffMemberType.TRAIN_OPERATOR, timetableItem.getStartDateTime(), timetableItem.getEndDateTime());
+		StaffRequest staffRequest2 = new StaffRequest(timetableItem.getRequestedTrainConductorsAmount(), StaffMemberType.CONDUCTOR, timetableItem.getStartDateTime(), timetableItem.getEndDateTime());
+		
+		timetableItem.setTrainOperatorRequestId(staffRequest1.getRequestId());
+		timetableItem.setTrainConductorRequestId(staffRequest2.getRequestId());
+		
+		gateway.reserveStaff(staffRequest1);
+		gateway.reserveStaff(staffRequest2);
+		logger.info("[Create Timetable Item Saga] reserve staff commands sent");
+		
+		timetableItem.setStaffReservationStatus(Status.PENDING);
+		timetableItemRepository.save(timetableItem);
+	}
 
 	public void onStationsReserved(TimetableItem timetableItem) {
 		logger.info("[Create Timetable Item Saga] successfully reserved stations on route");
 		
-		if(timetableItem.getTrainReservationStatus().equals(Status.SUCCESSFUL)) {
+		if(timetableItem.getTrainReservationStatus().equals(Status.SUCCESSFUL) && 
+				timetableItem.getStaffReservationStatus().equals(Status.SUCCESSFUL)) {
 			this.createTimetableItemComplete(timetableItem);
 		}
 	}
@@ -171,7 +191,17 @@ public class CreateTimetableItemSaga {
 	public void onTrainReserved(TimetableItem timetableItem) {
 		logger.info("[Create Timetable Item Saga] successfully reserved train");
 
-		if(timetableItem.getStationsReservationStatus().equals(Status.SUCCESSFUL)) {
+		if(timetableItem.getStationsReservationStatus().equals(Status.SUCCESSFUL) &&
+				timetableItem.getStaffReservationStatus().equals(Status.SUCCESSFUL)) {
+			this.createTimetableItemComplete(timetableItem);
+		}
+	}
+	
+	public void onStaffReserved(TimetableItem timetableItem) {
+		logger.info("[Create Timetable Item Saga] successfully reserved staff");
+
+		if(timetableItem.getTrainReservationStatus().equals(Status.SUCCESSFUL) && 
+				timetableItem.getStationsReservationStatus().equals(Status.SUCCESSFUL)) {
 			this.createTimetableItemComplete(timetableItem);
 		}
 	}
@@ -185,24 +215,44 @@ public class CreateTimetableItemSaga {
 		logger.info("[Create Timetable Item Saga] failed to reserve stations");
 		
 		discardTrainReservation(timetableItem.getId());
+		discardStaffReservations(timetableItem.getTrainOperatorRequestId());
+		discardStaffReservations(timetableItem.getTrainConductorRequestId());
 		
 		this.createTimetableItemFailed(timetableItem);
 	}
 	
-	public void discardTrainReservation(Long timetableItemId) {
+	public void discardTrainReservation(Long timetableItemId) {		
 		DiscardReservationRequest request = new DiscardReservationRequest(timetableItemId);
 		gateway.discardTrainReservation(request);
 	}
 		
 	public void onReserveTrainFailed(TimetableItem timetableItem){
 		logger.info("[Create Timetable Item Saga] failed to reserve train");
-		
+
 		discardStationReservations(timetableItem.getId());
+		discardStaffReservations(timetableItem.getTrainOperatorRequestId());
+		discardStaffReservations(timetableItem.getTrainConductorRequestId());
+		
+		this.createTimetableItemFailed(timetableItem);
+	}
+
+	public void discardStaffReservations(UUID requestId) {
+		DiscardStaffReservationRequest request = new DiscardStaffReservationRequest(requestId);
+		gateway.discardStaffReservation(request);
+	}
+
+	public void onReserveStaffFailed(TimetableItem timetableItem) {
+		logger.info("[Create Timetable Item Saga] failed to reserve staff");
+
+		discardStationReservations(timetableItem.getId());
+		discardTrainReservation(timetableItem.getId());
+		discardStaffReservations(timetableItem.getTrainOperatorRequestId());
+		discardStaffReservations(timetableItem.getTrainConductorRequestId());
 		
 		this.createTimetableItemFailed(timetableItem);
 	}
 	
-	public void discardStationReservations(Long timetableItemId) {
+	public void discardStationReservations(Long timetableItemId) {		
 		DiscardReservationRequest request = new DiscardReservationRequest(timetableItemId);
 		gateway.discardStationReservations(request);
 	}

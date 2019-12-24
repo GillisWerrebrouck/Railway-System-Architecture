@@ -16,27 +16,35 @@ public class Ticket {
     private String startStation;
     private String endStation;
     private LocalDateTime validOn;
+    private Long timetableId;
     private double price;
     private int amountOfSeats;
     private TicketType type;
     private UUID validationCode;
+    private TicketStatus status;
+
+    private UUID routeDetailsRequestId;
+    private UUID reserveGroupSeatsRequestId;
 
     @SuppressWarnings("unused")
 	private Ticket() {};
 
-    public Ticket(String startStation, String endStation, LocalDateTime validOn, double price, int amountOfSeats) {
+    public Ticket(String startStation, String endStation, LocalDateTime validOn, Long timetableId, double price, int amountOfSeats) {
         this.startStation = startStation;
         this.endStation = endStation;
         this.validOn = validOn;
+        this.timetableId = timetableId;
         this.price = price;
         this.amountOfSeats = amountOfSeats;
-        this.type = TicketType.GROUP;
         validationCode = Generators.timeBasedGenerator().generate();
+        if(amountOfSeats > 1)
+            this.type = TicketType.GROUP;
+        else
+            this.type = TicketType.SINGLE;
     }
 
-    public Ticket(String startStation, String endStation, LocalDateTime validOn, double price) {
-        this(startStation, endStation, validOn, price, 1);
-        this.type = TicketType.SINGLE;
+    public Ticket(LocalDateTime validOn, Long timetableId, int amountOfSeats){
+        this(null, null, validOn, timetableId, 0, amountOfSeats);
     }
 
     public Long getId() {
@@ -98,10 +106,38 @@ public class Ticket {
     public TicketType getType() {
 		return type;
 	}
-    
-    public void setType(TicketType type) {
-		this.type = type;
-	}
+
+    public UUID getRouteDetailsRequestId() {
+        return routeDetailsRequestId;
+    }
+
+    public void setRouteDetailsRequestId(UUID routeDetailsRequestId) {
+        this.routeDetailsRequestId = routeDetailsRequestId;
+    }
+
+    public UUID getReserveGroupSeatsRequestId() {
+        return reserveGroupSeatsRequestId;
+    }
+
+    public void setReserveGroupSeatsRequestId(UUID reserveGroupSeatsRequestId) {
+        this.reserveGroupSeatsRequestId = reserveGroupSeatsRequestId;
+    }
+
+    public TicketStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(TicketStatus status) {
+        this.status = status;
+    }
+
+    public Long getTimetableId() {
+        return timetableId;
+    }
+
+    public void setTimetableId(Long timetableId) {
+        this.timetableId = timetableId;
+    }
 
     @Override
     public String toString() {

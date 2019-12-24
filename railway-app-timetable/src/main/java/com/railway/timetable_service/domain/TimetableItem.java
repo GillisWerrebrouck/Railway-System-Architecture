@@ -25,18 +25,24 @@ public class TimetableItem {
 	
 	// delay in minutes
 	private int delay;
+	private String reasonForDelay;
+	private int reservedGroupSeats;
 
 	private Long routeId;
 	private UUID routeRequestId;
 	private String trainId;
+	private int groupCapacity;
 	private UUID trainRequestId;
 	private TrainType requestedTrainType;
 	private UUID stationsRequestId;
-	private String reasonForDelay;
-	
+  
+	private UUID trainOperatorRequestId;
+	private UUID trainConductorRequestId;
+	private int requestedTrainConductorsAmount;
+  
 	@Column
-    @ElementCollection(targetClass=Long.class, fetch=FetchType.EAGER)
-	private List<Long> staffIds = new ArrayList<Long>();
+  @ElementCollection(targetClass=String.class, fetch=FetchType.EAGER)
+	private List<String> staffIds = new ArrayList<String>();
 	
 	private Status routeStatus;
 	private Status trainReservationStatus;
@@ -45,27 +51,31 @@ public class TimetableItem {
 	
 	@SuppressWarnings("unused")
 	private TimetableItem() {}
-
-	public TimetableItem(LocalDateTime startDate, LocalDateTime endDateTime, Long routeId, String trainId, TrainType requestedTrainType, List<Long> staffIds, String reasonForDelay) {
+  
+	public TimetableItem(LocalDateTime startDate, LocalDateTime endDateTime, Long routeId, String trainId, TrainType requestedTrainType, List<String> staffIds, int requestedTrainConductorsAmount) {
 		this.startDateTime = startDate;
 		this.endDateTime = endDateTime;
 		this.delay = 0;
+		this.reservedGroupSeats = 0;
 		this.routeId = routeId;
 		this.routeRequestId = null;
 		this.trainId = trainId;
 		this.trainRequestId = null;
+		this.groupCapacity = 0;
 		this.requestedTrainType = requestedTrainType;
 		this.stationsRequestId = null;
+		this.trainOperatorRequestId = null;
+		this.trainConductorRequestId = null;
+		this.requestedTrainConductorsAmount = requestedTrainConductorsAmount;
 		this.staffIds = staffIds;
 		this.routeStatus = Status.UNKNOWN;
 		this.trainReservationStatus = Status.UNKNOWN;
 		this.stationsReservationStatus = Status.UNKNOWN;
 		this.staffReservationStatus = Status.UNKNOWN;
-		this.reasonForDelay = reasonForDelay;
 	}
-
-	public TimetableItem(Long routeId, LocalDateTime startDate, TrainType requestedTrainType) {
-		this(startDate, null, routeId, null, requestedTrainType, new ArrayList<Long>(), null);
+  
+	public TimetableItem(Long routeId, LocalDateTime startDate, TrainType requestedTrainType, int requestedStaffAmount) {
+		this(startDate, null, routeId, null, requestedTrainType, new ArrayList<String>(), requestedStaffAmount);
 	}
 	
 	public Long getId() {
@@ -144,15 +154,39 @@ public class TimetableItem {
 		this.stationsRequestId = stationsRequestId;
 	}
 
-	public List<Long> getStaffIds() {
+	public List<String> getStaffIds() {
 		return staffIds;
 	}
 	
-	public void setStaffIds(List<Long> staffIds) {
+	public UUID getTrainOperatorRequestId() {
+		return trainOperatorRequestId;
+	}
+	
+	public void setTrainOperatorRequestId(UUID trainOperatorRequestId) {
+		this.trainOperatorRequestId = trainOperatorRequestId;
+	}
+	
+	public UUID getTrainConductorRequestId() {
+		return trainConductorRequestId;
+	}
+	
+	public void setTrainConductorRequestId(UUID trainConductorRequestId) {
+		this.trainConductorRequestId = trainConductorRequestId;
+	}
+	
+	public int getRequestedTrainConductorsAmount() {
+		return requestedTrainConductorsAmount;
+	}
+	
+	public void setRequestedTrainConductorsAmount(int requestedTrainConductorsAmount) {
+		this.requestedTrainConductorsAmount = requestedTrainConductorsAmount;
+	}
+	
+	public void setStaffIds(List<String> staffIds) {
 		this.staffIds = staffIds;
 	}
 	
-	public void addStaffIds(Long staffId) {
+	public void addStaffId(String staffId) {
 		this.staffIds.add(staffId);
 	}
 	
@@ -194,6 +228,22 @@ public class TimetableItem {
 
 	public void setReasonForDelay(String reasonForDelay) {
 		this.reasonForDelay = reasonForDelay;
+  }
+
+	public int getGroupCapacity() {
+		return groupCapacity;
+	}
+
+	public void setGroupCapacity(int groupCapacity) {
+		this.groupCapacity = groupCapacity;
+	}
+
+	public int getReservedGroupSeats() {
+		return reservedGroupSeats;
+	}
+
+	public void setReservedGroupSeats(int reservedGroupSeats) {
+		this.reservedGroupSeats = reservedGroupSeats;
 	}
 
 	@Override

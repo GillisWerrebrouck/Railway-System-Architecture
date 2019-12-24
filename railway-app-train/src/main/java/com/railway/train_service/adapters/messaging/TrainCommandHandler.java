@@ -29,10 +29,10 @@ public class TrainCommandHandler {
 		TrainResponse response;
 		if(train != null) {
 			logger.info("[Train Command Handler] train reserved");
-			response = new TrainResponse(train.getId(), request.getTimetableId(), request.getRequestId());
+			response = new TrainResponse(train.getId(), request.getTimetableId(), train.getGroupCapacity(), request.getRequestId());
 		} else {
 			logger.info("[Train Command Handler] no train could be reserved");
-			response = new TrainResponse(null, request.getTimetableId(), request.getRequestId());
+			response = new TrainResponse(null, request.getTimetableId(), 0, request.getRequestId());
 		}
 		return response;
 	}
@@ -41,5 +41,11 @@ public class TrainCommandHandler {
 	public void discardTrainReservation(DiscardReservationRequest request) {
 		logger.info("[Train Command Handler] discard train reservation command received");
 		trainService.discardTrainReservation(request.getTimetableId());
+	}
+	
+	@StreamListener(Channels.CHANGE_TRAIN_STATUS)
+	public void changeTrainStatus(ChangeStatusRequest request) {
+		logger.info("[Train Command Handler] ChangeStatusRequest command received");
+		trainService.changeTrainStatus(request);
 	}
 }

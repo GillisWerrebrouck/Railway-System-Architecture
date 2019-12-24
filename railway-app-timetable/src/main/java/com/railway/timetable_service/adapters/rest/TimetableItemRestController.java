@@ -1,8 +1,13 @@
 package com.railway.timetable_service.adapters.rest;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
-import java.util.Optional;
+import java.util.UUID;
 
 import javax.annotation.PostConstruct;
 
@@ -14,10 +19,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.async.DeferredResult;
 
 import com.railway.timetable_service.RailwayAppTimetableApplication;
+import com.railway.timetable_service.adapters.messaging.Route;
 import com.railway.timetable_service.domain.CreateTimetableItemListener;
 import com.railway.timetable_service.domain.Status;
 import com.railway.timetable_service.domain.TimetableItem;
@@ -46,19 +53,68 @@ public class TimetableItemRestController implements CreateTimetableItemListener 
 		timetableService.registerCreateTimetableListener(this);
 	}
 	
+	@GetMapping("/all")
+	private Collection<TimetableItemResponse> getAllTimetableItems() {
+		Iterator<TimetableItem> timetableItems = timetableItemRepository.findAll().iterator();
+		Collection<TimetableItemResponse> response = new ArrayList<>();
+		
+		while (timetableItems.hasNext()) {
+			TimetableItem timetableItem = timetableItems.next();
+			
+			String routeName = timetableService.getRouteName(timetableItem.getRouteId());
+			
+			TimetableItemResponse timetableItemResponse = new TimetableItemResponse(timetableItem.getId(), timetableItem.getStartDateTime(), timetableItem.getEndDateTime(), timetableItem.getDelay(), timetableItem.getRouteId(), routeName);
+			response.add(timetableItemResponse);
+		}
+		
+		return response;
+	}
+	
+	@GetMapping("/{id}")
+	private TimetableItem getTimetableItemById(@PathVariable Long id) {
+		TimetableItem timetableItem = timetableItemRepository.findById(id).orElse(null);
+		
+		return timetableItem;
+	}
+	
 	@GetMapping
-	private Iterable<TimetableItem> getAllTimetableItems() {
-		return timetableItemRepository.findAll();
+	private Collection<TimetableItemResponse> getTimetableItemsByStartAndEndStation(@RequestParam UUID startStationId, @RequestParam UUID endStationId,
+			@RequestParam String fromDate, @RequestParam String toDate) throws Exception {
+		Collection<Route> routes = timetableService.getRoutes(startStationId, endStationId);
+		Collection<TimetableItemResponse> response = new ArrayList<>();
+		
+		for(Route route : routes) {
+			try {
+				LocalDateTime fromDateTime = LocalDateTime.parse(fromDate);
+				LocalDateTime toDateTime = LocalDateTime.parse(toDate);
+
+				Collection<TimetableItem> timetableItems = timetableItemRepository.findByRouteIdAndStartDateTimeBetweenOrderByStartDateTime(route.getId(), fromDateTime, toDateTime);
+				
+				for(TimetableItem timetableItem : timetableItems) {
+					TimetableItemResponse timetableItemResponse = new TimetableItemResponse(timetableItem.getId(), timetableItem.getStartDateTime(), timetableItem.getEndDateTime(), timetableItem.getDelay(), timetableItem.getRouteId(), route.getName());
+					response.add(timetableItemResponse);
+				}
+			} catch (DateTimeParseException e) {
+				throw new Exception("Could not convert request parameters to correct type: " + e.getMessage());
+			}
+		}
+		
+		return response;
+	}
+	
+	@GetMapping("/{timetableId}/route")
+	private Collection<ScheduleItemResponse> getStationsByTimetableItemId(@PathVariable Long timetableId) {
+		return timetableService.getStationByTimetableItemId(timetableId);
+	}
+	
+	@GetMapping("/{timetableId}/specifics")
+	private SpecificsResponse getSpecifics(@PathVariable Long timetableId) throws Exception {
+		return timetableService.getSpecifics(timetableId);
 	}
 	
 	@GetMapping("/route/{routeId}")
 	private Iterable<TimetableItem> getTimetableItemByRouteId(@PathVariable Long routeId) {
 		return timetableItemRepository.findByRouteId(routeId);
-	}
-	
-	@GetMapping("/{id}")
-	private Optional<TimetableItem> getTimetableItemById(@PathVariable Long id) {
-		return timetableItemRepository.findById(id);
 	}
 	
 	@PostMapping
@@ -67,27 +123,38 @@ public class TimetableItemRestController implements CreateTimetableItemListener 
 		
 		DeferredResult<TimetableItem> deferredResult = new DeferredResult<>(10000l);
 		
-		if(!isValidTimetableRequest(timetableRequest)) {
-			deferredResult.setErrorResult("Request must contain the following fields in the body; \"routeId\", \"startDateTime\" and \"requestedTrainType\"");
-		}
-		
 		deferredResult.onTimeout(() -> {
 			deferredResult.setErrorResult("Request timeout occurred");
 		});
 		
-		TimetableItem timetableItem = new TimetableItem(timetableRequest.getRouteId(), timetableRequest.getStartDateTime(), timetableRequest.getRequestedTrainType());
-		
-		timetableItemRepository.save(timetableItem);
-		
-		this.deferredResults.put(timetableItem.getId(), deferredResult);
-		
-		this.timetableService.createTimetableItem(timetableItem, timetableRequest);
-		
+		if(!isValidTimetableRequest(timetableRequest)) {
+			deferredResult.setErrorResult("Request must contain the following fields in the body; \"routeId\", \"startDateTime\", \"requestedTrainType\" and \"amountOfTrainConductors\"");
+		} else {
+			TimetableItem timetableItem = new TimetableItem(
+				timetableRequest.getRouteId(), 
+				timetableRequest.getStartDateTime(), 
+				timetableRequest.getRequestedTrainType(), 
+				timetableRequest.getAmountOfTrainConductors()
+			);
+			
+			timetableItemRepository.save(timetableItem);
+			
+			this.deferredResults.put(timetableItem.getId(), deferredResult);
+			
+			this.timetableService.createTimetableItem(timetableItem, timetableRequest);
+		}
+
 		return deferredResult;
 	}
 
 	private boolean isValidTimetableRequest(TimetableRequest request) {
-		return request.getRouteId() != null && request.getStartDateTime() != null && request.getRequestedTrainType() != null;
+		try {
+			LocalDateTime.parse(request.getStartDateTime().toString());
+		} catch(Exception e) {
+			return false;
+		}
+		
+		return request.getRouteId() != null && request.getStartDateTime() != null && request.getRequestedTrainType() != null && request.getAmountOfTrainConductors() != 0;
 	}
 
 	private void performSuccessfulResponse(TimetableItem timetableItem) {

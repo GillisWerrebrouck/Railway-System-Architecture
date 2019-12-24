@@ -8,11 +8,13 @@ public class TimetableRequest {
 	private Long routeId;
 	private LocalDateTime startDateTime;
 	private TrainType requestedTrainType;
+	private int amountOfTrainConductors;
 	
-	public TimetableRequest(Long routeId, LocalDateTime startDateTime, TrainType requestedTrainType) {
+	public TimetableRequest(Long routeId, LocalDateTime startDateTime, TrainType requestedTrainType, int amountOfTrainConductors) {
 		this.routeId = routeId;
 		this.startDateTime = startDateTime;
 		this.requestedTrainType = requestedTrainType;
+		this.amountOfTrainConductors = amountOfTrainConductors;
 	}
 	
 	public Long getRouteId() {
@@ -37,5 +39,13 @@ public class TimetableRequest {
 	
 	public void setRequestedTrainType(TrainType trainType) {
 		this.requestedTrainType = trainType;
+	}
+	
+	public int getAmountOfTrainConductors() {
+		return amountOfTrainConductors;
+	}
+	
+	public void setAmountOfTrainConductors(int amountOfTrainConductors) {
+		this.amountOfTrainConductors = amountOfTrainConductors;
 	}
 }

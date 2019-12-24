@@ -9,31 +9,32 @@ import java.util.UUID;
 @Entity
 public class Ticket {
     @Id
-    private UUID id;
+    private Long id;
     private String startStation;
     private String endStation;
     private LocalDateTime validOn;
     private int amountOfSeats;
+    private UUID validationCode;
     private boolean isUsed;
     private boolean isValid;
 
     @SuppressWarnings("unused")
 	private Ticket() {};
 
-    public Ticket(UUID id, String startStation, String endStation, LocalDateTime validOn, int amountOfSeats) {
+    public Ticket(Long id, String startStation, String endStation, LocalDateTime validOn, int amountOfSeats, UUID validationCode) {
         this.id = id;
         this.startStation = startStation;
         this.endStation = endStation;
         this.validOn = validOn;
         this.amountOfSeats = amountOfSeats;
-        isUsed = false;
+        this.validationCode = validationCode;
     }
 
-    public UUID getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -53,11 +54,11 @@ public class Ticket {
         this.endStation = endStation;
     }
 
-    public LocalDateTime getValidOnDate() {
+    public LocalDateTime getValidOn() {
         return validOn;
     }
 
-    public void setValidOnDate(LocalDateTime validOn) {
+    public void setValidOn(LocalDateTime validOn) {
         this.validOn = validOn;
     }
 
@@ -69,12 +70,20 @@ public class Ticket {
         this.amountOfSeats = amountOfSeats;
     }
 
+    public UUID getValidationCode() {
+        return validationCode;
+    }
+
+    public void setValidationCode(UUID validationCode) {
+        this.validationCode = validationCode;
+    }
+
     public boolean isUsed() {
         return isUsed;
     }
 
     public void setUsed(boolean used) {
-        this.isUsed = used;
+        isUsed = used;
     }
 
     // check if the due date of the ticket hasn't passed and that the ticket hasn't been used before
