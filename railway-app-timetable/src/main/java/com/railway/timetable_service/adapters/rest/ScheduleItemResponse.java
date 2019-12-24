@@ -13,6 +13,7 @@ public class ScheduleItemResponse {
 	private LocalDateTime departureDateTime;
 	private int delay;
 	
+	@SuppressWarnings("unused")
 	private ScheduleItemResponse() {}
 	
 	public ScheduleItemResponse(UUID stationId, String name, Long platformId, int platformNumber, Long scheduleItemId, LocalDateTime arrivalDateTime, LocalDateTime departureDateTime, int delay) {

@@ -13,7 +13,6 @@ import org.springframework.context.annotation.Bean;
 import com.railway.station_service.adapters.messaging.Channels;
 import com.railway.station_service.domain.Address;
 import com.railway.station_service.domain.Platform;
-import com.railway.station_service.domain.ScheduleItem;
 import com.railway.station_service.domain.Station;
 import com.railway.station_service.persistence.PlatformRepository;
 import com.railway.station_service.persistence.ScheduleItemRepository;
@@ -25,7 +24,6 @@ public class RailwayAppStationApplication {
 	private static Logger logger = LoggerFactory.getLogger(RailwayAppStationApplication.class);
 	private StationRepository stationRepository;
 	private PlatformRepository platformRepository;
-	private ScheduleItemRepository scheduleItemRepository;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(RailwayAppStationApplication.class, args);
@@ -35,8 +33,7 @@ public class RailwayAppStationApplication {
 	public CommandLineRunner populateDatabase (StationRepository stationRepository, PlatformRepository platformRepository, ScheduleItemRepository scheduleItemRepository) {
 		return(args)->{			
 			this.stationRepository = stationRepository;
-			this.platformRepository = platformRepository;	
-			this.scheduleItemRepository = scheduleItemRepository;
+			this.platformRepository = platformRepository;
 
 			createStation(UUID.fromString("11018de0-1943-42b2-929d-a707f751f79c"), "Gent-Sint-Pieters", "Koningin Maria Hendrikaplein 1", "Gent", "Oost-Vlaanderen", "België");
 			createStation(UUID.fromString("a39b1971-fc82-49b2-809a-444105e03c8d"), "Gent-Dampoort", "Oktrooiplein 10", "Gent", "Oost-Vlaanderen", "België");

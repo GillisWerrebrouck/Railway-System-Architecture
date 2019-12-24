@@ -3,7 +3,6 @@ package com.railway.delay_service.domain;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.stream.endpoint.BindingsEndpoint.State;
 import org.springframework.stereotype.Service;
 
 import com.railway.delay_service.adapters.messaging.DelayRequest;

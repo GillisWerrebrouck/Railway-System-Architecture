@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class TicketValidationEventHandler {
-
     private static Logger logger = LoggerFactory.getLogger(TicketValidationEventHandler.class);
 
     private final TicketValidationService ticketValidationService;
@@ -22,6 +21,7 @@ public class TicketValidationEventHandler {
 
     @StreamListener(Channels.TICKET_CREATED)
     public void addTicket(Ticket ticket){
+    	logger.info("[Ticket Validation Event Handler] ticket created event received");
         ticketValidationService.addTicket(ticket);
     }
 }

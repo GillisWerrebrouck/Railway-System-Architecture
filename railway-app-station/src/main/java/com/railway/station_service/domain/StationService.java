@@ -11,11 +11,9 @@ import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
 import com.railway.station_service.adapters.messaging.DelayRequest;
-import com.railway.station_service.adapters.messaging.DiscardReservationRequest;
 import com.railway.station_service.adapters.messaging.MessageGateway;
 import com.railway.station_service.adapters.messaging.Route;
 import com.railway.station_service.adapters.messaging.RouteConnection;

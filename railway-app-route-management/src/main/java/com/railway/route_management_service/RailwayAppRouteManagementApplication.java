@@ -1,6 +1,5 @@
 package com.railway.route_management_service;
 
-import java.util.Collection;
 import java.util.UUID;
 
 import org.slf4j.Logger;
@@ -29,6 +28,7 @@ public class RailwayAppRouteManagementApplication {
 		SpringApplication.run(RailwayAppRouteManagementApplication.class, args);
 	}
 	
+	@SuppressWarnings("unused")
 	@Bean
 	public CommandLineRunner populateDatabase(StationRepository stationRepository, ConnectionRepository connectionRepository, RouteRepository routeRepository) {
 		return (args) ->{

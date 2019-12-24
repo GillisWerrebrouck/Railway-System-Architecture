@@ -26,14 +26,16 @@ public class TimetableItem {
 	// delay in minutes
 	private int delay;
 	private String reasonForDelay;
-	private int reservedGroupSeats;
-
+	
 	private Long routeId;
 	private UUID routeRequestId;
+	
 	private String trainId;
-	private int groupCapacity;
-	private UUID trainRequestId;
 	private TrainType requestedTrainType;
+	private UUID trainRequestId;
+	private int groupCapacity;
+	private int reservedGroupSeats;
+	
 	private UUID stationsRequestId;
   
 	private UUID trainOperatorRequestId;
@@ -41,7 +43,7 @@ public class TimetableItem {
 	private int requestedTrainConductorsAmount;
   
 	@Column
-  @ElementCollection(targetClass=String.class, fetch=FetchType.EAGER)
+	@ElementCollection(targetClass=String.class, fetch=FetchType.EAGER)
 	private List<String> staffIds = new ArrayList<String>();
 	
 	private Status routeStatus;
@@ -56,6 +58,7 @@ public class TimetableItem {
 		this.startDateTime = startDate;
 		this.endDateTime = endDateTime;
 		this.delay = 0;
+		this.reasonForDelay = null;
 		this.reservedGroupSeats = 0;
 		this.routeId = routeId;
 		this.routeRequestId = null;

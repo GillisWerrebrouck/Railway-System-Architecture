@@ -5,9 +5,6 @@ import java.util.UUID;
 
 import com.railway.timetable_service.adapters.messaging.GroupSeatsRequest;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +13,6 @@ import org.springframework.stereotype.Service;
 import com.railway.timetable_service.adapters.messaging.DelayRequest;
 import com.railway.timetable_service.adapters.messaging.Route;
 import com.railway.timetable_service.adapters.messaging.RouteFetchedResponse;
-import com.railway.timetable_service.adapters.messaging.RouteUsageRequest;
-import com.railway.timetable_service.adapters.messaging.RouteUsageResponse;
 import com.railway.timetable_service.adapters.messaging.StaffResponse;
 import com.railway.timetable_service.adapters.messaging.StationsResponse;
 import com.railway.timetable_service.adapters.messaging.TrainOutOfServiceResponse;
