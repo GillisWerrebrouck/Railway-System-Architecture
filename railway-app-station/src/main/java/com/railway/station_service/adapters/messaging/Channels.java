@@ -11,12 +11,19 @@ public interface Channels {
 	static final String DISCARD_STATION_RESERVATIONS = "discard_station_reservations";
 	static final String STATION_CREATED = "station_created";
 	static final String STATION_DELETED = "station_deleted";
+	static final String NOTIFY_DELAY = "notify_delay";
+	static final String GET_ROUTE = "get_route";
+	static final String ROUTE_FETCHED = "route_fetched";
+	static final String NOTIFY_EXTRA_DELAY = "notify_extra_delay";
 	
 	@Input(RESERVE_STATIONS)
 	SubscribableChannel reserveStations();
 	
 	@Input(DISCARD_STATION_RESERVATIONS)
 	SubscribableChannel discardStationReservations();
+	
+	@Input(NOTIFY_DELAY)
+	SubscribableChannel notifyDelay();
 	
 	@Output(STATIONS_RESERVED)
 	MessageChannel stationsReserved();
@@ -26,4 +33,13 @@ public interface Channels {
 	
 	@Output(STATION_DELETED)
 	MessageChannel stationDeleted();
+	
+	@Output(GET_ROUTE)
+	MessageChannel getRoute();
+	
+	@Output(NOTIFY_EXTRA_DELAY)
+	MessageChannel notifyExtraDelay();
+	
+	@Input(ROUTE_FETCHED)
+	SubscribableChannel routeFetched();
 }

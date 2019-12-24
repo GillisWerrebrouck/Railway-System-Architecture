@@ -5,22 +5,19 @@ import java.util.UUID;
 
 import com.railway.timetable_service.adapters.messaging.GroupSeatsRequest;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.railway.timetable_service.adapters.messaging.DelayRequest;
 import com.railway.timetable_service.adapters.messaging.Route;
 import com.railway.timetable_service.adapters.messaging.RouteFetchedResponse;
-import com.railway.timetable_service.adapters.messaging.RouteUsageRequest;
-import com.railway.timetable_service.adapters.messaging.RouteUsageResponse;
 import com.railway.timetable_service.adapters.messaging.StaffResponse;
 import com.railway.timetable_service.adapters.messaging.StationsResponse;
 import com.railway.timetable_service.adapters.messaging.TrainOutOfServiceResponse;
 import com.railway.timetable_service.adapters.messaging.TrainReservedResponse;
+import com.railway.timetable_service.adapters.messaging.UpdateDelayRequest;
 import com.railway.timetable_service.adapters.rest.ScheduleItemResponse;
 import com.railway.timetable_service.adapters.rest.SpecificsResponse;
 import com.railway.timetable_service.adapters.rest.TimetableItemRestAdapter;
@@ -230,5 +227,21 @@ public class TimetableService {
 			}
 		}
 		return areUsed;
+	}
+
+	public void processExtraDelay(UpdateDelayRequest request) {
+		saveTimeTableItemWithDelay(request.getTimetableId(), request.getDelayInMinutes(), null);
+	}
+
+	public void processDelay(DelayRequest request) {
+		saveTimeTableItemWithDelay(request.getTimetableId(), request.getDelayInMinutes(), request.getReasonForDelay());
+	}
+	
+	public void saveTimeTableItemWithDelay(Long id, int delay,String reason) {
+		TimetableItem tItem =  timetableItemRepository.findById(id).get();
+		int totalDelay = tItem.getDelay() + delay;
+		tItem.setDelay(totalDelay);
+		tItem.setReasonForDelay(reason == null ? tItem.getReasonForDelay() : reason);
+		timetableItemRepository.save(tItem);
 	}
 }

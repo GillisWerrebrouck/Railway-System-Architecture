@@ -63,7 +63,15 @@ public class TimetableItemRestController implements CreateTimetableItemListener 
 			
 			String routeName = timetableService.getRouteName(timetableItem.getRouteId());
 			
-			TimetableItemResponse timetableItemResponse = new TimetableItemResponse(timetableItem.getId(), timetableItem.getStartDateTime(), timetableItem.getEndDateTime(), timetableItem.getDelay(), timetableItem.getRouteId(), routeName);
+			TimetableItemResponse timetableItemResponse = new TimetableItemResponse(
+				timetableItem.getId(), 
+				timetableItem.getRouteId(), 
+				routeName, 
+				timetableItem.getStartDateTime(), 
+				timetableItem.getEndDateTime(), 
+				timetableItem.getDelay(), 
+				timetableItem.getReasonForDelay()
+			);
 			response.add(timetableItemResponse);
 		}
 		
@@ -91,7 +99,15 @@ public class TimetableItemRestController implements CreateTimetableItemListener 
 				Collection<TimetableItem> timetableItems = timetableItemRepository.findByRouteIdAndStartDateTimeBetweenOrderByStartDateTime(route.getId(), fromDateTime, toDateTime);
 				
 				for(TimetableItem timetableItem : timetableItems) {
-					TimetableItemResponse timetableItemResponse = new TimetableItemResponse(timetableItem.getId(), timetableItem.getStartDateTime(), timetableItem.getEndDateTime(), timetableItem.getDelay(), timetableItem.getRouteId(), route.getName());
+					TimetableItemResponse timetableItemResponse = new TimetableItemResponse(
+						timetableItem.getId(), 
+						timetableItem.getRouteId(), 
+						route.getName(),
+						timetableItem.getStartDateTime(), 
+						timetableItem.getEndDateTime(), 
+						timetableItem.getDelay(), 
+						timetableItem.getReasonForDelay()
+					);
 					response.add(timetableItemResponse);
 				}
 			} catch (DateTimeParseException e) {
@@ -123,31 +139,37 @@ public class TimetableItemRestController implements CreateTimetableItemListener 
 		
 		DeferredResult<TimetableItem> deferredResult = new DeferredResult<>(10000l);
 		
-		if(!isValidTimetableRequest(timetableRequest)) {
-			deferredResult.setErrorResult("Request must contain the following fields in the body; \"routeId\", \"startDateTime\", \"requestedTrainType\" and \"amountOfTrainConductors\"");
-		}
-		
 		deferredResult.onTimeout(() -> {
 			deferredResult.setErrorResult("Request timeout occurred");
 		});
 		
-		TimetableItem timetableItem = new TimetableItem(
-			timetableRequest.getRouteId(), 
-			timetableRequest.getStartDateTime(), 
-			timetableRequest.getRequestedTrainType(), 
-			timetableRequest.getAmountOfTrainConductors()
-		);
-		
-		timetableItemRepository.save(timetableItem);
-		
-		this.deferredResults.put(timetableItem.getId(), deferredResult);
-		
-		this.timetableService.createTimetableItem(timetableItem, timetableRequest);
-		
+		if(!isValidTimetableRequest(timetableRequest)) {
+			deferredResult.setErrorResult("Request must contain the following fields in the body; \"routeId\", \"startDateTime\", \"requestedTrainType\" and \"amountOfTrainConductors\"");
+		} else {
+			TimetableItem timetableItem = new TimetableItem(
+				timetableRequest.getRouteId(), 
+				timetableRequest.getStartDateTime(), 
+				timetableRequest.getRequestedTrainType(), 
+				timetableRequest.getAmountOfTrainConductors()
+			);
+			
+			timetableItemRepository.save(timetableItem);
+			
+			this.deferredResults.put(timetableItem.getId(), deferredResult);
+			
+			this.timetableService.createTimetableItem(timetableItem, timetableRequest);
+		}
+
 		return deferredResult;
 	}
 
 	private boolean isValidTimetableRequest(TimetableRequest request) {
+		try {
+			LocalDateTime.parse(request.getStartDateTime().toString());
+		} catch(Exception e) {
+			return false;
+		}
+		
 		return request.getRouteId() != null && request.getStartDateTime() != null && request.getRequestedTrainType() != null && request.getAmountOfTrainConductors() != 0;
 	}
 

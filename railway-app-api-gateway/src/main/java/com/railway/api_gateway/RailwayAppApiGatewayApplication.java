@@ -9,7 +9,6 @@ import org.springframework.context.annotation.Bean;
 
 import com.railway.api_gateway.adapters.messaging.Channels;
 
-
 @SpringBootApplication
 @EnableBinding(Channels.class)
 public class RailwayAppApiGatewayApplication {

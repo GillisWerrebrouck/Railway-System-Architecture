@@ -5,6 +5,7 @@ import java.util.UUID;
 public class DiscardStaffReservationRequest {
 	private UUID requestId;
 	
+	@SuppressWarnings("unused")
 	private DiscardStaffReservationRequest() {}
 	
 	public DiscardStaffReservationRequest(UUID requestId) {

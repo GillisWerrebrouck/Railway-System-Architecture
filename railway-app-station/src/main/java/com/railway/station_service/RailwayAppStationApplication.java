@@ -15,6 +15,7 @@ import com.railway.station_service.domain.Address;
 import com.railway.station_service.domain.Platform;
 import com.railway.station_service.domain.Station;
 import com.railway.station_service.persistence.PlatformRepository;
+import com.railway.station_service.persistence.ScheduleItemRepository;
 import com.railway.station_service.persistence.StationRepository;
 
 @SpringBootApplication
@@ -29,10 +30,10 @@ public class RailwayAppStationApplication {
 	}
 	
 	@Bean
-	public CommandLineRunner populateDatabase (StationRepository stationRepository, PlatformRepository platformRepository) {
+	public CommandLineRunner populateDatabase (StationRepository stationRepository, PlatformRepository platformRepository, ScheduleItemRepository scheduleItemRepository) {
 		return(args)->{			
 			this.stationRepository = stationRepository;
-			this.platformRepository = platformRepository;			
+			this.platformRepository = platformRepository;
 
 			createStation(UUID.fromString("11018de0-1943-42b2-929d-a707f751f79c"), "Gent-Sint-Pieters", "Koningin Maria Hendrikaplein 1", "Gent", "Oost-Vlaanderen", "België");
 			createStation(UUID.fromString("a39b1971-fc82-49b2-809a-444105e03c8d"), "Gent-Dampoort", "Oktrooiplein 10", "Gent", "Oost-Vlaanderen", "België");
