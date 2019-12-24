@@ -65,6 +65,34 @@ const endpoints = {
                 .catch(error => { reject(error); });
         });
     },
+    postDelay: (delay) => {
+        return new Promise((resolve, reject) => {
+            axios.post(URL + '/delay', delay, { headers: { 'Content-Type': 'application/json' } })
+                .then(result => { resolve(result); })
+                .catch(error => { reject(error); });
+        });
+    },
+    postDamage: (damage) => {
+        return new Promise((resolve, reject) => {
+            axios.post(URL + '/infrastructure_damage', damage, { headers: { 'Content-Type': 'application/json' } })
+                .then(result => { resolve(result); })
+                .catch(error => { reject(error); });
+        });
+    },
+    postStatus: (statusinfo) => {
+        return new Promise((resolve, reject) => {
+            axios.post(URL + '/status', statusinfo, { headers: { 'Content-Type': 'application/json' } })
+                .then(result => { resolve(result); })
+                .catch(error => { reject(error); });
+        });
+    },
+    postNewStation: (station) => {
+        return new Promise((resolve, reject) => {
+            axios.post(URL + '/station', station, { headers: { 'Content-Type': 'application/json' } })
+                .then(result => { resolve(result); })
+                .catch(error => { reject(error); });
+        });
+    },
 }
 
 export default endpoints;

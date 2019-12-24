@@ -13,6 +13,9 @@ import TimetablePage from './components/TimetablePage'
 import StaffPage from './components/StaffPage';
 import TrainPage from './components/TrainPage';
 import TicketPage from './components/TicketPage';
+import DelayPage from './components/DelayPage';
+import DamagePage from './components/DamagePage';
+import StationPage from './components/StationPage';
 
 class App extends Component {
   render() {
@@ -28,6 +31,9 @@ class App extends Component {
               <li> <Link to="/staff">Staff</Link> </li>
               <li> <Link to="/train">Train</Link> </li>
               <li> <Link to="/ticket">Ticket</Link> </li>
+	      <li> <Link to="/delay">Delay</Link> </li>
+	      <li> <Link to="/damage">Damage</Link> </li>
+	      <li> <Link to="/station">Station</Link> </li>
             </ul>
         </div>
         <div className="App-intro">
@@ -37,6 +43,9 @@ class App extends Component {
             <Route path="/staff" component={StaffPage} />
             <Route path="/train" component={TrainPage} />
             <Route path="/ticket" component={TicketPage} />
+            <Route path="/delay" component={DelayPage} />
+            <Route path="/damage" component={DamagePage} />
+            <Route path="/station" component={StationPage} />
             <Redirect to="/" />
           </Switch>
         </div>
