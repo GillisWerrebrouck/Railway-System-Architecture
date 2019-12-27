@@ -68,7 +68,13 @@ const endpoints = {
     postNewStaff: (newStaff) => {
         return new Promise((resolve, reject) => {
             axios.post(URL + '/staff', newStaff, { headers: { 'Content-Type': 'application/json' } })
-                .then(result => { resolve(result); })
+                .then(result => {
+                    if(typeof result.data === "string") {
+                        reject(result.data);
+                    } else {
+                        resolve(result);
+                    }
+                })
                 .catch(error => { reject(error); });
         });
     },

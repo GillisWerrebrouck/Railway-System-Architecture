@@ -19,14 +19,12 @@ export default class StaffSchedulePage extends Component {
   }
 
   renderStaff() {
-        return this.state.schedules.map((platformId, timetableId, arrivalDateTime, departureDateTime, delayInMinutes) => {
+        return this.state.schedules.map((id, requestId, startDate, endDate) => {
             return (
-                <tr key={platformId}>
-                    <td>{platformId}</td>
-                    <td>{timetableId}</td>
-                    <td>{arrivalDateTime}</td>
-                    <td>{departureDateTime}</td>
-                    <td>{delayInMinutes}</td>
+                <tr key={id}>
+                    <td>{id}</td>
+                    <td>{requestId}</td>
+                    <td>{startDate} - {endDate}</td>
                 </tr>
             );
         });
@@ -40,11 +38,9 @@ export default class StaffSchedulePage extends Component {
          <table id='staff'>
           <tbody>
            <tr>
-            <th>Platform ID</th>
-            <th>Timetable ID</th>
-            <th>Arrival DateTime</th>
-            <th>Departure DateTime</th>
-            <th>Delay (minutes)</th>
+            <th>ID</th>
+            <th>Request ID</th>
+            <th>Date</th>
            </tr>
           { this.renderStaff() }
          </tbody>

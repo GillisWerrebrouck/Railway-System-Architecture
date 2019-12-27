@@ -23,7 +23,6 @@ export default class StationPage extends Component {
             const { platformId, timetableId, arrivalDateTime, departureDateTime, delayInMinutes } = reservedSlots;
             return (
                 <tr key={platformId}>
-                    <td>{platformNumber}</td>
                     <td>{platformId}</td>
                     <td>{timetableId}</td>
                     <td>{arrivalDateTime}</td>
@@ -42,7 +41,6 @@ export default class StationPage extends Component {
          <table id='station'>
           <tbody>
            <tr>
-            <th>Platform Nr.</th>
             <th>Platform ID</th>
             <th>Timetable ID</th>
             <th>Arrival DateTime</th>
