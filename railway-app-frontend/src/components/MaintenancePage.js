@@ -19,7 +19,7 @@ export default class MaintenancePage extends Component {
   }
 
   renderMaintenance() {
-    return this.state.maintenance.map((scheduleItem) => {
+    return this.state.maintenance.map((scheduleItem, index) => {
     const { id, startDate, endDate, staffIds, requestId, staffReservationMessage, status, maintenanceMessage, trainId, maintenanceType } = scheduleItem;
       return (
         <tr key={id}>

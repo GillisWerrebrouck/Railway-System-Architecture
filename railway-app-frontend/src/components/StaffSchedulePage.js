@@ -19,11 +19,11 @@ export default class StaffSchedulePage extends Component {
   }
 
   renderStaff() {
-        return this.state.schedules.map((id, requestId, startDate, endDate) => {
-            return (
+        return this.state.schedules.map((scheduleItem, index) => {
+        const { id, requestId, startDate, endDate } = scheduleItem;
+        return (
                 <tr key={id}>
                     <td>{id}</td>
-                    <td>{requestId}</td>
                     <td>{startDate} - {endDate}</td>
                 </tr>
             );
@@ -39,7 +39,6 @@ export default class StaffSchedulePage extends Component {
           <tbody>
            <tr>
             <th>ID</th>
-            <th>Request ID</th>
             <th>Date</th>
            </tr>
           { this.renderStaff() }

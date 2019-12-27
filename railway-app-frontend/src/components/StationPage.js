@@ -19,7 +19,7 @@ export default class StationPage extends Component {
   }
 
   renderStation() {
-        return this.state.station.map((id, platformNumber, reservedSlots) => {
+        return this.state.station.map((reservedSlots, index) => {
             const { platformId, timetableId, arrivalDateTime, departureDateTime, delayInMinutes } = reservedSlots;
             return (
                 <tr key={platformId}>
