@@ -12,9 +12,17 @@ export default class NetworkPage extends Component {
       isStationsLoading: true,
       routes: [],
       stations: [],
+      createConnection: {
+        stationXId: null,
+        stationYId: null,
+        distance: 0,
+        maxSpeed: 0,
+        active: "true",
+      },
+      createConnectionErrorResponse: null, 
       changeConnectionState: {
         id: null,
-        active: true,
+        active: "true",
       },
     };
   }
@@ -49,11 +57,14 @@ export default class NetworkPage extends Component {
             endpoints.getConnectionsOnRoute(route.id)
               .then((result) => {
                 const connections = result.data;
-                
-                this.state.routes[routeIndex].stations = stations[0];
+
+                let routes = this.state.routes;
+                routes[routeIndex].stations = stations[0];
+
                 connections.forEach((connection, connectionIndex) => {
-                  this.state.routes[routeIndex].stations += " -- " + connection.distance + " --> " + stations[connectionIndex+1];
+                  routes[routeIndex].stations += " -- " + connection.distance + " --> " + stations[connectionIndex+1];
                 });
+                this.setState({ routes });
                 this.setState({ isRoutesLoading: false });
               });
           });
@@ -92,7 +103,16 @@ export default class NetworkPage extends Component {
     });
   }
 
-  changeConnectionFormChangeHandler = (event) => {
+  changeCreateConnectionFormChangeHandler = (event) => {
+    const name = event.target.name;
+    const value = event.target.value;
+
+    let createConnection = {...this.state.createConnection};
+    createConnection[name] = value;
+    this.setState({ createConnection });
+  }
+
+  changeConnectionStateFormChangeHandler = (event) => {
     const name = event.target.name;
     const value = event.target.value;
 
@@ -101,14 +121,28 @@ export default class NetworkPage extends Component {
     this.setState({ changeConnectionState });
   }
 
+  createConnection = (event) => {
+    event.preventDefault();
+
+    let createConnection = {...this.state.createConnection};
+    createConnection.active = createConnection.active === "true";
+    this.setState({ createConnection });
+
+    endpoints.postCreateConnection(this.state.createConnection)
+      .then(() => { window.location.reload(); })
+      .catch(() => {
+        this.setState({ createConnectionErrorResponse: "Both fields are mandatory, the 2 stations also need to be different." });
+      });
+  }
+
   changeConnectionState = (event) => {
     event.preventDefault();
 
     let changeConnectionState = {...this.state.changeConnectionState};
-    changeConnectionState.active = changeConnectionState.active == "true";
+    changeConnectionState.active = changeConnectionState.active === "true";
     this.setState({ changeConnectionState });
 
-    endpoints.postChangeConnectionState(this.state.changeConnectionState)
+    endpoints.putChangeConnectionState(this.state.changeConnectionState)
       .then(() => { window.location.reload(); });
   }
 
@@ -159,6 +193,58 @@ export default class NetworkPage extends Component {
           <p>Loading...</p>
         )}
 
+        <h3>Create connection between two stations</h3>
+        <form onSubmit={this.createConnection}>
+          <label>Station x: </label>
+          <select name='stationXId' onChange={this.changeCreateConnectionFormChangeHandler}>
+            <option value="">choose a station</option>
+            {this.state.stations.map((station) => {
+              return (<option key={station.id} value={station.id}>{station.name}</option>)
+            })}
+          </select>
+          <br />
+
+          <label>Station y: </label>
+          <select name='stationYId' onChange={this.changeCreateConnectionFormChangeHandler}>
+            <option value="">choose a station</option>
+            {this.state.stations.map((station) => {
+              return (<option key={station.id} value={station.id}>{station.name}</option>)
+            })}
+          </select>
+          <br />
+
+          <label>Distance (in km): </label>
+          <input
+            type='number'
+            name='distance'
+            placeholder='0'
+            onChange={this.changeCreateConnectionFormChangeHandler}
+          />
+          <br />
+
+          <label>Max speed (in km/h): </label>
+          <input
+            type='number'
+            name='maxSpeed'
+            placeholder='0'
+            onChange={this.changeCreateConnectionFormChangeHandler}
+          />
+          <br />
+
+          <label>Status: </label>
+          <select name='active' onChange={this.changeCreateConnectionFormChangeHandler}>
+            <option value="true">active</option>
+            <option value="false">non-active</option>
+          </select>
+          <br />
+
+          <input
+            type='submit'
+            value='CREATE'
+          />
+        </form>
+        <p>{this.state.createConnectionErrorResponse}</p>
+
         <h3>Change connection status</h3>
         <p>
           A connection between two stations has a status (active/non-active). 
@@ -169,12 +255,12 @@ export default class NetworkPage extends Component {
           <input
             type='number'
             name='id'
-            onChange={this.changeConnectionFormChangeHandler}
+            onChange={this.changeConnectionStateFormChangeHandler}
           />
           <br />
 
           <label>Status: </label>
-          <select name='active' onChange={this.changeConnectionFormChangeHandler}>
+          <select name='active' onChange={this.changeConnectionStateFormChangeHandler}>
             <option value="true">active</option>
             <option value="false">non-active</option>
           </select>

@@ -1,5 +1,5 @@
 // credits: https://github.com/jackdbd/react-neovis-example
-
+/* eslint-disable react/forbid-foreign-prop-types */
 import React, { Component } from "react";
 import ResizeAware from "react-resize-aware";
 import PropTypes from "prop-types";

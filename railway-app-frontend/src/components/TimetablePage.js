@@ -53,12 +53,9 @@ export default class TimetablePage extends Component {
   createTimetableItem = (event) => {
     event.preventDefault();
     endpoints.postNewTimetableItem(this.state.newTimetableItem)
-      .then(result => { 
-        if(typeof result.data === "string") {
-          this.setState({ createTimetableItemErrorResponse: result.data });
-        } else {
-          window.location.reload();
-        }
+      .then(() => { window.location.reload(); })
+      .catch((error) => {
+        this.setState({ createTimetableItemErrorResponse: error });
       });
   }
 
