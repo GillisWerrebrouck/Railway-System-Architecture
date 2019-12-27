@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import endpoints from '../api/endpoints';
+import { Link } from 'react-router-dom';
 
 export default class StaffPage extends Component {
   constructor(props) {
@@ -8,6 +9,13 @@ export default class StaffPage extends Component {
     this.state = {
       isLoading: true,
       staff: [],
+      newStaff: {
+        firstName: null,
+        lastName: null,
+        birthdate: null,
+        staffMemberType: "CONDUCTOR",
+      },
+      createStaffErrorResponse: "",
     };
   }
 
@@ -32,7 +40,7 @@ export default class StaffPage extends Component {
       
       return (
         <tr key={id}>
-          <td>{id}</td>
+          <td><Link to={`/staffschedule/${id}`}>{id}</Link></td>
           <td>{lastName}</td>
           <td>{firstName}</td>
           <td>{staffMemberType}</td>
@@ -41,6 +49,28 @@ export default class StaffPage extends Component {
       );
     });
   }
+
+    createStaffFormChangeHandler = (event) => {
+      const name = event.target.name;
+      const value = event.target.value;
+
+      let newStaff = {...this.state.newStaff};
+      newStaff[name] = value;
+      this.setState({ newStaff });
+    }
+
+    createStaffItem = (event) => {
+      event.preventDefault();
+      endpoints.postNewStaff(this.state.newStaff)
+        .then(result => {
+          if(typeof result.data === "string") {
+            this.setState({ createStaffErrorResponse: result.data });
+          } else {
+            window.location.reload();
+          }
+        });
+    }
+
 
   render() {
     return (
@@ -63,6 +93,48 @@ export default class StaffPage extends Component {
         ) : (
           <p>Loading...</p>
         )}
+        <h3>Add a staff member</h3>
+        <form onSubmit={this.createStaff}>
+          <label>Firstname: </label>
+          <input
+            type='string'
+            name='firstName'
+            onChange={this.createStaffFormChangeHandler}
+          />
+          <br />
+
+        <label>Lastname: </label>
+          <input
+            type='string'
+            name='lastName'
+            onChange={this.createStaffFormChangeHandler}
+          />
+          <br />
+
+          <label>Birthdate: </label>
+          <input
+            type='datetime'
+            name='birthdate'
+            onChange={this.createStaffFormChangeHandler}
+          />
+          <span>&nbsp;format: yyyy-mm-ddThh:mm:00.000</span>
+          <br />
+
+          <label>Staff type: </label>
+          <select name='staffMemberType' onChange={this.createStaffFormChangeHandler}>
+            <option value="CONDUCTOR">conductor</option>
+            <option value="TRAIN_OPERATOR">train operator</option>
+            <option value="MECHANIC">mechanic</option>
+          </select>
+          <br />
+
+          <input
+            type='submit'
+            value='CREATE'
+          />
+        </form>
+
+        <p>{this.state.createStaffErrorResponse}</p>
       </div>
     );
   }

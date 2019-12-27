@@ -44,6 +44,34 @@ const endpoints = {
                 .catch(error => { reject(error); });
         });
     },
+    getStation: (stationId) => {
+        return new Promise((resolve, reject) => {
+            axios.get(URL + `/station/${stationId}`, { responseType: 'json' })
+                .then(result => { resolve(result); })
+                .catch(error => { reject(error); });
+        });
+    },
+    getMaintenanceSchedules: () => {
+        return new Promise((resolve, reject) => {
+            axios.get(URL + '/maintenance/schedule', { responseType: 'json' })
+                .then(result => { resolve(result); })
+                .catch(error => { reject(error); });
+        });
+    },
+    getStaffSchedule: (staffId) => {
+        return new Promise((resolve, reject) => {
+            axios.get(URL + `/staff/${staffId}`, { responseType: 'json' })
+               .then(result => { resolve(result); })
+               .catch(error => { reject(error); });
+        });
+    },
+    postNewStaff: (newStaff) => {
+        return new Promise((resolve, reject) => {
+            axios.post(URL + '/staff', newStaff, { headers: { 'Content-Type': 'application/json' } })
+                .then(result => { resolve(result); })
+                .catch(error => { reject(error); });
+        });
+    },
     getConnectionsOnRoute: (routeId) => {
         return new Promise((resolve, reject) => {
             axios.get(URL + `/network/route/${routeId}/connections`, { responseType: 'json' })
