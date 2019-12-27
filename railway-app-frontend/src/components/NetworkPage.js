@@ -32,6 +32,7 @@ export default class NetworkPage extends Component {
         maxSpeed: 0,
         active: "true",
       },
+      createRouteErrorResponse: null,
       createConnectionErrorResponse: null, 
       changeConnectionState: {
         id: null,
@@ -199,6 +200,17 @@ export default class NetworkPage extends Component {
   createRoute = (event) => {
     event.preventDefault();
 
+    if(this.state.createRoute.name === null) {
+      this.setState({ createRouteErrorResponse: "No route name given" });
+      return;
+    } else if(!this.state.routeServiceStations.map(s => s.id.toString()).includes(this.state.createRoute.startStation)) {
+      this.setState({ createRouteErrorResponse: "No start station chosen" });
+      return;
+    } else if(!this.state.connections.map(c => c.id.toString()).includes(this.state.routeParts[0].connectionId)) {
+      this.setState({ createRouteErrorResponse: "No connection chosen for connection part 1" });
+      return;
+    }
+
     let route = {
       name: this.state.createRoute.name,
       routeConnections: [
@@ -212,7 +224,18 @@ export default class NetworkPage extends Component {
       ],
     };
 
+    let failed = false;
     this.state.routeParts.forEach((routePart, i) => {
+      if(!this.state.connections.map(c => c.id.toString()).includes(this.state.routeParts[i].connectionId)){
+        this.setState({ createRouteErrorResponse: `No connection chosen for connection ${i+1}` });
+        failed = true;
+        return;
+      }
+      if(!this.state.routeServiceStations.map(s => s.id.toString()).includes(routePart.station)){
+        this.setState({ createRouteErrorResponse: `No station chosen for route part ${i}` });
+        failed = true;
+        return;
+      }
       route.routeConnections[i+1] = {
         station: {
           id: routePart.station,
@@ -222,8 +245,13 @@ export default class NetworkPage extends Component {
       }
     });
 
-    endpoints.postCreateRoute(route)
-      .then(() => { window.location.reload(); });
+    if(!failed) {
+      endpoints.postCreateRoute(route)
+        .then(() => { window.location.reload(); })
+        .catch((error) => {
+          this.setState({ createRouteErrorResponse: "All fields need to be filled out." });
+        });
+    }
   }
 
   createConnection = (event) => {
@@ -365,7 +393,7 @@ export default class NetworkPage extends Component {
                     <select name={i} data-id={i} className='connectionId' onChange={this.createRouteFormPartChangeHandler}>
                       <option value="">choose a connection</option>
                       {this.state.connections.map((connection) => {
-                        return (<option key={connection.id} value={connection.id}>{connection.id}</option>)
+                        return (<option key={connection.id} value={connection.id}>{connection.id + ": " + connection.stationX.name + " - " + connection.stationY.name}</option>)
                       })}
                     </select>
                     <br />
@@ -390,6 +418,7 @@ export default class NetworkPage extends Component {
             value='CREATE'
           />
         </form>
+        <p>{this.state.createRouteErrorResponse}</p>
 
         <h3>Create connection between two stations</h3>
         <form onSubmit={this.createConnection}>
@@ -453,7 +482,7 @@ export default class NetworkPage extends Component {
           <select name='id' onChange={this.changeConnectionStateFormChangeHandler}>
             <option value="">choose a connection</option>
             {this.state.connections.map((connection) => {
-              return (<option key={connection.id} value={connection.id}>{connection.id}</option>)
+              return (<option key={connection.id} value={connection.id}>{connection.id + ": " + connection.stationX.name + " - " + connection.stationY.name}</option>)
             })}
           </select>
           <br />
