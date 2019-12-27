@@ -30,6 +30,11 @@ public class RouteCommandHandler {
 		logger.info("[Route Command Handler] get route command received");
 		Collection<Connection> routeConnections = routeService.getRouteConnections(request.getRouteId());
 		Route route = routeService.getRoute(request.getRouteId());
+		
+		if (!routeService.areConnectionsActive(route.getRouteConnections())) {
+			routeConnections.clear();
+		}
+		
 		RouteResponse response = new RouteResponse(request.getRouteId(), request.getTimetableId(), request.getRequestId(), routeConnections, route);
 		logger.info("[Route Command Handler] route fetched");
 		return response;
