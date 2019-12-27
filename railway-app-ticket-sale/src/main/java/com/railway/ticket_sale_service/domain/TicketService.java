@@ -38,11 +38,15 @@ public class TicketService {
 
     public synchronized void bookTickets(TicketRequest ticketRequest){
         if(ticketRequest.getTicketType() == TicketType.GROUP){
-            Ticket groupTicket = new Ticket(ticketRequest.getStartDateTime(), ticketRequest.getTimetableId(), ticketRequest.getAmountOfSeats(), ticketRequest.getTicketCreationId());
-            this.ticketRepository.save(groupTicket);
-            this.bookTicketSaga.startBookGroupTicketSaga(groupTicket, UUID.fromString(ticketRequest.getEndStationId()),
-                    UUID.fromString(ticketRequest.getStartStationId()));
-            this.ticketRepository.save(groupTicket);
+                Ticket groupTicket = new Ticket(ticketRequest.getStartDateTime(), ticketRequest.getTimetableId(), ticketRequest.getAmountOfSeats(), ticketRequest.getTicketCreationId());
+                if(groupTicket.getAmountOfSeats() < 10) {
+                    this.bookTicketSaga.onGroupTicketAmountOfSeatsToLow(groupTicket);
+                }else {
+                    this.ticketRepository.save(groupTicket);
+                    this.bookTicketSaga.startBookGroupTicketSaga(groupTicket, UUID.fromString(ticketRequest.getEndStationId()),
+                            UUID.fromString(ticketRequest.getStartStationId()));
+                    this.ticketRepository.save(groupTicket);
+                }
         }else{
             List<Ticket> singleTickets = new ArrayList<>();
             for(int i = 0; i < ticketRequest.getAmountOfSeats(); i++){

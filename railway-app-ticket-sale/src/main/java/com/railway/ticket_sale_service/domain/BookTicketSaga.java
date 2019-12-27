@@ -87,17 +87,22 @@ public class BookTicketSaga {
         notifyErrorListeners(tickets,"Could not get route details.");
     }
 
+    public void onGroupTicketAmountOfSeatsToLow(Ticket ticket){
+        notifyErrorListeners(Arrays.asList(ticket),"Too few seats for groupticket.");
+    }
+
     private void checkTicketCompletion(List<Ticket> tickets){
-        notifyListeners(
-                tickets.stream()
+        List<Ticket> bookedTickets = tickets.stream()
                 .filter(ticket -> (ticket.getType() == TicketType.SINGLE && ticket.getStatus() == TicketStatus.DETAILS_FETCHED) || ticket.getStatus() ==  TicketStatus.DETAILS_FETCHED_GROUP_SEATS_RESERVED)
                 .map(ticket -> {
                     ticket.setStatus(TicketStatus.BOOKED);
                     gateway.ticketCreated(ticket);
                     return ticket;
                 })
-                .collect(Collectors.toList())
-        );
+                .collect(Collectors.toList());
+
+        if(!bookedTickets.isEmpty())
+            notifyListeners(bookedTickets);
     }
 
     private void notifyListeners(List<Ticket> tickets){
