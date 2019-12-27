@@ -38,12 +38,12 @@ class App extends Component {
           <Switch>
             <Route exact path="/"  component={NetworkPage} />
             <Route path="/timetable" component={TimetablePage} />
+            <Route exact path="/staff/:id" component={StaffSchedulePage} />
             <Route path="/staff" component={StaffPage} />
             <Route path="/train" component={TrainPage} />
             <Route path="/ticket" component={TicketPage} />
             <Route path="/maintenance" component={MaintenancePage} />
             <Route exact path="/station/:id" component={StationPage} />
-            <Route exact path="/staffschedule/:id" component={StaffSchedulePage} />
             <Redirect to="/" />
           </Switch>
         </div>

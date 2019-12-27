@@ -12,19 +12,15 @@ export default class MaintenancePage extends Component {
   }
 
   componentDidMount() {
-    let array = [];
     endpoints.getMaintenanceSchedules()
-      .then((result) => {
-        result.data.forEach((item) => {
-            array.push(item);
-        });
-        this.setState({ maintenance: array, isLoading: false });
-      });
+        .then((result) => {
+            this.setState({ maintenance: result.data, isLoading: false });
+    });
   }
 
   renderMaintenance() {
-    return this.state.maintenance.map((Object) => {
-    const { id, startDate, endDate, staffIds, requestId, staffReservationMessage, status, maintenanceMessage, trainId, maintenanceType } = Object;
+    return this.state.maintenance.map((scheduleItem) => {
+    const { id, startDate, endDate, staffIds, requestId, staffReservationMessage, status, maintenanceMessage, trainId, maintenanceType } = scheduleItem;
       return (
         <tr key={id}>
           <td>{id}</td>

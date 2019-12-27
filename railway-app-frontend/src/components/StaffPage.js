@@ -40,7 +40,7 @@ export default class StaffPage extends Component {
       
       return (
         <tr key={id}>
-          <td><Link to={`/staffschedule/${id}`}>{id}</Link></td>
+          <td><Link to={`/staff/${id}`}>{id}</Link></td>
           <td>{lastName}</td>
           <td>{firstName}</td>
           <td>{staffMemberType}</td>
@@ -117,7 +117,6 @@ export default class StaffPage extends Component {
             name='birthdate'
             onChange={this.createStaffFormChangeHandler}
           />
-          <span>&nbsp;format: yyyy-mm-ddThh:mm:00.000</span>
           <br />
 
           <label>Staff type: </label>

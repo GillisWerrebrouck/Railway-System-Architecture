@@ -37,7 +37,7 @@ public class StaffRestController {
 	}
 	
 	@PostMapping
-    @ResponseStatus(value = HttpStatus.NO_CONTENT)
+	@ResponseStatus(value = HttpStatus.NO_CONTENT)
 	public void createStaff(@RequestBody StaffMember staff) throws Exception {
 		try {
 			this.staffMembersRepository.save(staff);
