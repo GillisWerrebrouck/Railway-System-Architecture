@@ -9,6 +9,13 @@ const endpoints = {
                 .catch(error => { reject(error); });
         });
     },
+    getStationsFromRouteService: () => {
+        return new Promise((resolve, reject) => {
+            axios.get(URL + '/network/station', { responseType: 'json' })
+                .then(result => { resolve(result); })
+                .catch(error => { reject(error); });
+        });
+    },
     getTrains: () => {
         return new Promise((resolve, reject) => {
             axios.get(URL + '/train', { responseType: 'json' })
@@ -68,6 +75,13 @@ const endpoints = {
                         resolve(result);
                     }
                 })
+                .catch(error => { reject(error); });
+        });
+    },
+    postCreateRoute: (route) => {
+        return new Promise((resolve, reject) => {
+            axios.post(URL + '/network/route', route, { headers: { 'Content-Type': 'application/json' } })
+                .then(result => { resolve(result.data); })
                 .catch(error => { reject(error); });
         });
     },

@@ -14,10 +14,17 @@ export default class NetworkPage extends Component {
       routes: [],
       connections: [],
       stations: [],
+      routeServiceStations: [],
       createRoute: {
         name: null,
-        routeConnections: [],
+        startStation: null,
       },
+      routeParts: [
+        {
+          station: "",
+          connectionId: "",
+        }
+      ],
       createConnection: {
         stationXId: null,
         stationYId: null,
@@ -37,6 +44,7 @@ export default class NetworkPage extends Component {
     this.getRoutes();
     this.getConnections();
     this.getStations();
+    this.getStationsFromRouteService();
   }
 
   getRoutes() {
@@ -83,6 +91,13 @@ export default class NetworkPage extends Component {
     endpoints.getStations()
       .then((result) => {
         this.setState({ stations: result.data, isStationsLoading: false });
+      });
+  }
+
+  getStationsFromRouteService() {
+    endpoints.getStationsFromRouteService()
+      .then((result) => {
+        this.setState({ routeServiceStations: result.data });
       });
   }
 
@@ -133,6 +148,27 @@ export default class NetworkPage extends Component {
     });
   }
 
+  addStationToRoute = (e) => {
+    this.setState((prevState) => ({
+      routeParts: [
+        ...prevState.routeParts,
+        {
+          station: "",
+          connectionId: "",
+        }
+      ],
+    }));
+  }
+
+  createRouteFormPartChangeHandler = (event) => {
+    if (["station", "connectionId"].includes(event.target.className) ) {
+      let routeParts = [...this.state.routeParts]   
+      routeParts[event.target.dataset.id][event.target.className] = event.target.value
+    } else {
+      this.setState({ [event.target.name]: event.target.value })
+    }
+  }
+
   createRouteFormChangeHandler = (event) => {
     const name = event.target.name;
     const value = event.target.value;
@@ -163,7 +199,31 @@ export default class NetworkPage extends Component {
   createRoute = (event) => {
     event.preventDefault();
 
-    // TODO
+    let route = {
+      name: this.state.createRoute.name,
+      routeConnections: [
+        {
+          station: {
+            id: this.state.createRoute.startStation,
+          },
+          connectionId: this.state.routeParts[0].connectionId,
+          startOfRoute: true,
+        }
+      ],
+    };
+
+    this.state.routeParts.forEach((routePart, i) => {
+      route.routeConnections[i+1] = {
+        station: {
+          id: routePart.station,
+        },
+        connectionId: this.state.routeParts.length === i+1 ? null : this.state.routeParts[i+1].connectionId,
+        startOfRoute: false,
+      }
+    });
+
+    endpoints.postCreateRoute(route)
+      .then(() => { window.location.reload(); });
   }
 
   createConnection = (event) => {
@@ -268,6 +328,44 @@ export default class NetworkPage extends Component {
           />
           <br />
 
+          <label>Station: </label>
+          <select name='startStation' onChange={this.createRouteFormChangeHandler}>
+            <option value="">choose a station</option>
+            {this.state.routeServiceStations.map((station) => {
+              return (<option key={station.id} value={station.id}>{station.name}</option>)
+            })}
+          </select>
+          <br />
+
+          <div id="routeStationsFormPart">
+            {
+              this.state.routeParts.map((routePart, i) => {
+                return (
+                  <div key={i}>
+                    <label>Connection ID: </label>
+                    <select name={i} data-id={i} className='connectionId' onChange={this.createRouteFormPartChangeHandler}>
+                      <option value="">choose a connection</option>
+                      {this.state.connections.map((connection) => {
+                        return (<option key={connection.id} value={connection.id}>{connection.id}</option>)
+                      })}
+                    </select>
+                    <br />
+
+                    <label>Station: </label>
+                    <select name={i} data-id={i} className='station' onChange={this.createRouteFormPartChangeHandler}>
+                      <option value="">choose a station</option>
+                      {this.state.routeServiceStations.map((station) => {
+                        return (<option key={station.id} value={station.id}>{station.name}</option>)
+                      })}
+                    </select>
+                    <br />
+                  </div>
+                );
+              })
+            }
+          </div>
+
+          <button onClick={this.addStationToRoute}>ADD STATION</button>
           <input
             type='submit'
             value='CREATE'
