@@ -37,6 +37,13 @@ const endpoints = {
                 .catch(error => { reject(error); });
         });
     },
+    getConnections: () => {
+        return new Promise((resolve, reject) => {
+            axios.get(URL + '/network/connection', { responseType: 'json' })
+                .then(result => { resolve(result); })
+                .catch(error => { reject(error); });
+        });
+    },
     getStationsOnRoute: (routeId) => {
         return new Promise((resolve, reject) => {
             axios.get(URL + `/network/route/${routeId}/stations`, { responseType: 'json' })

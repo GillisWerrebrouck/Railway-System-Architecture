@@ -29,10 +29,10 @@ class NeoGraph extends Component {
       },
       relationships: {
         CONNECTED_WITH: {
-          caption: "distance",
+          caption: false,
         },
         USES_STATION: {
-          caption: "connectionId",
+          caption: false,
         }
       },
       initial_cypher:

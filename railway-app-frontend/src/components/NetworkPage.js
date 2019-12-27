@@ -10,8 +10,14 @@ export default class NetworkPage extends Component {
     this.state = {
       isRoutesLoading: true,
       isStationsLoading: true,
+      isConnectionsLoading: true,
       routes: [],
+      connections: [],
       stations: [],
+      createRoute: {
+        name: null,
+        routeConnections: [],
+      },
       createConnection: {
         stationXId: null,
         stationYId: null,
@@ -29,14 +35,8 @@ export default class NetworkPage extends Component {
 
   componentDidMount() {
     this.getRoutes();
+    this.getConnections();
     this.getStations();
-  }
-
-  getStations() {
-    endpoints.getStations()
-      .then((result) => {
-        this.setState({ stations: result.data, isStationsLoading: false });
-      });
   }
 
   getRoutes() {
@@ -72,6 +72,20 @@ export default class NetworkPage extends Component {
     });
   }
 
+  getConnections() {
+    endpoints.getConnections()
+      .then((result) => {
+        this.setState({ connections: result.data.sort((a, b) => a.id > b.id), isConnectionsLoading: false });
+      });
+  }
+
+  getStations() {
+    endpoints.getStations()
+      .then((result) => {
+        this.setState({ stations: result.data, isStationsLoading: false });
+      });
+  }
+
   renderRoutes() {
     return this.state.routes.map((route, index) => {
       const { id, name, stations } = route;
@@ -80,6 +94,22 @@ export default class NetworkPage extends Component {
           <td>{id}</td>
           <td>{name}</td>
           <td>{stations}</td>
+        </tr>
+      );
+    });
+  }
+
+  renderConnections() {
+    return this.state.connections.map((connection, index) => {
+      const { id, stationX, stationY, distance, maxSpeed, active } = connection;
+      return (
+        <tr key={id}>
+          <td>{id}</td>
+          <td>{stationX.name}</td>
+          <td>{stationY.name}</td>
+          <td>{distance}</td>
+          <td>{maxSpeed}</td>
+          <td>{active ? "active" : "non-active"}</td>
         </tr>
       );
     });
@@ -103,7 +133,16 @@ export default class NetworkPage extends Component {
     });
   }
 
-  changeCreateConnectionFormChangeHandler = (event) => {
+  createRouteFormChangeHandler = (event) => {
+    const name = event.target.name;
+    const value = event.target.value;
+
+    let createRoute = {...this.state.createRoute};
+    createRoute[name] = value;
+    this.setState({ createRoute });
+  }
+
+  createConnectionFormChangeHandler = (event) => {
     const name = event.target.name;
     const value = event.target.value;
 
@@ -119,6 +158,12 @@ export default class NetworkPage extends Component {
     let changeConnectionState = {...this.state.changeConnectionState};
     changeConnectionState[name] = value;
     this.setState({ changeConnectionState });
+  }
+
+  createRoute = (event) => {
+    event.preventDefault();
+
+    // TODO
   }
 
   createConnection = (event) => {
@@ -173,6 +218,25 @@ export default class NetworkPage extends Component {
           <p>Loading...</p>
         )}
 
+        <h3>Connections</h3>
+        {!this.state.isConnectionsLoading ? (
+        <table id='connections'>
+          <tbody>
+            <tr>
+              <th>ID</th>
+              <th>Station X</th>
+              <th>Station Y</th>
+              <th>Distance (km)</th>
+              <th>Max speed (km/h)</th>
+              <th>Active</th>
+            </tr>
+            { this.renderConnections() }
+          </tbody>
+        </table>
+        ) : (
+          <p>Loading...</p>
+        )}
+
         <h3>Stations</h3>
         {!this.state.isStationsLoading ? (
         <table id='stations'>
@@ -193,10 +257,27 @@ export default class NetworkPage extends Component {
           <p>Loading...</p>
         )}
 
+        <h3>Create route</h3>
+        <form onSubmit={this.createRoute}>
+          <label>Route name: </label>
+          <input
+            type='string'
+            name='name'
+            placeholder='Station x - Station y'
+            onChange={this.changeCreateRouteFormChangeHandler}
+          />
+          <br />
+
+          <input
+            type='submit'
+            value='CREATE'
+          />
+        </form>
+
         <h3>Create connection between two stations</h3>
         <form onSubmit={this.createConnection}>
           <label>Station x: </label>
-          <select name='stationXId' onChange={this.changeCreateConnectionFormChangeHandler}>
+          <select name='stationXId' onChange={this.createConnectionFormChangeHandler}>
             <option value="">choose a station</option>
             {this.state.stations.map((station) => {
               return (<option key={station.id} value={station.id}>{station.name}</option>)
@@ -205,7 +286,7 @@ export default class NetworkPage extends Component {
           <br />
 
           <label>Station y: </label>
-          <select name='stationYId' onChange={this.changeCreateConnectionFormChangeHandler}>
+          <select name='stationYId' onChange={this.createConnectionFormChangeHandler}>
             <option value="">choose a station</option>
             {this.state.stations.map((station) => {
               return (<option key={station.id} value={station.id}>{station.name}</option>)
@@ -218,7 +299,7 @@ export default class NetworkPage extends Component {
             type='number'
             name='distance'
             placeholder='0'
-            onChange={this.changeCreateConnectionFormChangeHandler}
+            onChange={this.createConnectionFormChangeHandler}
           />
           <br />
 
@@ -227,12 +308,12 @@ export default class NetworkPage extends Component {
             type='number'
             name='maxSpeed'
             placeholder='0'
-            onChange={this.changeCreateConnectionFormChangeHandler}
+            onChange={this.createConnectionFormChangeHandler}
           />
           <br />
 
           <label>Status: </label>
-          <select name='active' onChange={this.changeCreateConnectionFormChangeHandler}>
+          <select name='active' onChange={this.createConnectionFormChangeHandler}>
             <option value="true">active</option>
             <option value="false">non-active</option>
           </select>
