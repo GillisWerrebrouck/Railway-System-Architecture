@@ -10,7 +10,9 @@ import org.springframework.web.context.request.async.DeferredResult;
 
 import javax.annotation.PostConstruct;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/ticket")
@@ -19,7 +21,7 @@ public class TicketRestController implements BookTicketListener {
     private static Logger logger = LoggerFactory.getLogger(TicketRestController.class);
 
     private TicketRepository ticketRepository;
-    private final Map<Long, DeferredResult<Ticket>> deferredResults;
+    private final Map<UUID, DeferredResult<List<Ticket>>> deferredResults;
     private final TicketService ticketService;
 
     @Autowired
@@ -45,44 +47,51 @@ public class TicketRestController implements BookTicketListener {
     }
 
     @PostMapping()
-    public DeferredResult<Ticket> buyTicket (@RequestBody TicketRequest ticketRequest){
+    public DeferredResult<List<Ticket>> buyTicket (@RequestBody TicketRequest ticketRequest){
         logger.info("[Ticket Sale Rest Controller] buy ticket");
 
-        DeferredResult<Ticket> deferredResult = new DeferredResult<>(10000l);
+        DeferredResult<List<Ticket>> deferredResult = new DeferredResult<>(10000l);
 
         if(!isValidTicketRequest(ticketRequest)){
             deferredResult.setErrorResult("Request must contain the following fields in the body; \"startStationId\", \"endStationId\"" +
-                    ", \"startDateTime\", \"amountOfSeats\" and \"timeTableId\"");
+                    ", \"startDateTime\", \"timeTableId\", \"amountOfSeats\" and \"ticketType\"");
         }
 
         deferredResult.onTimeout(() -> {
             deferredResult.setErrorResult("Request timeout occurred");
         });
 
-        Ticket ticket = new Ticket(ticketRequest.getStartDateTime(), ticketRequest.getTimetableId(), ticketRequest.getAmountOfSeats());
-
-        ticketRepository.save(ticket);
-        deferredResults.put(ticket.getId(), deferredResult);
-
-        ticketService.buyTicket(ticket, ticketRequest);
-
+        deferredResults.put(ticketRequest.getTicketCreationId(), deferredResult);
+        ticketService.bookTickets(ticketRequest);
         return deferredResult;
     }
 
     private boolean isValidTicketRequest(TicketRequest ticketRequest){
-        return ticketRequest.getStartStationId() != null && ticketRequest.getEndStationId() != null;
+        return ticketRequest.getStartStationId() != null && ticketRequest.getEndStationId() != null && ticketRequest.getTimetableId() != null;
     }
 
-    private void performResponse(Ticket ticket){
-        DeferredResult<Ticket> deferredResult = this.deferredResults.remove(ticket.getId());
+    private void performResponse(List<Ticket> tickets){
+        DeferredResult<List<Ticket>> deferredResult = this.deferredResults.remove(tickets.get(0).getTicketCreationId());
         if (deferredResult != null && !deferredResult.isSetOrExpired())
-            deferredResult.setResult(ticket);
+            deferredResult.setResult(tickets);
         else
             logger.info("[Ticket Sale Rest Controller] defereredResult: " + deferredResult);
     }
 
+    private void performError(List<Ticket> tickets, String errorMessage){
+        DeferredResult<List<Ticket>> deferredResult = this.deferredResults.remove(tickets.get(0).getTicketCreationId());
+        if (deferredResult != null && !deferredResult.isSetOrExpired())
+            deferredResult.setErrorResult("Failed to create " + tickets.size() + " ticket(s). " + errorMessage);
+        logger.info("[Ticket Sale Rest Controller] defereredResult: " + deferredResult);
+    }
+
     @Override
-    public void onBookTicketResult(Ticket ticket) {
-        this.performResponse(ticket);
+    public void onBookTicketResult(List<Ticket> tickets) {
+        performResponse(tickets);
+    }
+
+    @Override
+    public void onBookTicketError(List<Ticket> tickets, String errorMessage) {
+        performError(tickets, errorMessage);
     }
 }

@@ -1,21 +1,29 @@
 package com.railway.ticket_sale_service.adapters.rest;
 
+import com.railway.ticket_sale_service.domain.TicketType;
+
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 public class TicketRequest {
 
     private String startStationId;
     private String endStationId;
     private LocalDateTime startDateTime;
-    private int amountOfSeats;
     private Long timetableId;
+    private int amountOfSeats;
+    private TicketType ticketType;
+    private UUID ticketCreationId;
 
-    public TicketRequest(String startStationId, String endStationId, LocalDateTime startDateTime, int amountOfSeats, Long timetableId) {
+
+    public TicketRequest(String startStationId, String endStationId, LocalDateTime startDateTime, Long timetableId, int amountOfSeats, TicketType ticketType) {
         this.startStationId = startStationId;
         this.endStationId = endStationId;
         this.startDateTime = startDateTime;
-        this.amountOfSeats = amountOfSeats;
         this.timetableId = timetableId;
+        this.amountOfSeats = amountOfSeats;
+        this.ticketType = ticketType;
+        this.ticketCreationId = UUID.randomUUID();
     }
 
     public String getStartStationId() {
@@ -56,5 +64,13 @@ public class TicketRequest {
 
     public void setTimetableId(Long timetableId) {
         this.timetableId = timetableId;
+    }
+
+    public TicketType getTicketType() {
+        return ticketType;
+    }
+
+    public UUID getTicketCreationId() {
+        return ticketCreationId;
     }
 }
