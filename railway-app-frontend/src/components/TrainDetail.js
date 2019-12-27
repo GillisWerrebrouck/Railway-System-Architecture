@@ -30,8 +30,6 @@ export default class TrainDetail extends Component {
       });
   }
 
- 
-
   renderScheduleItems() {
     return this.state.train.scheduleItems.map((s, index) => {
       const { timetableId, reservationType, startDateTime, endDateTime} = s;	
@@ -65,9 +63,6 @@ export default class TrainDetail extends Component {
         ) : (
           <p>Loading...</p>
         )}
-        
-	
-	
       </div>
     );
   }

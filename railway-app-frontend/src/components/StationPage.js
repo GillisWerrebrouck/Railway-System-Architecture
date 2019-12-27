@@ -52,7 +52,7 @@ export default class StationPage extends Component {
 
     let station = {...this.state.station};
     
-    if(name === 'street' || name === 'city' || name === 'province' || name === 'country'){
+    if(['street','city','province','country'].includes(name)){
 	station['address'][name] = value;
     } else{
     	station[name] = value;

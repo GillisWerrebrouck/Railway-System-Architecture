@@ -14,10 +14,6 @@ export default class DamagePage extends Component {
     };
   }
 
-  componentDidMount() {
-
-  }
-
   createDamageFormChangeHandler = (event) => {
     const name = event.target.name;
     const value = event.target.value;
@@ -33,9 +29,7 @@ export default class DamagePage extends Component {
       .then(result => { 
         if(typeof result.data === "string") {
           this.setState({ createErrorResponse: result.data });
-	  console.log(result.data); 
         } else {
-	  console.log("gelukt!"); 
           window.location.reload();
         }
       });

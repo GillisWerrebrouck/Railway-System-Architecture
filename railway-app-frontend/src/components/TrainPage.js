@@ -88,10 +88,8 @@ maintenanceFormChangeHandler = (event) => {
     endpoints.postStatus(this.state.train)
       .then(result => { 
         if(typeof result.data === "string") {
-          this.setState({ createErrorResponse: result.data });
-	  console.log(result.data); 
+          this.setState({ createErrorResponse: result.data }); 
         } else {
-	  console.log("gelukt!"); 
           window.location.reload();
         }
       });
@@ -112,10 +110,8 @@ accidentFormChangeHandler = (event) => {
     endpoints.postStatus(this.state.changeStatusRequest)
       .then(result => { 
         if(typeof result.data === "string") {
-          this.setState({ createErrorResponse: result.data });
-	  console.log(result.data); 
+          this.setState({ createErrorResponse: result.data }); 
         } else {
-	  console.log("gelukt!"); 
           window.location.reload();
         }
       });
@@ -127,9 +123,7 @@ addTrain = (event) => {
       .then(result => { 
         if(typeof result.data === "string") {
           this.setState({ createErrorResponse: result.data });
-	  console.log(result.data); 
         } else {
-	  console.log("gelukt!"); 
           window.location.reload();
         }
       });
@@ -141,9 +135,7 @@ requestMaintenance = (event) => {
       .then(result => { 
         if(typeof result.data === "string") {
           this.setState({ createErrorResponse: result.data });
-	  console.log(result.data); 
         } else {
-	  console.log("gelukt!"); 
           window.location.reload();
         }
       });
@@ -154,10 +146,8 @@ notifyAccident = (event) => {
     endpoints.postNewAccidentRequest(this.state.accidentRequest)
       .then(result => { 
         if(typeof result.data === "string") {
-          this.setState({ createErrorResponse: result.data });
-	  console.log(result.data); 
+          this.setState({ createErrorResponse: result.data }); 
         } else {
-	  console.log("gelukt!"); 
           window.location.reload();
         }
       });
@@ -237,8 +227,6 @@ notifyAccident = (event) => {
 	    <option value="P">P</option>
           </select>
           <br />
-
-
           <label>total capacity*: </label>
           <input
             type='number'
@@ -317,8 +305,6 @@ notifyAccident = (event) => {
             type='submit'
             value='request maintenance'
           />
-
-
         </form>
 
 	<h3>notify Accident</h3> 
@@ -368,10 +354,7 @@ notifyAccident = (event) => {
             type='submit'
             value='notify accident'
           />
-
-
         </form>
-	
       </div>
     );
   }

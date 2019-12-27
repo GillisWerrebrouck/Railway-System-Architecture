@@ -17,7 +17,6 @@ export default class DelayPage extends Component {
     };
   }
 
-
   createDelayFormChangeHandler = (event) => {
     const name = event.target.name;
     const value = event.target.value;
@@ -33,9 +32,7 @@ export default class DelayPage extends Component {
       .then(result => { 
         if(typeof result.data === "string") {
           this.setState({ createErrorResponse: result.data });
-	  console.log(result.data); 
         } else {
-	  console.log("gelukt!"); 
           window.location.reload();
         }
       });
