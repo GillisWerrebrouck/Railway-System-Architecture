@@ -26,7 +26,6 @@ export default class MaintenancePage extends Component {
           <td>{id}</td>
           <td>{startDate} - {endDate}</td>
           <td>{String(staffIds.join(' '))}</td>
-          <td>{String(requestId ? (requestId) : (''))}</td>
           <td>{String(staffReservationMessage ? (staffReservationMessage) : (''))}</td>
           <td>{String(status)}</td>
           <td>{String(maintenanceMessage)}</td>
@@ -48,7 +47,6 @@ export default class MaintenancePage extends Component {
                 <th>ID</th>
                 <th>Start Date -> End Date</th>
                 <th>Staff ID</th>
-                <th>Request ID</th>
                 <th>Staff Reservation Message</th>
                 <th>Status</th>
                 <th>Message</th>

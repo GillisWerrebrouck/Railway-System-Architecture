@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.mongodb.MongoException;
 import com.railway.staff_service.domain.StaffMember;
 import com.railway.staff_service.persistence.StaffMembersRepository;
 
