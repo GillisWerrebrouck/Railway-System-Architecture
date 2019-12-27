@@ -6,7 +6,7 @@ export default class DelayPage extends Component {
     super(props);
 
     this.state = {
-      Delay: {
+      delay: {
 	timetableId: null,
         routeId: null,
         startStationId: null,
@@ -17,25 +17,19 @@ export default class DelayPage extends Component {
     };
   }
 
-  componentDidMount() {
-    //endpoints.getTrains()
-      //.then((result) => {
-        //this.setState({ trains: result.data, isLoading: false });
-      //});
-  }
 
   createDelayFormChangeHandler = (event) => {
     const name = event.target.name;
     const value = event.target.value;
 
-    let delay = {...this.state.Delay};
+    let delay = {...this.state.delay};
     delay[name] = value;
     this.setState({ delay });
   }
 
   createDelay = (event) => {
     event.preventDefault();
-    endpoints.postDelay(this.state.Delay)
+    endpoints.postDelay(this.state.delay)
       .then(result => { 
         if(typeof result.data === "string") {
           this.setState({ createErrorResponse: result.data });

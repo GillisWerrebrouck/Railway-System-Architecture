@@ -51,6 +51,13 @@ const endpoints = {
                 .catch(error => { reject(error); });
         });
     },
+    getTrain: (id) => {
+        return new Promise((resolve, reject) => {
+            axios.get(URL + '/train/' + id, { responseType: 'json' })
+                .then(result => { resolve(result); })
+                .catch(error => { reject(error); });
+        });
+    },
     postNewTimetableItem: (newTimetableItem) => {
         return new Promise((resolve, reject) => {
             axios.post(URL + '/timetable', newTimetableItem, { headers: { 'Content-Type': 'application/json' } })
@@ -66,6 +73,7 @@ const endpoints = {
         });
     },
     postDelay: (delay) => {
+	console.log(delay);
         return new Promise((resolve, reject) => {
             axios.post(URL + '/delay', delay, { headers: { 'Content-Type': 'application/json' } })
                 .then(result => { resolve(result); })
@@ -74,14 +82,14 @@ const endpoints = {
     },
     postDamage: (damage) => {
         return new Promise((resolve, reject) => {
-            axios.post(URL + '/infrastructure_damage', damage, { headers: { 'Content-Type': 'application/json' } })
+            axios.post(URL + '/maintenance/schedule/infrastructure_damage', damage, { headers: { 'Content-Type': 'application/json' } })
                 .then(result => { resolve(result); })
                 .catch(error => { reject(error); });
         });
     },
     postStatus: (statusinfo) => {
         return new Promise((resolve, reject) => {
-            axios.post(URL + '/status', statusinfo, { headers: { 'Content-Type': 'application/json' } })
+            axios.post(URL + '/maintenance/schedule/status', statusinfo, { headers: { 'Content-Type': 'application/json' } })
                 .then(result => { resolve(result); })
                 .catch(error => { reject(error); });
         });
@@ -93,6 +101,28 @@ const endpoints = {
                 .catch(error => { reject(error); });
         });
     },
+    postNewTrain: (train) => {
+        return new Promise((resolve, reject) => {
+            axios.post(URL + '/train', train, { headers: { 'Content-Type': 'application/json' } })
+                .then(result => { resolve(result); })
+                .catch(error => { reject(error); });
+        });
+    },
+    postNewMaintenanceRequest: (request) => {
+        return new Promise((resolve, reject) => {
+            axios.post(URL + '/train/' + request.trainId + '/maintenance' , request, { headers: { 'Content-Type': 'application/json' } })
+                .then(result => { resolve(result); })
+                .catch(error => { reject(error); });
+        });
+    },
+    postNewAccidentRequest: (request) => {
+        return new Promise((resolve, reject) => {
+            axios.post(URL + '/train/' + request.trainId + '/accident' , request, { headers: { 'Content-Type': 'application/json' } })
+                .then(result => { resolve(result); })
+                .catch(error => { reject(error); });
+        });
+    },
+
 }
 
 export default endpoints;

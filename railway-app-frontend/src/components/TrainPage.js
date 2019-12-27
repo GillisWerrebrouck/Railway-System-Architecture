@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import endpoints from '../api/endpoints';
+import { Link } from 'react-router-dom';
+import endpoints from '../api/endpoints'; 
 
 export default class TrainPage extends Component {
   constructor(props) {
@@ -8,10 +9,35 @@ export default class TrainPage extends Component {
     this.state = {
       isLoading: true,
       trains: [],
-      Train: {
+      changeStatusRequest:{
 	trainId: null,
-        status: "ACTIVE",
+	status: "ACTIVE",
       },
+      train: {
+	id: null,
+        status: "ACTIVE",
+	type: null,
+	totalCapacity: 0,
+	groupCapacity: 0,
+	technicaldetails: {
+           fuel: null,
+           lastCheck: null,
+           defects: null,
+        },
+	scheduleItems: null
+      },
+      maintenanceRequest: {
+	trainId: null,
+	maintenanceMessage: null,
+	maintenanceDate: null,
+      },
+      accidentRequest: {
+	timetableId: null,
+	trainId: null,
+	accidentMessage: null,
+	emergencyServicesRequired: false,
+	accidentDate: null,
+      }
     };
   }
 
@@ -22,18 +48,110 @@ export default class TrainPage extends Component {
       });
   }
 
-  statusFormChangeHandler = (event) => {
+  trainFormChangeHandler = (event) => {
     const name = event.target.name;
     const value = event.target.value;
 
-    let train = {...this.state.Train};
-    train[name] = value;
+    let train = {...this.state.train};
+
+    if(name === "fuel" || name === "lastCheck"){
+	train["technicaldetails"][name] = value;
+    } else{
+	train[name] = value;
+    }
+    
     this.setState({ train });
+  }
+
+statusFormChangeHandler = (event) => {
+    const name = event.target.name;
+    const value = event.target.value;
+
+    let changeStatusRequest = {...this.state.changeStatusRequest};
+    changeStatusRequest[name] = value;
+    
+    this.setState({ changeStatusRequest });
+  }
+
+maintenanceFormChangeHandler = (event) => {
+    const name = event.target.name;
+    const value = event.target.value;
+
+    let maintenanceRequest = {...this.state.maintenanceRequest};
+    maintenanceRequest[name] = value;
+    
+    this.setState({ maintenanceRequest });
   }
 
   changeStatus = (event) => {
     event.preventDefault();
-    endpoints.postStatus(this.state.Train)
+    endpoints.postStatus(this.state.train)
+      .then(result => { 
+        if(typeof result.data === "string") {
+          this.setState({ createErrorResponse: result.data });
+	  console.log(result.data); 
+        } else {
+	  console.log("gelukt!"); 
+          window.location.reload();
+        }
+      });
+  }
+
+accidentFormChangeHandler = (event) => {
+    const name = event.target.name;
+    const value = event.target.value;
+
+    let accidentRequest = {...this.state.accidentRequest};
+    accidentRequest[name] = value;
+    
+    this.setState({ accidentRequest });
+  }
+
+  changeStatus = (event) => {
+    event.preventDefault();
+    endpoints.postStatus(this.state.changeStatusRequest)
+      .then(result => { 
+        if(typeof result.data === "string") {
+          this.setState({ createErrorResponse: result.data });
+	  console.log(result.data); 
+        } else {
+	  console.log("gelukt!"); 
+          window.location.reload();
+        }
+      });
+  }
+
+addTrain = (event) => {
+    event.preventDefault();
+    endpoints.postNewTrain(this.state.train)
+      .then(result => { 
+        if(typeof result.data === "string") {
+          this.setState({ createErrorResponse: result.data });
+	  console.log(result.data); 
+        } else {
+	  console.log("gelukt!"); 
+          window.location.reload();
+        }
+      });
+  }
+
+requestMaintenance = (event) => {
+    event.preventDefault();
+    endpoints.postNewMaintenanceRequest(this.state.maintenanceRequest)
+      .then(result => { 
+        if(typeof result.data === "string") {
+          this.setState({ createErrorResponse: result.data });
+	  console.log(result.data); 
+        } else {
+	  console.log("gelukt!"); 
+          window.location.reload();
+        }
+      });
+  }
+
+notifyAccident = (event) => {
+    event.preventDefault();
+    endpoints.postNewAccidentRequest(this.state.accidentRequest)
       .then(result => { 
         if(typeof result.data === "string") {
           this.setState({ createErrorResponse: result.data });
@@ -48,15 +166,17 @@ export default class TrainPage extends Component {
   renderTrains() {
     return this.state.trains.map((train, index) => {
       const { id, status, type, groupCapacity, totalCapacity, technicaldetails } = train;
-      const { fuel, lastCheck } = technicaldetails;
+      const { fuel, lastCheck } = technicaldetails;	
       return (
         <tr key={id}>
-          <td>{id}</td>
+      	  <Link to={{pathname: `/trainDetail/${id}`}}> 
+          	<td>{id}</td>
+	  </Link>
           <td>{status}</td>
           <td>{type}</td>
           <td>{groupCapacity} - {totalCapacity}</td>
-          <td>{fuel}</td>
-          <td>{lastCheck}</td>
+          <td>{fuel ? fuel : ""}</td>
+          <td>{lastCheck ? lastCheck : ""}</td>
         </tr>
       );
     });
@@ -71,7 +191,7 @@ export default class TrainPage extends Component {
         <table id='trains'>
           <tbody>
             <tr>
-              <th>ID</th>
+	      <th>ID</th>
               <th>Status</th>
               <th>Type</th>
               <th>Groupcapacity - Totalcapacity</th>
@@ -104,6 +224,152 @@ export default class TrainPage extends Component {
             type='submit'
             value='Change status'
           />
+        </form>
+
+	<h3>Add train</h3> 
+	<h5><i>* is required</i></h5>
+        <form onSubmit={this.addTrain}>
+
+          <label>Train type*: </label>
+          <select name='type' onChange={this.trainFormChangeHandler}>
+            <option value="IC">IC</option>
+            <option value="IR">IR</option>
+	    <option value="P">P</option>
+          </select>
+          <br />
+
+
+          <label>total capacity*: </label>
+          <input
+            type='number'
+            name='totalCapacity'
+            onChange={this.trainFormChangeHandler}
+          />
+	  <br/>
+
+          <label>total groupcapacity*: </label>
+          <input
+            type='number'
+            name='totalGroupCapacity'
+            onChange={this.trainFormChangeHandler}
+          />
+	  <br/>
+
+          <label>Train status*: </label>
+          <select name='status' onChange={this.trainFormChangeHandler}>
+            <option value="ACTIVE">ACTIVE</option>
+            <option value="NONACTIVE">NONACTIVE</option>
+          </select>
+          <br />
+
+          <label>Train fuel*: </label>
+          <select name='fuel' onChange={this.trainFormChangeHandler}>
+            <option value="ELECTRIC">ELECTRIC</option>
+            <option value="DIESEL">DIESEL</option>
+   	    <option value="HYBRID">HYBRID</option>
+          </select>
+          <br />
+
+          <label>last check*: </label>
+          <input
+            type='text'
+            name='lastCheck'
+            onChange={this.trainFormChangeHandler}
+          />
+	  <br/>
+
+          <input
+            type='submit'
+            value='add train'
+          />
+	
+	</form>
+
+	<h3>request maintenance</h3> 
+	<h5><i>* is required</i></h5>
+        <form onSubmit={this.requestMaintenance}>
+
+          <label>Train ID: </label>
+          <input
+            type='text'
+            name='trainId'
+            onChange={this.maintenanceFormChangeHandler}
+          />
+          <br />
+
+          <label>message: </label>
+          <input
+            type='text'
+            name='maintenanceMessage'
+            onChange={this.maintenanceFormChangeHandler}
+          />
+	  <br/>
+
+          <label>date: </label>
+          <input
+            type='text'
+            name='maintenanceDate'
+            onChange={this.maintenanceFormChangeHandler}
+          />
+	  <br/>
+
+          <input
+            type='submit'
+            value='request maintenance'
+          />
+
+
+        </form>
+
+	<h3>notify Accident</h3> 
+	<h5><i>* is required</i></h5>
+        <form onSubmit={this.notifyAccident}>
+
+          <label>Timetable ID: </label>
+          <input
+            type='number'
+            name='timetableId'
+            onChange={this.accidentFormChangeHandler}
+          />
+          <br />
+
+          <label>Train ID: </label>
+          <input
+            type='text'
+            name='trainId'
+            onChange={this.accidentFormChangeHandler}
+          />
+          <br />
+
+          <label>message: </label>
+          <input
+            type='text'
+            name='accidentMessage'
+            onChange={this.accidentFormChangeHandler}
+          />
+	  <br/>
+
+          <label>emergency services: </label>
+          <select name='emergencyServiceRequired' onChange={this.accidentFormChangeHandler}>
+            <option value="true">yes</option>
+            <option value="false">no</option>
+          </select>
+          <br />
+
+          <label>date: </label>
+          <input
+            type='text'
+            name='accidentDate'
+            onChange={this.accidentFormChangeHandler}
+          />
+	  <br/>
+
+          <input
+            type='submit'
+            value='notify accident'
+          />
+
+
         </form>
 	
       </div>

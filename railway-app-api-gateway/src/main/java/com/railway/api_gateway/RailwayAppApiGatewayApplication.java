@@ -35,6 +35,8 @@ public class RailwayAppApiGatewayApplication {
 				.route(r -> r.host("*").and().path("/timetable/**").uri("http://localhost:2001"))
 				//train service
 				.route(r -> r.host("*").and().path("/train/**").uri("http://localhost:2003"))
+				//delay service
+				.route(r -> r.host("*").and().path("/delay/**").uri("http://localhost:2004"))
 				.build();
 	}
 }

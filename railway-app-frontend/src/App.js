@@ -16,6 +16,7 @@ import TicketPage from './components/TicketPage';
 import DelayPage from './components/DelayPage';
 import DamagePage from './components/DamagePage';
 import StationPage from './components/StationPage';
+import TrainDetail from './components/TrainDetail';
 
 class App extends Component {
   render() {
@@ -46,6 +47,7 @@ class App extends Component {
             <Route path="/delay" component={DelayPage} />
             <Route path="/damage" component={DamagePage} />
             <Route path="/station" component={StationPage} />
+	    <Route path="/trainDetail/:id" component={TrainDetail} />
             <Redirect to="/" />
           </Switch>
         </div>

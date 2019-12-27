@@ -7,55 +7,65 @@ export default class StationPage extends Component {
 
     this.state = {
       isLoading: true,
-      timetable: [],
-      newTimetableItem: {
-        routeId: null,
-        startDateTime: null,
-        requestedTrainType: "IR",
-        amountOfTrainConductors: null,
+      stations: [],
+      station: {
+        name: null,
+	address: {
+		street: null,
+		city: null,
+		province: null,
+		country: null,	
+	},
+        platforms: null,
       },
-      createTimetableItemErrorResponse: "",
+      addStationErrorResponse: "",
     };
   }
 
   componentDidMount() {
-    endpoints.getTimetable()
+    endpoints.getStations()
       .then((result) => {
-        this.setState({ timetable: result.data, isLoading: false });
+        this.setState({ stations: result.data, isLoading: false });
       });
   }
 
-  renderTimetable() {
-    return this.state.timetable.map((timetableItem, index) => {
-      const { id, route, routeId, startDateTime, endDateTime, delay } = timetableItem;
+  renderStation() {
+    return this.state.stations.map((station, index) => {
+      const { id, name, address } = station;
+      const { street, city, province, country } = address;
       return (
         <tr key={id}>
           <td>{id}</td>
-          <td>{route}</td>
-          <td>{routeId}</td>
-          <td>{startDateTime}</td>
-          <td>{endDateTime}</td>
-          <td>{delay}</td>
+          <td>{name}</td>
+          <td>{street}</td>
+          <td>{city}</td>
+          <td>{province}</td>
+          <td>{country}</td>
         </tr>
       );
     });
   }
 
-  createTimetableItemFormChangeHandler = (event) => {
+  addStationFormChangeHandler = (event) => {
     const name = event.target.name;
     const value = event.target.value;
 
-    let newTimetableItem = {...this.state.newTimetableItem};
-    newTimetableItem[name] = value;
-    this.setState({ newTimetableItem });
+    let station = {...this.state.station};
+    
+    if(name === 'street' || name === 'city' || name === 'province' || name === 'country'){
+	station['address'][name] = value;
+    } else{
+    	station[name] = value;
+    }
+    this.setState({ station });
   }
 
-  createTimetableItem = (event) => {
+  addStation = (event) => {
     event.preventDefault();
-    endpoints.postNewTimetableItem(this.state.newTimetableItem)
+    endpoints.postNewStation(this.state.station)
       .then(result => { 
         if(typeof result.data === "string") {
-          this.setState({ createTimetableItemErrorResponse: result.data });
+          this.setState({ addStationErrorResponse: result.data });
         } else {
           window.location.reload();
         }
@@ -65,58 +75,65 @@ export default class StationPage extends Component {
   render() {
     return (
       <div>
-        <h2>Timetable</h2>
+        <h2>Station</h2>
 
         {!this.state.isLoading ? (
-        <table id='timetable'>
+        <table id='station'>
           <tbody>
             <tr>
               <th>ID</th>
-              <th>Route name</th>
-              <th>Route ID</th>
-              <th>Start</th>
-              <th>End</th>
-              <th>Delay (minutes)</th>
+              <th>name</th>
+              <th>street</th>
+              <th>city</th>
+              <th>province</th>
+              <th>country</th>
             </tr>
-            { this.renderTimetable() }
+            { this.renderStation() }
           </tbody>
         </table>
         ) : (
           <p>Loading...</p>
         )}
 
-        <h3>Create a timetable item</h3>
-        <form onSubmit={this.createTimetableItem}>
-          <label>Route ID: </label>
+        <h3>add station</h3>
+        <form onSubmit={this.addStation}>
+          <label>name: </label>
           <input
-            type='number'
-            name='routeId'
-            onChange={this.createTimetableItemFormChangeHandler}
+            type='text'
+            name='name'
+            onChange={this.addStationFormChangeHandler}
           />
           <br />
 
-          <label>Start datetime: </label>
+          <label>street: </label>
           <input
-            type='datetime'
-            name='startDateTime'
-            onChange={this.createTimetableItemFormChangeHandler}
+            type='text'
+            name='street'
+            onChange={this.addStationFormChangeHandler}
           />
-          <span>&nbsp;format: yyyy-mm-ddThh:mm:00.000</span>
           <br />
 
-          <label>Train type: </label>
-          <select name='requestedTrainType' onChange={this.createTimetableItemFormChangeHandler}>
-            <option value="IR">IR</option>
-            <option value="IC">IC</option>
-            <option value="P">P</option>
-          </select>
-          <br />
-
-          <label>#Train conductors: </label>
+          <label>city: </label>
           <input
-            type='number'
-            name='amountOfTrainConductors'
-            onChange={this.createTimetableItemFormChangeHandler}
+            type='text'
+            name='city'
+            onChange={this.addStationFormChangeHandler}
+          />
+          <br />
+
+          <label>province: </label>
+          <input
+            type='text'
+            name='province'
+            onChange={this.addStationFormChangeHandler}
+          />
+          <br />
+
+          <label>country: </label>
+          <input
+            type='text'
+            name='country'
+            onChange={this.addStationFormChangeHandler}
           />
           <br />
 
@@ -126,7 +143,7 @@ export default class StationPage extends Component {
           />
         </form>
 
-        <p>{this.state.createTimetableItemErrorResponse}</p>
+        <p>{this.state.addStationErrorResponse}</p>
       </div>
     );
   }
