@@ -264,7 +264,7 @@ export default class NetworkPage extends Component {
             type='string'
             name='name'
             placeholder='Station x - Station y'
-            onChange={this.changeCreateRouteFormChangeHandler}
+            onChange={this.createRouteFormChangeHandler}
           />
           <br />
 
@@ -333,11 +333,12 @@ export default class NetworkPage extends Component {
         </p>
         <form onSubmit={this.changeConnectionState}>
           <label>Connection ID: </label>
-          <input
-            type='number'
-            name='id'
-            onChange={this.changeConnectionStateFormChangeHandler}
-          />
+          <select name='id' onChange={this.changeConnectionStateFormChangeHandler}>
+            <option value="">choose a connection</option>
+            {this.state.connections.map((connection) => {
+              return (<option key={connection.id} value={connection.id}>{connection.id}</option>)
+            })}
+          </select>
           <br />
 
           <label>Status: </label>
