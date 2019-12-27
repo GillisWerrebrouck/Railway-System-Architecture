@@ -48,13 +48,13 @@ class NeoGraph extends Component {
   }
 
   render() {
-    const { width, height, containerId, backgroundColor } = this.props;
+    const { /*width,*/ height, containerId, backgroundColor } = this.props;
     return (
       <div
         id={containerId}
         ref={this.visRef}
         style={{
-          width: `${width}px`,
+          width: `100%`,
           height: `${height}px`,
           backgroundColor: `${backgroundColor}`
         }}
@@ -64,7 +64,7 @@ class NeoGraph extends Component {
 }
 
 NeoGraph.defaultProps = {
-  width: 600,
+  // width: 600,
   height: 600,
   backgroundColor: "#EEE"
 };
@@ -81,15 +81,15 @@ NeoGraph.propTypes = {
 
 class ResponsiveNeoGraph extends Component {
   state = {
-    width: 500,
+    // width: 500,
     height: 500
   };
 
   handleResize = ({ width, height }) => {
-    const side = Math.max(width, height) / 2;
+    // const side = Math.max(width, height) / 2;
     this.setState({
-      width: side,
-      height: side
+      // width: side,
+      height: 500
     });
   };
 
