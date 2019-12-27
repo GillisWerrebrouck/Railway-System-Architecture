@@ -255,6 +255,13 @@ export default class NetworkPage extends Component {
     return (
       <div>
         <h2>Network</h2>
+
+        <p>
+          This is the railway network, it consists out of station nodes and route nodes. Station nodes are connected with other station nodes. 
+          Route nodes are connected to station nodes. The route-station relationship has a property "connectionId", this indicates the connection 
+          (station-station) that will be used for that route. All route-station relationships have this property except for the last station on a route.
+        </p>
+
         <ResponsiveNeoGraph
           containerId={"network-graph"}
           neo4jUri={NEO4J_URI}
@@ -263,6 +270,11 @@ export default class NetworkPage extends Component {
         />
 
         <h3>Routes</h3>
+
+        <p>
+          These are the routes that can be used for timetable items. They exist because travellers can only take certain routes on the network.
+        </p>
+
         {!this.state.isRoutesLoading ? (
         <table id='routes'>
           <tbody>
@@ -279,6 +291,13 @@ export default class NetworkPage extends Component {
         )}
 
         <h3>Connections</h3>
+
+        <p>
+          These are the connections between stations. Two stations can have multiple connections between them. These connections are bidirectional so it 
+          is possible to travel from station x to station y and also the other way around. The connectionId property on route relationships decides what 
+          connection between two stations should be used for that particular route.
+        </p>
+
         {!this.state.isConnectionsLoading ? (
         <table id='connections'>
           <tbody>
