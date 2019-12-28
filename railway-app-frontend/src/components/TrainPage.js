@@ -159,7 +159,7 @@ notifyAccident = (event) => {
       const { fuel, lastCheck } = technicaldetails;	
       return (
         <tr key={id}>
-          <td><Link to={{pathname: `/trainDetail/${id}`}}>{id}</Link></td>
+          <td><Link to={{pathname: `/train/${id}`}}>{id}</Link></td>
           <td>{status}</td>
           <td>{type}</td>
           <td>{groupCapacity} - {totalCapacity}</td>
