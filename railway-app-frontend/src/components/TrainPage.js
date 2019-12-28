@@ -10,33 +10,33 @@ export default class TrainPage extends Component {
       isLoading: true,
       trains: [],
       changeStatusRequest:{
-	trainId: null,
-	status: "ACTIVE",
-      },
-      train: {
-	id: null,
-        status: "ACTIVE",
-	type: null,
-	totalCapacity: 0,
-	groupCapacity: 0,
-	technicaldetails: {
-           fuel: null,
-           lastCheck: null,
-           defects: null,
-        },
-	scheduleItems: null
-      },
-      maintenanceRequest: {
-	trainId: null,
-	maintenanceMessage: null,
-	maintenanceDate: null,
-      },
-      accidentRequest: {
-	timetableId: null,
-	trainId: null,
-	accidentMessage: null,
-	emergencyServicesRequired: false,
-	accidentDate: null,
+      trainId: null,
+      status: "ACTIVE",
+          },
+          train: {
+      id: null,
+            status: "ACTIVE",
+      type: null,
+      totalCapacity: 0,
+      groupCapacity: 0,
+      technicaldetails: {
+              fuel: null,
+              lastCheck: null,
+              defects: null,
+            },
+      scheduleItems: null
+          },
+          maintenanceRequest: {
+      trainId: null,
+      maintenanceMessage: null,
+      maintenanceDate: null,
+          },
+          accidentRequest: {
+      timetableId: null,
+      trainId: null,
+      accidentMessage: null,
+      emergencyServicesRequired: false,
+      accidentDate: null,
       }
     };
   }
@@ -159,9 +159,7 @@ notifyAccident = (event) => {
       const { fuel, lastCheck } = technicaldetails;	
       return (
         <tr key={id}>
-      	  <Link to={{pathname: `/trainDetail/${id}`}}> 
-          	<td>{id}</td>
-	  </Link>
+          <td><Link to={{pathname: `/trainDetail/${id}`}}>{id}</Link></td>
           <td>{status}</td>
           <td>{type}</td>
           <td>{groupCapacity} - {totalCapacity}</td>
@@ -181,7 +179,7 @@ notifyAccident = (event) => {
         <table id='trains'>
           <tbody>
             <tr>
-	      <th>ID</th>
+	            <th>ID</th>
               <th>Status</th>
               <th>Type</th>
               <th>Groupcapacity - Totalcapacity</th>
@@ -195,7 +193,7 @@ notifyAccident = (event) => {
           <p>Loading...</p>
         )}
 
-	<h3>Set train active/non-active</h3> 
+	      <h3>Set train active/non-active</h3>
         <form onSubmit={this.changeStatus}>
           <label>Train ID: </label>
           <input
@@ -212,71 +210,67 @@ notifyAccident = (event) => {
           <br />
           <input
             type='submit'
-            value='Change status'
+            value='CHANGE STATUS'
           />
         </form>
 
-	<h3>Add train</h3> 
-	<h5><i>* is required</i></h5>
+        <h3>Add train</h3>
         <form onSubmit={this.addTrain}>
-
-          <label>Train type*: </label>
+          <label>Train type: </label>
           <select name='type' onChange={this.trainFormChangeHandler}>
             <option value="IC">IC</option>
             <option value="IR">IR</option>
-	    <option value="P">P</option>
+	          <option value="P">P</option>
           </select>
           <br />
-          <label>total capacity*: </label>
+
+          <label>Total capacity: </label>
           <input
             type='number'
             name='totalCapacity'
             onChange={this.trainFormChangeHandler}
           />
-	  <br/>
+	        <br/>
 
-          <label>total groupcapacity*: </label>
+          <label>Total groupcapacity: </label>
           <input
             type='number'
             name='totalGroupCapacity'
             onChange={this.trainFormChangeHandler}
           />
-	  <br/>
+	        <br/>
 
-          <label>Train status*: </label>
+          <label>Train status: </label>
           <select name='status' onChange={this.trainFormChangeHandler}>
             <option value="ACTIVE">ACTIVE</option>
             <option value="NONACTIVE">NONACTIVE</option>
           </select>
           <br />
 
-          <label>Train fuel*: </label>
+          <label>Train fuel: </label>
           <select name='fuel' onChange={this.trainFormChangeHandler}>
             <option value="ELECTRIC">ELECTRIC</option>
             <option value="DIESEL">DIESEL</option>
-   	    <option value="HYBRID">HYBRID</option>
+   	        <option value="HYBRID">HYBRID</option>
           </select>
           <br />
 
-          <label>last check*: </label>
+          <label>Last check: </label>
           <input
             type='text'
             name='lastCheck'
             onChange={this.trainFormChangeHandler}
           />
-	  <br/>
+	        <br/>
 
           <input
             type='submit'
-            value='add train'
+            value='ADD TRAIN'
           />
-	
-	</form>
+	      </form>
 
-	<h3>request maintenance</h3> 
-	<h5><i>* is required</i></h5>
+	      <h3>Request maintenance</h3>
         <form onSubmit={this.requestMaintenance}>
-
           <label>Train ID: </label>
           <input
             type='text'
@@ -285,32 +279,30 @@ notifyAccident = (event) => {
           />
           <br />
 
-          <label>message: </label>
+          <label>Message: </label>
           <input
             type='text'
             name='maintenanceMessage'
             onChange={this.maintenanceFormChangeHandler}
           />
-	  <br/>
+	        <br/>
 
-          <label>date: </label>
+          <label>Date: </label>
           <input
             type='text'
             name='maintenanceDate'
             onChange={this.maintenanceFormChangeHandler}
           />
-	  <br/>
+	        <br/>
 
           <input
             type='submit'
-            value='request maintenance'
+            value='REQUEST'
           />
         </form>
 
-	<h3>notify Accident</h3> 
-	<h5><i>* is required</i></h5>
-        <form onSubmit={this.notifyAccident}>
-
+	      <h3>Notify Accident</h3>
+          <form onSubmit={this.notifyAccident}>
           <label>Timetable ID: </label>
           <input
             type='number'
@@ -327,32 +319,32 @@ notifyAccident = (event) => {
           />
           <br />
 
-          <label>message: </label>
+          <label>Message: </label>
           <input
             type='text'
             name='accidentMessage'
             onChange={this.accidentFormChangeHandler}
           />
-	  <br/>
+	        <br/>
 
-          <label>emergency services: </label>
+          <label>Emergency services: </label>
           <select name='emergencyServiceRequired' onChange={this.accidentFormChangeHandler}>
             <option value="true">yes</option>
             <option value="false">no</option>
           </select>
           <br />
 
-          <label>date: </label>
+          <label>Date: </label>
           <input
             type='text'
             name='accidentDate'
             onChange={this.accidentFormChangeHandler}
           />
-	  <br/>
+	        <br/>
 
           <input
             type='submit'
-            value='notify accident'
+            value='NOTIFY'
           />
         </form>
       </div>
