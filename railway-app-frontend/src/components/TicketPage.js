@@ -14,9 +14,10 @@ export default class TicketPage extends Component {
         endStations: [],
         newTicket: {
             timetableId: null,
+            startDateTime: null,
             startStationId: null,
             endStationId: null,
-            type: null,
+            ticketType: null,
             amountOfSeats: 0
         },
         buyTicketErrorResponse: "",
@@ -29,18 +30,21 @@ export default class TicketPage extends Component {
 
       let newTicket = {...this.state.newTicket};
       newTicket[name] = value;
-      this.setState({ newTicket });
-      const routeId = this.findTimetableItemWithId(1).routeId;
-      if(routeId != null){
-          endpoints.getStationsOnRoute(routeId).then((result) => {
+      const timetable = this.findTimetableItemWithId(newTicket.timetableId);
+
+      if(timetable != null){
+          endpoints.getStationsOnRoute(timetable.routeId).then((result) => {
               this.setState({startStations: result.data});
           });
+          newTicket.startDateTime = timetable.startDateTime;
       }
+
       if(newTicket.startStationId != null){
           const index = this.state.startStations.findIndex(station => station.stationId === newTicket.startStationId);
           this.setState({endStations: this.state.startStations.slice(index+1)});
       }
-      console.log(this.state.newTicket);
+
+      this.setState({ newTicket });
   };
 
   findTimetableItemWithId(id) {
@@ -54,12 +58,13 @@ export default class TicketPage extends Component {
         .then((result) => {
           this.setState({ tickets: result.data });
           endpoints.getTimetable().then((result) => {
-              this.setState({timetable: result.data, isLoading: false})
+              this.setState({timetable: result.data, isLoading: false});
               endpoints.getStationsOnRoute(this.state.timetable[0].routeId).then((result) => {
                   this.setState({startStations: result.data, endStations: result.data.slice(1)});
                   this.setState({newTicket: {                     // specific object of food object
                           ...this.state.newTicket,
                           timetableId: this.state.timetable[0].id,
+                          startDateTime: this.state.timetable[0].startDateTime,
                           startStationId: this.state.startStations[0].stationId,
                           endStationId: this.state.endStations[0].stationId
                       }});
@@ -151,12 +156,12 @@ export default class TicketPage extends Component {
               <br />
               <label>Ticket type: </label>
               <input
-                  name='type'
+                  name='ticketType'
                   type='radio'
                   value='single' onChange={this.onTicketChange} />
                   Single
               <input
-                  name='type'
+                  name='ticketType'
                   type='radio'
                   value='group' onChange={this.onTicketChange} />
                   Group
@@ -167,8 +172,8 @@ export default class TicketPage extends Component {
                 <input
                   type='number'
                   name='amountOfSeats'
-                  min={this.state.newTicket.type === 'group' ? 10 : 1 }
-                  defaultValue={this.state.newTicket.type === 'group' ? 10 : 1 }
+                  min={this.state.newTicket.ticketType === 'group' ? 10 : 1 }
+                  defaultValue={this.state.newTicket.ticketType === 'group' ? 10 : 1 }
                   onChange={this.onTicketChange}
                   />
                   </div>
