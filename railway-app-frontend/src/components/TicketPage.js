@@ -15,8 +15,11 @@ export default class TicketPage extends Component {
         newTicket: {
             timetableId: null,
             startStationId: null,
+            endStationId: null,
+            type: null,
             amountOfSeats: 0
         },
+        buyTicketErrorResponse: "",
     };
   }
 
@@ -37,6 +40,7 @@ export default class TicketPage extends Component {
           const index = this.state.startStations.findIndex(station => station.stationId === newTicket.startStationId);
           this.setState({endStations: this.state.startStations.slice(index+1)});
       }
+      console.log(this.state.newTicket);
   };
 
   findTimetableItemWithId(id) {
@@ -52,11 +56,29 @@ export default class TicketPage extends Component {
           endpoints.getTimetable().then((result) => {
               this.setState({timetable: result.data, isLoading: false})
               endpoints.getStationsOnRoute(this.state.timetable[0].routeId).then((result) => {
-                  this.setState({startStations: result.data});
+                  this.setState({startStations: result.data, endStations: result.data.slice(1)});
+                  this.setState({newTicket: {                     // specific object of food object
+                          ...this.state.newTicket,
+                          timetableId: this.state.timetable[0].id,
+                          startStationId: this.state.startStations[0].stationId,
+                          endStationId: this.state.endStations[0].stationId
+                      }});
               });
           })
         });
   }
+
+  buyTicket = (event) => {
+        event.preventDefault();
+        endpoints.postNewTicket(this.state.newTicket)
+            .then(result => {
+                if(typeof result.data === "string") {
+                    this.setState({ createTimetableItemErrorResponse: result.data });
+                } else {
+                    window.location.reload();
+                }
+            });
+    }
 
   renderTickets() {
     return this.state.tickets.map((ticket, index) => {
@@ -101,16 +123,20 @@ export default class TicketPage extends Component {
             <p>Loading...</p>
         )}
         <h2>Buy a new ticket</h2>
-          <form onSubmit={this.createTimetableItem}>
+          <form onSubmit={this.buyTicket}>
               <label>Timetable: </label>
-              <select name='timetableId' onChange={this.onTicketChange}>
+              <select
+                  name='timetableId'
+                  onChange={this.onTicketChange}>
                   {this.state.timetable.map((t, key) => {
                       return <option key={key} value={t.id}>{t.route} : {Moment(t.startDateTime).format('DD/MM-HH:mm')}</option>;
                   })}
               </select>
               <br />
               <label>Start Station: </label>
-              <select name='startStationId' onChange={this.onTicketChange}>
+              <select
+                  name='startStationId'
+                  onChange={this.onTicketChange}>
                   {this.state.startStations.map((t, key) => {
                       return <option key={key} value={t.stationId}>{t.name}</option>;
                   })}
@@ -122,7 +148,37 @@ export default class TicketPage extends Component {
                       return <option key={key} value={t.stationId}>{t.name}</option>;
                   })}
               </select>
+              <br />
+              <label>Ticket type: </label>
+              <input
+                  name='type'
+                  type='radio'
+                  value='single' onChange={this.onTicketChange} />
+                  Single
+              <input
+                  name='type'
+                  type='radio'
+                  value='group' onChange={this.onTicketChange} />
+                  Group
+              <br/>
+              {this.state.newTicket.type != null &&
+                  <div>
+                <label>amount of seats</label>
+                <input
+                  type='number'
+                  name='amountOfSeats'
+                  min={this.state.newTicket.type === 'group' ? 10 : 1 }
+                  defaultValue={this.state.newTicket.type === 'group' ? 10 : 1 }
+                  onChange={this.onTicketChange}
+                  />
+                  </div>
+              }
+              <input
+                  type='submit'
+                  value='buy'
+              />
           </form>
+          <p>{this.state.buyTicketErrorResponse}</p>
       </div>
     );
   }
