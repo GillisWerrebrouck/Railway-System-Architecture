@@ -232,7 +232,7 @@ export default class NetworkPage extends Component {
         return;
       }
       if(!this.state.routeServiceStations.map(s => s.id.toString()).includes(routePart.station)){
-        this.setState({ createRouteErrorResponse: `No station chosen for route part ${i}` });
+        this.setState({ createRouteErrorResponse: `No station chosen for route part ${i+1}` });
         failed = true;
         return;
       }
