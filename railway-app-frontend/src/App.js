@@ -11,7 +11,7 @@ import {
 import NetworkPage from './components/NetworkPage';
 import TimetablePage from './components/TimetablePage'
 import StaffPage from './components/StaffPage';
-import StationPage from './components/StationPage';
+import StationSchedulePage from './components/StationSchedulePage';
 import MaintenancePage from './components/MaintenancePage';
 import TrainPage from './components/TrainPage';
 import TicketPage from './components/TicketPage';
@@ -43,7 +43,7 @@ class App extends Component {
             <Route path="/train" component={TrainPage} />
             <Route path="/ticket" component={TicketPage} />
             <Route path="/maintenance" component={MaintenancePage} />
-            <Route exact path="/station/:id" component={StationPage} />
+            <Route exact path="/station/:id" component={StationSchedulePage} />
             <Redirect to="/" />
           </Switch>
         </div>

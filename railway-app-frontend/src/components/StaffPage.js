@@ -50,27 +50,27 @@ export default class StaffPage extends Component {
     });
   }
 
-    createStaffFormChangeHandler = (event) => {
-      const name = event.target.name;
-      const value = event.target.value;
+  createStaffFormChangeHandler = (event) => {
+    const name = event.target.name;
+    const value = event.target.value;
 
-      let newStaff = {...this.state.newStaff};
-      newStaff[name] = value;
-      this.setState({ newStaff });
+    let newStaff = {...this.state.newStaff};
+    newStaff[name] = value;
+    this.setState({ newStaff });
+  }
+
+  createStaffItem = (event) => {
+    event.preventDefault();
+
+    if(this.state.newStaff.firstName === null || this.state.newStaff.lastName === null || this.state.newStaff.birthdate === null) {
+      this.setState({ createStaffErrorResponse: 'All fields need to be filled out' });
+      return;
     }
 
-    createStaffItem = (event) => {
-      event.preventDefault();
-      endpoints.postNewStaff(this.state.newStaff)
-        .then(result => {
-          if(typeof result.data === "string") {
-            this.setState({ createStaffErrorResponse: result.data });
-          } else {
-            window.location.reload();
-          }
-        });
-    }
-
+    endpoints.postNewStaff(this.state.newStaff)
+      .then(() => { window.location.reload(); })
+      .catch(() => { this.setState({ createStaffErrorResponse: 'All fields need to be filled out' }); });
+  }
 
   render() {
     return (
@@ -94,7 +94,7 @@ export default class StaffPage extends Component {
           <p>Loading...</p>
         )}
         <h3>Add a staff member</h3>
-        <form onSubmit={this.createStaff}>
+        <form onSubmit={this.createStaffItem}>
           <label>Firstname: </label>
           <input
             type='string'

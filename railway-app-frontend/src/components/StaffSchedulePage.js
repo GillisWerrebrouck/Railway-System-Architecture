@@ -19,35 +19,35 @@ export default class StaffSchedulePage extends Component {
   }
 
   renderStaff() {
-        return this.state.schedules.map((scheduleItem, index) => {
-        const { id, requestId, startDate, endDate } = scheduleItem;
-        return (
-                <tr key={id}>
-                    <td>{id}</td>
-                    <td>{startDate} - {endDate}</td>
-                </tr>
-            );
-        });
+    return this.state.schedules.map((scheduleItem) => {
+      const { id, requestId, startDate, endDate } = scheduleItem;
+      return (
+        <tr key={id}>
+            <td>{id}</td>
+            <td>{startDate} - {endDate}</td>
+        </tr>
+      );
+    });
   }
 
-    render() {
-     return (
-      <div>
-       <h2>Staff Schedules</h2>
-        {!this.state.isLoading ? (
-         <table id='staff'>
-          <tbody>
-           <tr>
-            <th>ID</th>
-            <th>Date</th>
-           </tr>
-          { this.renderStaff() }
-         </tbody>
-        </table>
-        ) : (
-        <p>Loading...</p>
-       )}
-      </div>
-     );
-    }
+  render() {
+    return (
+    <div>
+      <h2>Staff Schedules</h2>
+      {!this.state.isLoading ? (
+        <table id='staff'>
+        <tbody>
+          <tr>
+          <th>Staff ID</th>
+          <th>Schedule datetime</th>
+          </tr>
+        { this.renderStaff() }
+        </tbody>
+      </table>
+      ) : (
+      <p>Loading...</p>
+      )}
+    </div>
+    );
+  }
 }

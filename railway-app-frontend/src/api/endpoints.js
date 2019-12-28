@@ -58,6 +58,13 @@ const endpoints = {
                 .catch(error => { reject(error); });
         });
     },
+    putChangeMaintenanceStatus: (maintenanceId, status) => {
+        return new Promise((resolve, reject) => {
+            axios.put(URL + `/maintenance/schedule/${parseInt(maintenanceId)}/${status}`, {}, { headers: { 'Content-Type': 'application/json' } })
+                .then(result => { resolve(result); })
+                .catch(error => { reject(error); });
+        });
+    },
     getStaffSchedule: (staffId) => {
         return new Promise((resolve, reject) => {
             axios.get(URL + `/staff/${staffId}`, { responseType: 'json' })
@@ -68,13 +75,7 @@ const endpoints = {
     postNewStaff: (newStaff) => {
         return new Promise((resolve, reject) => {
             axios.post(URL + '/staff', newStaff, { headers: { 'Content-Type': 'application/json' } })
-                .then(result => {
-                    if(typeof result.data === "string") {
-                        reject(result.data);
-                    } else {
-                        resolve(result);
-                    }
-                })
+                .then(result => { resolve(result); })
                 .catch(error => { reject(error); });
         });
     },
