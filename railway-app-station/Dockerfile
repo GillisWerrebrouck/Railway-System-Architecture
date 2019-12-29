@@ -1,0 +1,3 @@
+from openjdk:8
+CMD ["java", "-jar", "app/railway-app-station-0.0.1-SNAPSHOT.jar"]
+
