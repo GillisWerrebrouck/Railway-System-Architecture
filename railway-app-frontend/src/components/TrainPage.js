@@ -16,11 +16,11 @@ export default class TrainPage extends Component {
           train: {
       id: null,
             status: "ACTIVE",
-      type: null,
+      type: "IC",
       totalCapacity: 0,
       groupCapacity: 0,
       technicaldetails: {
-              fuel: null,
+              fuel: "ELECTRIC",
               lastCheck: null,
               defects: null,
             },
@@ -36,7 +36,6 @@ export default class TrainPage extends Component {
       trainId: null,
       accidentMessage: null,
       emergencyServicesRequired: false,
-      accidentDate: null,
       }
     };
   }
@@ -59,7 +58,6 @@ export default class TrainPage extends Component {
     } else{
 	train[name] = value;
     }
-    
     this.setState({ train });
   }
 
@@ -155,7 +153,7 @@ notifyAccident = (event) => {
 
   renderTrains() {
     return this.state.trains.map((train, index) => {
-      const { id, status, type, groupCapacity, totalCapacity, technicaldetails } = train;
+      const { id, status, type, totalCapacity, groupCapacity, technicaldetails } = train;
       const { fuel, lastCheck } = technicaldetails;	
       return (
         <tr key={id}>
@@ -235,7 +233,7 @@ notifyAccident = (event) => {
           <label>Total groupcapacity: </label>
           <input
             type='number'
-            name='totalGroupCapacity'
+            name='groupCapacity'
             onChange={this.trainFormChangeHandler}
           />
 	        <br/>
@@ -260,7 +258,7 @@ notifyAccident = (event) => {
             type='text'
             name='lastCheck'
             onChange={this.trainFormChangeHandler}
-          />
+          /> <span>&nbsp;format: yyyy-mm-ddThh:mm:00.000</span>
 	        <br/>
 
           <input
@@ -333,15 +331,6 @@ notifyAccident = (event) => {
             <option value="false">no</option>
           </select>
           <br />
-
-          <label>Date: </label>
-          <input
-            type='text'
-            name='accidentDate'
-            onChange={this.accidentFormChangeHandler}
-          />
-	        <br/>
-
           <input
             type='submit'
             value='NOTIFY'

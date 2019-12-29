@@ -31,6 +31,7 @@ export default class TrainDetail extends Component {
   }
 
   renderScheduleItems() {
+	if (this.state.train.scheduleItems != null){
     return this.state.train.scheduleItems.map((s, index) => {
       const { timetableId, reservationType, startDateTime, endDateTime} = s;	
       return (
@@ -42,6 +43,10 @@ export default class TrainDetail extends Component {
         </tr>
       );
     });
+	}
+	else{
+		return null;
+	}
   }
 
   render() {

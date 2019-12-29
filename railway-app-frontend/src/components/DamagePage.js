@@ -6,7 +6,7 @@ export default class DamagePage extends Component {
     super(props);
 
     this.state = {
-      Damage: {
+      damage: {
 	location: null,
         message: null,
       },
@@ -18,14 +18,14 @@ export default class DamagePage extends Component {
     const name = event.target.name;
     const value = event.target.value;
 
-    let damage = {...this.state.Damage};
+    let damage = {...this.state.damage};
     damage[name] = value;
     this.setState({ damage });
   }
 
   createDamage = (event) => {
     event.preventDefault();
-    endpoints.postDamage(this.state.Damage)
+    endpoints.postDamage(this.state.damage)
       .then(result => { 
         if(typeof result.data === "string") {
           this.setState({ createErrorResponse: result.data });
