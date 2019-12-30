@@ -4,7 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "station")
@@ -17,7 +24,7 @@ public class Station {
 	@Embedded
 	private Address address;
 	
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "station")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "station", cascade = CascadeType.ALL)
 	private List<Platform> platforms = new ArrayList<Platform>();
 	
 	@SuppressWarnings("unused")
@@ -29,11 +36,15 @@ public class Station {
 		this.id = id;
 	}
 	
-	public Station(String name, Address address) {
-		// in production the "id" field should be an auto-generated field but this is easier for development/testing purposes
-		this(UUID.randomUUID());
+	public Station(UUID id, String name, Address address) {
+		this.id = id;
 		this.name = name;
 		this.address = address;
+	}
+	
+	public Station(String name, Address address) {
+		// the "id" field should be an auto-generated field but this is easier for development/testing purposes
+		this(UUID.randomUUID(), name, address);
 	}
 	
 	public List<Platform> getPlatforms() {
