@@ -154,7 +154,8 @@ notifyAccident = (event) => {
   renderTrains() {
     return this.state.trains.map((train, index) => {
       const { id, status, type, totalCapacity, groupCapacity, technicaldetails } = train;
-      const { fuel, lastCheck } = technicaldetails;	
+      const { fuel, lastCheck } = technicaldetails ? technicaldetails : {fuel: null, lastCheck: null};
+	
       return (
         <tr key={id}>
           <td><Link to={{pathname: `/train/${id}`}}>{id}</Link></td>
