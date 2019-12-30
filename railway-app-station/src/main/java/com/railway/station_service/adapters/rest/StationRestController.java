@@ -1,10 +1,9 @@
 package com.railway.station_service.adapters.rest;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
-
-import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -49,10 +48,7 @@ public class StationRestController {
 	// they would get created again if a service is scaled or restarted by kubernetes
 	@PostMapping("/init")
 	@ResponseStatus(HttpStatus.OK)
-	@Transactional
-	public void initStations(){
-		stationRepository.deleteAll();
-		
+	public void initStations(){		
 		createStation(UUID.fromString("11018de0-1943-42b2-929d-a707f751f79c"), "Gent-Sint-Pieters", "Koningin Maria Hendrikaplein 1", "Gent", "Oost-Vlaanderen", "België");
 		createStation(UUID.fromString("a39b1971-fc82-49b2-809a-444105e03c8d"), "Gent-Dampoort", "Oktrooiplein 10", "Gent", "Oost-Vlaanderen", "België");
 		createStation(UUID.fromString("cf204af6-a407-47ea-af89-f0f989e7bd8a"), "Kortrijk", "Stationsplein 8", "Kortrijk", "West-Vlaanderen", "België");
@@ -68,29 +64,30 @@ public class StationRestController {
 		createStation(UUID.fromString("05cce0f7-1409-4224-926a-db3b4c4a8ce5"), "Brussel-Zuid", "Fonsnylaan 47b", "Brussel", "Brussels", "België");
 	}
 
-	@Transactional
 	private void createStation(UUID id, String name, String street, String city, String province, String country) {
-		Address address = new Address(street, city, province, country);
-		Station station = new Station(id, name, address);
+		if(stationRepository.findByName(name) == null) {
+			Address address = new Address(street, city, province, country);
+			Station station = new Station(id, name, address);
 
-		Platform p1 = new Platform(1);
-		Platform p2 = new Platform(2);
-		Platform p3 = new Platform(3);
-//		platformRepository.save(p1);
-//		platformRepository.save(p2);
-//		platformRepository.save(p3);
-		
-		station.getPlatforms().add(p1);
-		station.getPlatforms().add(p2);
-		station.getPlatforms().add(p3);
-		stationRepository.save(station);
-		
-//		p1.setStation(station);
-//		p2.setStation(station);
-//		p3.setStation(station);
-//		platformRepository.save(p1);
-//		platformRepository.save(p2);
-//		platformRepository.save(p3);
+			Platform p1 = new Platform(1);
+			Platform p2 = new Platform(2);
+			Platform p3 = new Platform(3);
+			p1 = platformRepository.save(p1);
+			p2 = platformRepository.save(p2);
+			p3 = platformRepository.save(p3);
+
+			station.getPlatforms().add(p1);
+			station.getPlatforms().add(p2);
+			station.getPlatforms().add(p3);
+			station = stationRepository.save(station);
+
+			p1.setStation(station);
+			p2.setStation(station);
+			p3.setStation(station);
+			platformRepository.save(p1);
+			platformRepository.save(p2);
+			platformRepository.save(p3);
+		}
 	}
 
 	@GetMapping
@@ -100,7 +97,7 @@ public class StationRestController {
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<Station> stationById(@PathVariable UUID id) {
-		Station station = stationRepository.getStationById(id);
+		Station station = stationRepository.findById(id).orElse(null);
 		if(station != null) {
 			return new ResponseEntity<>(station, HttpStatus.OK);
 		}

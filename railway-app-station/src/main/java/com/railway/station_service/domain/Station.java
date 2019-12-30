@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -13,18 +12,22 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Type;
+
 @Entity
 @Table(name = "station")
 public class Station {
 	@Id
+	@Type(type="org.hibernate.type.UUIDCharType")
 	private UUID id;
 	
+	@Column(unique = true)
 	private String name;
 	
 	@Embedded
 	private Address address;
 	
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "station", cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "station")
 	private List<Platform> platforms = new ArrayList<Platform>();
 	
 	@SuppressWarnings("unused")
