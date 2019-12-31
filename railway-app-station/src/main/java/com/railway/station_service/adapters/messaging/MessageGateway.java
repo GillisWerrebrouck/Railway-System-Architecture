@@ -12,4 +12,10 @@ public interface MessageGateway {
 
 	@Gateway(requestChannel = Channels.STATION_DELETED)
 	public void stationDeleted(Station station);
+	
+	@Gateway(requestChannel = Channels.GET_ROUTE)
+	public void getRoute(RouteRequest routeRequest);
+	
+	@Gateway(requestChannel = Channels.NOTIFY_EXTRA_DELAY)
+	public void notifyExtraDelay(UpdateDelayRequest updateDelayRequest);
 }

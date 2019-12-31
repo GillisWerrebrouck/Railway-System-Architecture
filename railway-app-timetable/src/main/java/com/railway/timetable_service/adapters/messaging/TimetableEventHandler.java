@@ -18,6 +18,7 @@ public class TimetableEventHandler {
 		this.timetableItemService = timetableItemService;
 	}
 	
+	
 	@StreamListener(Channels.ROUTE_FETCHED)
 	public void processFetchedRoute(RouteFetchedResponse response) {
 		if(response.getRouteConnections().size() != 0) {
@@ -49,6 +50,13 @@ public class TimetableEventHandler {
 			logger.info("[Timetable Event Handler] failed to reserve train");
 			this.timetableItemService.failedToCreateTimetableItem(response);
 		}
+	}
+	
+	@StreamListener(Channels.NOTIFY_EXTRA_DELAY)
+	public void processExtraDelay(UpdateDelayRequest request) {
+		if(request.getTimetableId() != null) {
+			this.timetableItemService.processExtraDelay(request);
+		} 
 	}
   
 	@StreamListener(Channels.STAFF_RESERVED)

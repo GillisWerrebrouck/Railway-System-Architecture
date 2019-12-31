@@ -63,7 +63,15 @@ public class TimetableItemRestController implements CreateTimetableItemListener 
 			
 			String routeName = timetableService.getRouteName(timetableItem.getRouteId());
 			
-			TimetableItemResponse timetableItemResponse = new TimetableItemResponse(timetableItem.getId(), timetableItem.getStartDateTime(), timetableItem.getEndDateTime(), timetableItem.getDelay(), timetableItem.getRouteId(), routeName);
+			TimetableItemResponse timetableItemResponse = new TimetableItemResponse(
+				timetableItem.getId(), 
+				timetableItem.getRouteId(), 
+				routeName, 
+				timetableItem.getStartDateTime(), 
+				timetableItem.getEndDateTime(), 
+				timetableItem.getDelay(), 
+				timetableItem.getReasonForDelay()
+			);
 			response.add(timetableItemResponse);
 		}
 		
@@ -91,7 +99,15 @@ public class TimetableItemRestController implements CreateTimetableItemListener 
 				Collection<TimetableItem> timetableItems = timetableItemRepository.findByRouteIdAndStartDateTimeBetweenOrderByStartDateTime(route.getId(), fromDateTime, toDateTime);
 				
 				for(TimetableItem timetableItem : timetableItems) {
-					TimetableItemResponse timetableItemResponse = new TimetableItemResponse(timetableItem.getId(), timetableItem.getStartDateTime(), timetableItem.getEndDateTime(), timetableItem.getDelay(), timetableItem.getRouteId(), route.getName());
+					TimetableItemResponse timetableItemResponse = new TimetableItemResponse(
+						timetableItem.getId(), 
+						timetableItem.getRouteId(), 
+						route.getName(),
+						timetableItem.getStartDateTime(), 
+						timetableItem.getEndDateTime(), 
+						timetableItem.getDelay(), 
+						timetableItem.getReasonForDelay()
+					);
 					response.add(timetableItemResponse);
 				}
 			} catch (DateTimeParseException e) {

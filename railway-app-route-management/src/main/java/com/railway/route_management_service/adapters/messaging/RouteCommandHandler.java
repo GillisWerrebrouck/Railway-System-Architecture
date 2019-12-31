@@ -43,9 +43,9 @@ public class RouteCommandHandler {
 		if(routeDetails != null && routeDetails.getDistance() > 0){
 			logger.info("[Route Command Handler] route details fetched");
 			return new RouteDetailResponse(routeDetails.getArrivalStation(), routeDetails.getDepartureStation(),
-					routeDetails.getDistance(), request.getTicketId(), request.getRouteDetailRequestId());
+					routeDetails.getDistance(), request.getTicketIds(), request.getRouteDetailRequestId());
 		}else{
-			return new RouteDetailResponse(null, null, 0, request.getTicketId(), request.getRouteDetailRequestId());
+			return new RouteDetailResponse(null, null, 0, request.getTicketIds(), request.getRouteDetailRequestId());
 		}
 
 	}

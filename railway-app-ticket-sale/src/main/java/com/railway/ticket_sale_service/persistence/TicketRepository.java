@@ -7,10 +7,13 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Repository
 public interface TicketRepository extends CrudRepository<Ticket, Long> {
     Iterable<Ticket> getTicketsByValidOnAfter(LocalDateTime date);
 
     Iterable<Ticket> getTicketsByType(TicketType type);
+
+    List<Ticket> findByIdIn(List<Long> ids);
 }

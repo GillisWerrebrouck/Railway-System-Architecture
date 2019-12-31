@@ -8,7 +8,8 @@ public class RouteDetails {
     private String arrivalStation;
     private double distance;
 
-    private RouteDetails(){}
+    @SuppressWarnings("unused")
+	private RouteDetails(){}
 
     public RouteDetails(String departureStation, String arrivalStation, double distance) {
         this.departureStation = departureStation;

@@ -25,6 +25,7 @@ public class Ticket {
 
     private UUID routeDetailsRequestId;
     private UUID reserveGroupSeatsRequestId;
+    private UUID ticketCreationId;
 
     @SuppressWarnings("unused")
 	private Ticket() {};
@@ -43,8 +44,9 @@ public class Ticket {
             this.type = TicketType.SINGLE;
     }
 
-    public Ticket(LocalDateTime validOn, Long timetableId, int amountOfSeats){
+    public Ticket(LocalDateTime validOn, Long timetableId, int amountOfSeats, UUID ticketCreationId){
         this(null, null, validOn, timetableId, 0, amountOfSeats);
+        this.ticketCreationId = ticketCreationId;
     }
 
     public Long getId() {
@@ -121,6 +123,14 @@ public class Ticket {
 
     public void setReserveGroupSeatsRequestId(UUID reserveGroupSeatsRequestId) {
         this.reserveGroupSeatsRequestId = reserveGroupSeatsRequestId;
+    }
+
+    public UUID getTicketCreationId() {
+        return ticketCreationId;
+    }
+
+    public void setTicketCreationId(UUID ticketCreationId) {
+        this.ticketCreationId = ticketCreationId;
     }
 
     public TicketStatus getStatus() {

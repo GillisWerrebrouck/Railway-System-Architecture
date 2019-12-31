@@ -25,21 +25,25 @@ public class TimetableItem {
 	
 	// delay in minutes
 	private int delay;
-	private int reservedGroupSeats;
-
+	private String reasonForDelay;
+	
 	private Long routeId;
 	private UUID routeRequestId;
+	
 	private String trainId;
-	private int groupCapacity;
-	private UUID trainRequestId;
 	private TrainType requestedTrainType;
+	private UUID trainRequestId;
+	private int groupCapacity;
+	private int reservedGroupSeats;
+	
 	private UUID stationsRequestId;
-
+  
 	private UUID trainOperatorRequestId;
 	private UUID trainConductorRequestId;
 	private int requestedTrainConductorsAmount;
+  
 	@Column
-    @ElementCollection(targetClass=String.class, fetch=FetchType.EAGER)
+	@ElementCollection(targetClass=String.class, fetch=FetchType.EAGER)
 	private List<String> staffIds = new ArrayList<String>();
 	
 	private Status routeStatus;
@@ -49,11 +53,12 @@ public class TimetableItem {
 	
 	@SuppressWarnings("unused")
 	private TimetableItem() {}
-
+  
 	public TimetableItem(LocalDateTime startDate, LocalDateTime endDateTime, Long routeId, String trainId, TrainType requestedTrainType, List<String> staffIds, int requestedTrainConductorsAmount) {
 		this.startDateTime = startDate;
 		this.endDateTime = endDateTime;
 		this.delay = 0;
+		this.reasonForDelay = null;
 		this.reservedGroupSeats = 0;
 		this.routeId = routeId;
 		this.routeRequestId = null;
@@ -71,7 +76,7 @@ public class TimetableItem {
 		this.stationsReservationStatus = Status.UNKNOWN;
 		this.staffReservationStatus = Status.UNKNOWN;
 	}
-
+  
 	public TimetableItem(Long routeId, LocalDateTime startDate, TrainType requestedTrainType, int requestedStaffAmount) {
 		this(startDate, null, routeId, null, requestedTrainType, new ArrayList<String>(), requestedStaffAmount);
 	}
@@ -219,6 +224,14 @@ public class TimetableItem {
 	public void setStaffReservationStatus(Status staffReservationStatus) {
 		this.staffReservationStatus = staffReservationStatus;
 	}
+	
+	public String getReasonForDelay() {
+		return reasonForDelay;
+	}
+
+	public void setReasonForDelay(String reasonForDelay) {
+		this.reasonForDelay = reasonForDelay;
+  }
 
 	public int getGroupCapacity() {
 		return groupCapacity;
