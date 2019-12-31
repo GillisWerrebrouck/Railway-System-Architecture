@@ -11,8 +11,11 @@ import {
 import NetworkPage from './components/NetworkPage';
 import TimetablePage from './components/TimetablePage'
 import StaffPage from './components/StaffPage';
+import StationSchedulePage from './components/StationSchedulePage';
+import MaintenancePage from './components/MaintenancePage';
 import TrainPage from './components/TrainPage';
 import TicketPage from './components/TicketPage';
+import StaffSchedulePage from './components/StaffSchedulePage';
 
 class App extends Component {
   render() {
@@ -28,15 +31,19 @@ class App extends Component {
               <li> <Link to="/staff">Staff</Link> </li>
               <li> <Link to="/train">Train</Link> </li>
               <li> <Link to="/ticket">Ticket</Link> </li>
+              <li> <Link to="/maintenance">Maintenance</Link> </li>
             </ul>
         </div>
         <div className="App-intro">
           <Switch>
             <Route exact path="/"  component={NetworkPage} />
             <Route path="/timetable" component={TimetablePage} />
+            <Route exact path="/staff/:id" component={StaffSchedulePage} />
             <Route path="/staff" component={StaffPage} />
             <Route path="/train" component={TrainPage} />
             <Route path="/ticket" component={TicketPage} />
+            <Route path="/maintenance" component={MaintenancePage} />
+            <Route exact path="/station/:id" component={StationSchedulePage} />
             <Redirect to="/" />
           </Switch>
         </div>
