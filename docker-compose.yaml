@@ -193,3 +193,16 @@ services:
       - train-service
     ports:
       - 8080:8080
+
+  frontend:
+    build: ./railway-app-frontend
+    volumes:
+      - ./railway-app-frontend/target:/app
+    links:
+      - apigateway
+      - route-db
+    depends_on:
+      - apigateway
+      - route-db
+    ports:
+      - 80:80
