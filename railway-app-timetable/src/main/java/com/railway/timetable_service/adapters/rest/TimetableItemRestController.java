@@ -139,20 +139,21 @@ public class TimetableItemRestController implements CreateTimetableItemListener 
 		
 		DeferredResult<TimetableItem> deferredResult = new DeferredResult<>(10000l);
 		
+		TimetableItem timetableItem = new TimetableItem(
+			timetableRequest.getRouteId(), 
+			timetableRequest.getStartDateTime(), 
+			timetableRequest.getRequestedTrainType(), 
+			timetableRequest.getAmountOfTrainConductors()
+		);
+		
 		deferredResult.onTimeout(() -> {
+			this.timetableService.discardAll(timetableItem);
 			deferredResult.setErrorResult("Request timeout occurred");
 		});
 		
 		if(!isValidTimetableRequest(timetableRequest)) {
 			deferredResult.setErrorResult("Request must contain the following fields in the body; \"routeId\", \"startDateTime\", \"requestedTrainType\" and \"amountOfTrainConductors\"");
 		} else {
-			TimetableItem timetableItem = new TimetableItem(
-				timetableRequest.getRouteId(), 
-				timetableRequest.getStartDateTime(), 
-				timetableRequest.getRequestedTrainType(), 
-				timetableRequest.getAmountOfTrainConductors()
-			);
-			
 			timetableItemRepository.save(timetableItem);
 			
 			this.deferredResults.put(timetableItem.getId(), deferredResult);

@@ -9,6 +9,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.redis.connection.RedisPassword;
+import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
+import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
+import org.springframework.data.redis.core.RedisTemplate;
 
 import com.railway.station_service.adapters.messaging.Channels;
 import com.railway.station_service.domain.Address;
@@ -27,6 +31,20 @@ public class RailwayAppStationApplication {
 	
 	public static void main(String[] args) {
 		SpringApplication.run(RailwayAppStationApplication.class, args);
+	}
+	
+	@Bean
+	JedisConnectionFactory jedisConnectionFactory() {
+	    RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration("localhost", 6379);
+//	    redisStandaloneConfiguration.setPassword(RedisPassword.of("...")); // change for docker config
+	    return new JedisConnectionFactory(redisStandaloneConfiguration);
+	}
+	 
+	@Bean
+	public RedisTemplate<UUID, Object> redisTemplate() {
+	    RedisTemplate<UUID, Object> template = new RedisTemplate<>();
+	    template.setConnectionFactory(jedisConnectionFactory());
+	    return template;
 	}
 	
 	@Bean
