@@ -36,7 +36,6 @@ public class RailwayAppStationApplication {
 	@Bean
 	JedisConnectionFactory jedisConnectionFactory() {
 	    RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration("localhost", 6379);
-//	    redisStandaloneConfiguration.setPassword(RedisPassword.of("...")); // change for docker config
 	    return new JedisConnectionFactory(redisStandaloneConfiguration);
 	}
 	 
