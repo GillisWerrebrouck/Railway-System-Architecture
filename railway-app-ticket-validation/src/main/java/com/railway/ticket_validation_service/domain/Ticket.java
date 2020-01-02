@@ -91,7 +91,7 @@ public class Ticket {
         return !isUsed && validOn.compareTo(LocalDateTime.now()) <= 0;
     }
 
-    public void validate(){	
+    public void validate() {
         if(isValid) {
             isUsed = true;
         }

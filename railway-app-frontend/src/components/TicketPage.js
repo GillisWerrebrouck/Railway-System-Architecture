@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import Moment from 'moment';
+import DayPickerInput from 'react-day-picker/DayPickerInput';
+import 'react-day-picker/lib/style.css';
 import endpoints from "../api/endpoints";
 
 export default class TicketPage extends Component {
@@ -10,18 +12,74 @@ export default class TicketPage extends Component {
         isLoading: true,
         tickets: [],
         timetable: [],
+        routes: [],
         startStations: [],
         endStations: [],
         newTicket: {
+            routeId: null,
             timetableId: null,
             startDateTime: null,
             startStationId: null,
             endStationId: null,
             ticketType: null,
-            amountOfSeats: 0
+            amountOfSeats: 1
         },
         buyTicketErrorResponse: "",
     };
+  }
+
+  onRouteChange= (event) => {
+      const routeId = event.target.value;
+      let newTicket = {...this.state.newTicket};
+      endpoints.getStationsOnRoute(routeId).then((result) => {
+          this.setState({newTicket, startStations: result.data, endStations: result.data.slice(1)}, () => {
+              newTicket.routeId = routeId;
+              newTicket.startStationId = this.state.startStations[0].stationId;
+              newTicket.endStationId = this.state.endStations[0].stationId;
+              this.setState({newTicket});
+          })
+      });
+  };
+
+  onTimetableChange = (event) => {
+      let newTicket = {...this.state.newTicket};
+      const timetableId = parseInt(event.target.value);
+      const timetable = this.findTimetableItemWithId(timetableId);
+      if(timetable != null){
+          endpoints.getStationsOnRoute(timetable.routeId).then((result) => {
+              this.setState({startStations: result.data, endStations: result.data.slice(1)}, () => {
+                  newTicket.timetableId = timetableId;
+                  newTicket.startStationId = this.state.startStations[0].stationId;
+                  newTicket.endStationId = this.state.endStations[0].stationId;
+                  newTicket.startDateTime = timetable.startDateTime;
+                  this.setState({newTicket});
+                  console.log(newTicket);
+              });
+          });
+      }
+  };
+
+  onStartStationChange = (event) => {
+      let newTicket = {...this.state.newTicket};
+      newTicket.startStationId = event.target.value;
+      const index = this.state.startStations.findIndex(station => station.stationId === newTicket.startStationId);
+      this.setState({endStations: this.state.startStations.slice(index+1)});
+      if(index+1 < this.state.startStations.length)
+          newTicket.endStationId = this.state.startStations[index+1].stationId;
+      else
+          newTicket.endStationId = null;
+      this.setState({ newTicket });
+  };
+
+  onTypeChange = (event) => {
+      const type = event.target.value;
+      let newTicket = {...this.state.newTicket};
+      for (let key in newTicket ) {
+          newTicket[key] = null;
+      }
+      newTicket.ticketType = type;
+      type === "GROUP" ? newTicket.amountOfSeats = 10 : newTicket.amountOfSeats = 1;
+      this.setState({ newTicket });
   }
 
   onTicketChange = (event) => {
@@ -30,21 +88,14 @@ export default class TicketPage extends Component {
 
       let newTicket = {...this.state.newTicket};
       newTicket[name] = value;
-      const timetable = this.findTimetableItemWithId(newTicket.timetableId);
-
-      if(timetable != null){
-          endpoints.getStationsOnRoute(timetable.routeId).then((result) => {
-              this.setState({startStations: result.data});
-          });
-          newTicket.startDateTime = timetable.startDateTime;
-      }
-
-      if(newTicket.startStationId != null){
-          const index = this.state.startStations.findIndex(station => station.stationId === newTicket.startStationId);
-          this.setState({endStations: this.state.startStations.slice(index+1)});
-      }
-
       this.setState({ newTicket });
+  };
+
+  onDayChange = (day) => {
+      let newTicket = {...this.state.newTicket};
+      newTicket.startDateTime = day;
+      this.setState({ newTicket });
+      console.log(newTicket);
   };
 
   findTimetableItemWithId(id) {
@@ -58,18 +109,13 @@ export default class TicketPage extends Component {
         .then((result) => {
           this.setState({ tickets: result.data });
           endpoints.getTimetable().then((result) => {
-              this.setState({timetable: result.data, isLoading: false});
-              endpoints.getStationsOnRoute(this.state.timetable[0].routeId).then((result) => {
-                  this.setState({startStations: result.data, endStations: result.data.slice(1)});
-                  this.setState({newTicket: {                     // specific object of food object
-                          ...this.state.newTicket,
-                          timetableId: this.state.timetable[0].id,
-                          startDateTime: this.state.timetable[0].startDateTime,
-                          startStationId: this.state.startStations[0].stationId,
-                          endStationId: this.state.endStations[0].stationId
-                      }});
-              });
-          })
+              this.setState({timetable: result.data});
+
+              endpoints.getRoutes().then((result)=> {
+                  this.setState({routes: result.data, isLoading: false})
+                  console.log(this.state.routes);
+              })
+          });
         });
   }
 
@@ -85,9 +131,41 @@ export default class TicketPage extends Component {
             });
     }
 
+   renderGroupTicketSale() {
+      return (
+          <div>
+              <label>Timetable: </label>
+              <select
+                  name='timetableId'
+                  onChange={this.onTimetableChange}
+                  defaultValue="select timetable">
+                  <option key='default' disabled={true}>select timetable</option>
+                  {this.state.timetable.map((t, key) => {
+                      return <option key={key} value={t.id}>{t.route} : {Moment(t.startDateTime).format('DD/MM-HH:mm')}</option>;
+                  })}
+              </select>
+              <br />
+              <label>Start Station: </label>
+              <select
+                  name='startStationId'
+                  onChange={this.onStartStationChange}>
+                  {this.state.startStations.map((t, key) => {
+                      return <option key={key} value={t.stationId}>{t.name}</option>;
+                  })}
+              </select>
+              <br />
+              <label>End Station: </label>
+              <select name='endStationId' onChange={this.onTicketChange}>
+                  {this.state.endStations.map((t, key) => {
+                      return <option key={key} value={t.stationId}>{t.name}</option>;
+                  })}
+              </select>
+          </div>
+      )
+   }
   renderTickets() {
     return this.state.tickets.map((ticket, index) => {
-      const { id, startStation, endStation, validOn, price, amountOfSeats, type, validationCode, status } = ticket;
+      const { id, startStation, endStation, validOn, price, amountOfSeats, type, validationCode } = ticket;
       return (
           <tr key={id}>
             <td>{id}</td>
@@ -98,12 +176,13 @@ export default class TicketPage extends Component {
             <td>{amountOfSeats}</td>
             <td>{price}</td>
             <td>{validationCode}</td>
-            <td>{status}</td>
           </tr>
       );
     });
   }
+
   render() {
+      const today = new Date();
     return (
       <div>
         <h2>Ticket</h2>
@@ -119,7 +198,6 @@ export default class TicketPage extends Component {
                 <th>Amount of seats</th>
                 <th>Price</th>
                 <th>Validation code</th>
-                <th>Status</th>
               </tr>
               { this.renderTickets() }
               </tbody>
@@ -129,59 +207,83 @@ export default class TicketPage extends Component {
         )}
         <h2>Buy a new ticket</h2>
           <form onSubmit={this.buyTicket}>
-              <label>Timetable: </label>
-              <select
-                  name='timetableId'
-                  onChange={this.onTicketChange}>
-                  {this.state.timetable.map((t, key) => {
-                      return <option key={key} value={t.id}>{t.route} : {Moment(t.startDateTime).format('DD/MM-HH:mm')}</option>;
-                  })}
-              </select>
-              <br />
-              <label>Start Station: </label>
-              <select
-                  name='startStationId'
-                  onChange={this.onTicketChange}>
-                  {this.state.startStations.map((t, key) => {
-                      return <option key={key} value={t.stationId}>{t.name}</option>;
-                  })}
-              </select>
-              <br />
-              <label>End Station: </label>
-              <select name='endStationId' onChange={this.onTicketChange}>
-                  {this.state.endStations.map((t, key) => {
-                      return <option key={key} value={t.stationId}>{t.name}</option>;
-                  })}
-              </select>
-              <br />
               <label>Ticket type: </label>
               <input
                   name='ticketType'
                   type='radio'
-                  value='single' onChange={this.onTicketChange} />
-                  Single
+                  value='SINGLE' onChange={this.onTypeChange} />
+              Single
               <input
                   name='ticketType'
                   type='radio'
-                  value='group' onChange={this.onTicketChange} />
-                  Group
+                  value='GROUP' onChange={this.onTypeChange} />
+              Group
               <br/>
-              {this.state.newTicket.type != null &&
+              {this.state.newTicket.ticketType != null &&
                   <div>
-                <label>amount of seats</label>
-                <input
-                  type='number'
-                  name='amountOfSeats'
-                  min={this.state.newTicket.ticketType === 'group' ? 10 : 1 }
-                  defaultValue={this.state.newTicket.ticketType === 'group' ? 10 : 1 }
-                  onChange={this.onTicketChange}
-                  />
+                      <label>amount of seats</label>
+                      <input
+                          type='number'
+                          name='amountOfSeats'
+                          min={this.state.newTicket.ticketType === 'GROUP' ? 10 : 1 }
+                          defaultValue={this.state.newTicket.ticketType === 'GROUP' ? 10 : 1 }
+                          onChange={this.onTicketChange}
+                      />
+                      {this.state.newTicket.ticketType === "GROUP" ? (
+                          this.renderGroupTicketSale()
+                      ) : (
+                          <div>
+                              <label>Route: </label>
+                              <select
+                                  name='routeId'
+                                  onChange={this.onRouteChange}
+                                  defaultValue="select route"
+                              >
+                                  <option key='default' disabled={true} >select route</option>
+                                  {this.state.routes.map((r, key) => {
+                                      return <option type="number" key={key} value={r.id}>{r.name}</option>;
+                                  })}
+                              </select>
+                              {this.state.newTicket.routeId != null && (
+                                  <div>
+                                      <label>Start Station: </label>
+                                      <select
+                                          name='startStationId'
+                                          onChange={this.onStartStationChange}>
+                                          {this.state.startStations.map((t, key) => {
+                                              return <option key={key} value={t.stationId}>{t.name}</option>;
+                                          })}
+                                      </select>
+                                      <br />
+                                      <label>End Station: </label>
+                                      <select name='endStationId' onChange={this.onTicketChange}>
+                                          {this.state.endStations.map((t, key) => {
+                                              return <option key={key} value={t.stationId}>{t.name}</option>;
+                                          })}
+                                      </select>
+                                      <br />
+                                      <label>Date: </label>
+                                      <DayPickerInput
+                                          onDayChange={day => this.onDayChange(day)}
+                                          dayPickerProps={{
+                                              modifiers: {
+                                                  disabled: {
+                                                      before: today
+                                                  }
+                                              }
+                                          }}
+                                      />
+                                  </div>
+                              )}
+                          </div>
+                      )}
+                      <input
+                          type='submit'
+                          value='buy'
+                      />
                   </div>
+
               }
-              <input
-                  type='submit'
-                  value='buy'
-              />
           </form>
           <p>{this.state.buyTicketErrorResponse}</p>
       </div>
@@ -189,5 +291,6 @@ export default class TicketPage extends Component {
   }
 
 }
+
 
 

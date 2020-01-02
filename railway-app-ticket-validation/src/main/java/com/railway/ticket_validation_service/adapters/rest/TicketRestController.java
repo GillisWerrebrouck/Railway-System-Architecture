@@ -24,22 +24,20 @@ public class TicketRestController {
     }
 
     @GetMapping("/{id}")
-    public Ticket getTicketById(@PathVariable("id") UUID id) {
+    public Ticket getTicketById(@PathVariable("id") Long id) {
         return ticketRepository.findById(id).orElse(null);
     }
 
-    @GetMapping("/validate/{id}")
-    public Ticket validateTicket(@PathVariable("id") UUID id) throws TicketNotFoundException{
-        Ticket ticket = ticketRepository.findById(id).orElse(null);
-
+    @GetMapping("/validate/{validationCode}")
+    public Ticket validateTicket(@PathVariable("validationCode") UUID validationCode) throws TicketNotFoundException{
+        Ticket ticket = ticketRepository.findTicketByValidationCode(validationCode).orElse(null);
         if (ticket != null) {	
         	ticket.validate();	
             ticketRepository.save(ticket);	
         } else {
-        	String errorMessage = "No ticket found with id '" + id.toString() + "'";
+        	String errorMessage = "No ticket found with validationcode '" + validationCode.toString() + "'";
         	throw new TicketNotFoundException(errorMessage);
         }
-
         return ticket;
     }
 }
