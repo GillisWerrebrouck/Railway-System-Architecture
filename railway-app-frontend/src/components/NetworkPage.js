@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import endpoints from '../api/endpoints';
 import { NEO4J_URI, NEO4J_USER, NEO4J_PASSWORD } from '../api/constants'
 import { ResponsiveNeoGraph } from "./NeoGraph";
+import { Link } from 'react-router-dom';
 
 export default class NetworkPage extends Component {
   constructor(props) {
@@ -80,7 +81,7 @@ export default class NetworkPage extends Component {
       const { street, city, province, country } = address;
       return (
         <tr key={id}>
-          <td>{id}</td>
+          <td><Link to={`/station/${id}`}>{id}</Link></td>
           <td>{name}</td>
           <td>{street}</td>
           <td>{city}</td>
