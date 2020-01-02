@@ -1,6 +1,7 @@
 package com.railway.route_management_service.persistence;
 
 import com.railway.route_management_service.domain.RouteDetails;
+
 import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.stereotype.Repository;
@@ -31,4 +32,7 @@ public interface RouteRepository extends Neo4jRepository<Route, Long> {
 	
 	@Query("MATCH (r:Route)-[n:USES_STATION {connectionId: {connectionId}}]-(x:Station) RETURN DISTINCT r")
 	Collection<Route> getAllRoutesByConnectionId(Long connectionId);
+	
+	@Query("CREATE (r:Route {name: {name}}) RETURN r")
+	Route createRoute(String name);
 }
