@@ -1,5 +1,7 @@
 package com.railway.ticket_sale_service.adapters.messaging;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 public class RouteDetailResponse {
@@ -7,14 +9,14 @@ public class RouteDetailResponse {
     private String startStationName;
     private String endStationName;
     private double distance;
-    private Long ticketId;
+    private Long[] ticketIds;
     private UUID routeDetailRequestId;
 
-    public RouteDetailResponse(String startStationName, String endStationName, double distance, Long ticketId, UUID routeDetailRequestId) {
+    public RouteDetailResponse(String startStationName, String endStationName, double distance, Long[] ticketIds, UUID routeDetailRequestId) {
         this.startStationName = startStationName;
         this.endStationName = endStationName;
         this.distance = distance;
-        this.ticketId = ticketId;
+        this.ticketIds = ticketIds;
         this.routeDetailRequestId = routeDetailRequestId;
     }
 
@@ -42,12 +44,16 @@ public class RouteDetailResponse {
         this.distance = distance;
     }
 
-    public Long getTicketId() {
-        return ticketId;
+    public Long[] getTicketIds() {
+        return ticketIds;
     }
 
-    public void setTicketId(Long ticketId) {
-        this.ticketId = ticketId;
+    public List<Long> getTicketsIdList() {
+        return Arrays.asList(this.ticketIds);
+    }
+
+    public void setTicketId(Long[] ticketIds) {
+        this.ticketIds = ticketIds;
     }
 
     public UUID getRouteDetailRequestId() {

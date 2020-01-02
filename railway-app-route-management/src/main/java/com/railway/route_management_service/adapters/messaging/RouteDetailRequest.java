@@ -4,13 +4,13 @@ import java.util.UUID;
 
 public class RouteDetailRequest {
 
-    private Long ticketId;
+    private Long[] ticketIds;
     private UUID startStationId;
     private UUID endStationId;
     private UUID routeDetailRequestId;
 
-    public RouteDetailRequest(Long ticketId, UUID startStationId, UUID endStationId, UUID routeDetailRequestId) {
-        this.ticketId = ticketId;
+    public RouteDetailRequest(Long[] ticketIds, UUID startStationId, UUID endStationId, UUID routeDetailRequestId) {
+        this.ticketIds = ticketIds;
         this.startStationId = startStationId;
         this.endStationId = endStationId;
         this.routeDetailRequestId = routeDetailRequestId;
@@ -24,8 +24,8 @@ public class RouteDetailRequest {
         return endStationId;
     }
 
-    public Long getTicketId() {
-        return ticketId;
+    public Long[] getTicketIds() {
+        return ticketIds;
     }
 
     public UUID getRouteDetailRequestId() {
