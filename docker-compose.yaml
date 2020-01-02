@@ -22,6 +22,9 @@ services:
       - 7687:7687
 # not good to expose a database port but this is just for the purpose of the frontend (graph visualisation)
 
+  delay-request-db:
+    image: redis
+
   staff-db:
     image: mongo
   train-db:
@@ -111,10 +114,12 @@ services:
       - kafka-container
       - zookeeper-container
       - station-db
+      - delay-request-db
     depends_on:
       - kafka-container
       - zookeeper-container
       - station-db
+      - delay-request-db
   ticket-sale-service:
     build: ./railway-app-ticket-sale
     volumes: 
