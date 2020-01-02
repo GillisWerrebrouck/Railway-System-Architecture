@@ -9,6 +9,13 @@ const endpoints = {
                 .catch(error => { reject(error); });
         });
     },
+    getStationsFromRouteService: () => {
+        return new Promise((resolve, reject) => {
+            axios.get(URL + '/network/station', { responseType: 'json' })
+                .then(result => { resolve(result); })
+                .catch(error => { reject(error); });
+        });
+    },
     getTrains: () => {
         return new Promise((resolve, reject) => {
             axios.get(URL + '/train', { responseType: 'json' })
@@ -33,6 +40,13 @@ const endpoints = {
     getRoutes: () => {
         return new Promise((resolve, reject) => {
             axios.get(URL + '/network/route/all', { responseType: 'json' })
+                .then(result => { resolve(result); })
+                .catch(error => { reject(error); });
+        });
+    },
+    getConnections: () => {
+        return new Promise((resolve, reject) => {
+            axios.get(URL + '/network/connection', { responseType: 'json' })
                 .then(result => { resolve(result); })
                 .catch(error => { reject(error); });
         });
@@ -96,11 +110,43 @@ const endpoints = {
     postNewTimetableItem: (newTimetableItem) => {
         return new Promise((resolve, reject) => {
             axios.post(URL + '/timetable', newTimetableItem, { headers: { 'Content-Type': 'application/json' } })
-                .then(result => { resolve(result); })
+                .then(result => {
+                    if(typeof result.data === "string") {
+                        reject(result.data);
+                    } else {
+                        resolve(result);
+                    }
+                })
                 .catch(error => { reject(error); });
         });
     },
-    postChangeConnectionState: (connection) => {
+    postCreateRoute: (route) => {
+        return new Promise((resolve, reject) => {
+            axios.post(URL + '/network/route', route, { headers: { 'Content-Type': 'application/json' } })
+                .then(result => { resolve(result.data); })
+                .catch(error => { reject(error); });
+        });
+    },
+    postCreateConnection: (connection) => {
+        return new Promise((resolve, reject) => {
+            const formattedConnection = {
+                stationX: {
+                    stationId: connection.stationXId,
+                },
+                stationY: {
+                    stationId: connection.stationYId,
+                },
+                distance: connection.distance,
+                maxSpeed: connection.maxSpeed,
+                active: connection.active,
+            };
+
+            axios.post(URL + '/network/connection', formattedConnection, { headers: { 'Content-Type': 'application/json' } })
+                .then(result => { resolve(result.data); })
+                .catch(error => { reject(error); });
+        });
+    },
+    putChangeConnectionState: (connection) => {
         return new Promise((resolve, reject) => {
             axios.put(URL + '/network/connection', connection, { headers: { 'Content-Type': 'application/json' } })
                 .then(result => { resolve(result); })
