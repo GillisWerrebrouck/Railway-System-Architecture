@@ -27,6 +27,8 @@ public class RailwayAppApiGatewayApplication {
 				.route(r -> r.host("*").and().path("/staff/**").uri("http://localhost:2006"))
 				//station service
 				.route(r -> r.host("*").and().path("/station/**").uri("http://localhost:2002"))
+				//station service
+				.route(r -> r.host("*").and().path("/platform/**").uri("http://localhost:2002"))
 				//ticket sale service
 				.route(r -> r.host("*").and().path("/ticket/**").uri("http://localhost:2007"))
 				//ticket validation service
@@ -35,6 +37,8 @@ public class RailwayAppApiGatewayApplication {
 				.route(r -> r.host("*").and().path("/timetable/**").uri("http://localhost:2001"))
 				//train service
 				.route(r -> r.host("*").and().path("/train/**").uri("http://localhost:2003"))
+				//delay service
+				.route(r -> r.host("*").and().path("/delay/**").uri("http://localhost:2004"))
 				.build();
 	}
 }

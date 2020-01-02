@@ -8,6 +8,7 @@ export default class TimetablePage extends Component {
     this.state = {
       isLoading: true,
       timetable: [],
+      routes: [],
       newTimetableItem: {
         routeId: null,
         startDateTime: null,
@@ -23,6 +24,14 @@ export default class TimetablePage extends Component {
       .then((result) => {
         this.setState({ timetable: result.data, isLoading: false });
       });
+    this.getRoutes();
+  }
+
+  getRoutes() {
+    endpoints.getRoutes()
+    .then((result) => {
+      this.setState({ routes: result.data });
+    });
   }
 
   renderTimetable() {
@@ -53,12 +62,9 @@ export default class TimetablePage extends Component {
   createTimetableItem = (event) => {
     event.preventDefault();
     endpoints.postNewTimetableItem(this.state.newTimetableItem)
-      .then(result => { 
-        if(typeof result.data === "string") {
-          this.setState({ createTimetableItemErrorResponse: result.data });
-        } else {
-          window.location.reload();
-        }
+      .then(() => { window.location.reload(); })
+      .catch((error) => {
+        this.setState({ createTimetableItemErrorResponse: typeof error === "object" ? "Failed to create timetable item, check all input fields" : error });
       });
   }
 
@@ -88,11 +94,12 @@ export default class TimetablePage extends Component {
         <h3>Create a timetable item</h3>
         <form onSubmit={this.createTimetableItem}>
           <label>Route ID: </label>
-          <input
-            type='number'
-            name='routeId'
-            onChange={this.createTimetableItemFormChangeHandler}
-          />
+          <select name='routeId' onChange={this.createTimetableItemFormChangeHandler}>
+            <option value="">choose a route</option>
+            {this.state.routes.map((route) => {
+              return (<option key={route.id} value={route.id}>{route.id + ": " + route.name}</option>)
+            })}
+          </select>
           <br />
 
           <label>Start datetime: </label>
