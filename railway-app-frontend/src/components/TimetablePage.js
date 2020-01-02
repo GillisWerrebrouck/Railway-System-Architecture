@@ -97,7 +97,7 @@ export default class TimetablePage extends Component {
 
           <label>Start datetime: </label>
           <input
-            type='datetime'
+            type='text'
             name='startDateTime'
             onChange={this.createTimetableItemFormChangeHandler}
           />

@@ -16,6 +16,7 @@ import MaintenancePage from './components/MaintenancePage';
 import TrainPage from './components/TrainPage';
 import TicketPage from './components/TicketPage';
 import StaffSchedulePage from './components/StaffSchedulePage';
+import SearchPage from './components/SearchPage';
 
 class App extends Component {
   render() {
@@ -28,6 +29,7 @@ class App extends Component {
             <ul>
               <li> <Link to="/">Network</Link> </li>
               <li> <Link to="/timetable">Timetable</Link> </li>
+              <li> <Link to="/search">Search</Link> </li>
               <li> <Link to="/staff">Staff</Link> </li>
               <li> <Link to="/train">Train</Link> </li>
               <li> <Link to="/ticket">Ticket</Link> </li>
@@ -37,6 +39,7 @@ class App extends Component {
         <div className="App-intro">
           <Switch>
             <Route exact path="/"  component={NetworkPage} />
+            <Route exact path="/search"  component={SearchPage} />
             <Route path="/timetable" component={TimetablePage} />
             <Route exact path="/staff/:id" component={StaffSchedulePage} />
             <Route path="/staff" component={StaffPage} />
