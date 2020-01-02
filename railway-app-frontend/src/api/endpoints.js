@@ -65,6 +65,13 @@ const endpoints = {
                 .catch(error => { reject(error); });
         })
     },
+    validateTicket: (validationCode) => {
+        return new Promise((resolve, reject) => {
+            axios.get(URL + `/ticket-validation/validate/${validationCode}`, { responseType: 'json' })
+                .then(result => { resolve(result); })
+                .catch(error => { reject(error); });
+        });
+    },
     postChangeConnectionState: (connection) => {
         return new Promise((resolve, reject) => {
             axios.put(URL + '/network/connection', connection, { headers: { 'Content-Type': 'application/json' } })

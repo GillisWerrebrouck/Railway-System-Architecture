@@ -25,6 +25,9 @@ export default class TicketPage extends Component {
             amountOfSeats: 1
         },
         buyTicketErrorResponse: "",
+        validationCode: "",
+        validateTicketErrorResponse: "",
+        validatedTicket: null
     };
   }
 
@@ -98,6 +101,11 @@ export default class TicketPage extends Component {
       console.log(newTicket);
   };
 
+  onValidationCodeChange = (event) => {
+      const validationCode = event.target.value;
+      this.setState({validationCode: validationCode});
+  };
+
   findTimetableItemWithId(id) {
         return this.state.timetable.find((item) => {
             return item.id === id;
@@ -129,9 +137,71 @@ export default class TicketPage extends Component {
                     window.location.reload();
                 }
             });
-    }
+  };
 
-   renderGroupTicketSale() {
+  validateTicket = (event) => {
+      event.preventDefault();
+      endpoints.validateTicket(this.state.validationCode)
+          .then(result => {
+              if(typeof result.data === "string") {
+                  this.setState({ validateTicketErrorResponse: result.data });
+              } else {
+                  this.setState({validatedTicket: result.data});
+              }
+          });
+  };
+
+  renderSingleTicketSale(){
+      const today = new Date();
+      return (
+          <div>
+              <label>Route: </label>
+              <select
+                  name='routeId'
+                  onChange={this.onRouteChange}
+                  defaultValue="select route"
+              >
+                  <option key='default' disabled={true} >select route</option>
+                  {this.state.routes.map((r, key) => {
+                      return <option type="number" key={key} value={r.id}>{r.name}</option>;
+                  })}
+              </select>
+              {this.state.newTicket.routeId != null && (
+                  <div>
+                      <label>Start Station: </label>
+                      <select
+                          name='startStationId'
+                          onChange={this.onStartStationChange}>
+                          {this.state.startStations.map((t, key) => {
+                              return <option key={key} value={t.stationId}>{t.name}</option>;
+                          })}
+                      </select>
+                      <br />
+                      <label>End Station: </label>
+                      <select name='endStationId' onChange={this.onTicketChange}>
+                          {this.state.endStations.map((t, key) => {
+                              return <option key={key} value={t.stationId}>{t.name}</option>;
+                          })}
+                      </select>
+                      <br />
+                      <label>Date: </label>
+                      <DayPickerInput
+                          onDayChange={day => this.onDayChange(day)}
+                          dayPickerProps={{
+                              modifiers: {
+                                  disabled: {
+                                      before: today
+                                  }
+                              }
+                          }}
+                      />
+                  </div>
+              )}
+          </div>
+      )
+  };
+
+  renderGroupTicketSale() {
       return (
           <div>
               <label>Timetable: </label>
@@ -162,7 +232,7 @@ export default class TicketPage extends Component {
               </select>
           </div>
       )
-   }
+   };
   renderTickets() {
     return this.state.tickets.map((ticket, index) => {
       const { id, startStation, endStation, validOn, price, amountOfSeats, type, validationCode } = ticket;
@@ -182,7 +252,6 @@ export default class TicketPage extends Component {
   }
 
   render() {
-      const today = new Date();
     return (
       <div>
         <h2>Ticket</h2>
@@ -232,50 +301,7 @@ export default class TicketPage extends Component {
                       {this.state.newTicket.ticketType === "GROUP" ? (
                           this.renderGroupTicketSale()
                       ) : (
-                          <div>
-                              <label>Route: </label>
-                              <select
-                                  name='routeId'
-                                  onChange={this.onRouteChange}
-                                  defaultValue="select route"
-                              >
-                                  <option key='default' disabled={true} >select route</option>
-                                  {this.state.routes.map((r, key) => {
-                                      return <option type="number" key={key} value={r.id}>{r.name}</option>;
-                                  })}
-                              </select>
-                              {this.state.newTicket.routeId != null && (
-                                  <div>
-                                      <label>Start Station: </label>
-                                      <select
-                                          name='startStationId'
-                                          onChange={this.onStartStationChange}>
-                                          {this.state.startStations.map((t, key) => {
-                                              return <option key={key} value={t.stationId}>{t.name}</option>;
-                                          })}
-                                      </select>
-                                      <br />
-                                      <label>End Station: </label>
-                                      <select name='endStationId' onChange={this.onTicketChange}>
-                                          {this.state.endStations.map((t, key) => {
-                                              return <option key={key} value={t.stationId}>{t.name}</option>;
-                                          })}
-                                      </select>
-                                      <br />
-                                      <label>Date: </label>
-                                      <DayPickerInput
-                                          onDayChange={day => this.onDayChange(day)}
-                                          dayPickerProps={{
-                                              modifiers: {
-                                                  disabled: {
-                                                      before: today
-                                                  }
-                                              }
-                                          }}
-                                      />
-                                  </div>
-                              )}
-                          </div>
+                          this.renderSingleTicketSale()
                       )}
                       <input
                           type='submit'
@@ -286,6 +312,38 @@ export default class TicketPage extends Component {
               }
           </form>
           <p>{this.state.buyTicketErrorResponse}</p>
+          <h2>Validate a ticket</h2>
+          <form onSubmit={this.validateTicket}>
+            <label>Validation Code</label>
+              <input name="validationCode" onChange={this.onValidationCodeChange} />
+              <input
+                  type='submit'
+                  value='validate'
+              />
+          </form>
+          {this.state.validatedTicket != null && (
+              <div>
+              <h4 style={{color: this.state.validatedTicket.valid ? 'green' : 'red'}}>Ticket
+                  {this.state.validatedTicket.valid ? ( <span> valid</span>) : (<span> unValid</span>)}
+              </h4>
+                  startStation: {this.state.validatedTicket.startStation}<br/>
+                  endStation: {this.state.validatedTicket.endStation}<br/>
+                  amountOfSeats: {this.state.validatedTicket.amountOfSeats}<br/>
+                  {this.state.validatedTicket.amountOfSeats > 1 ? (
+                      <div>
+                          validOn: {Moment(this.state.validatedTicket.validOn).format('DD/MM/YYYY-HH:mm')}
+                      </div>
+                  ) : (
+                      <div>
+                          validOn: {Moment(this.state.validatedTicket.validOn).format('DD/MM/YYYY')}
+                      </div>
+                      )}
+                  {this.state.validatedTicket.used && !this.state.validatedTicket.valid && (
+                      <span style={{color: 'red'}}>already used.</span>
+                  )}
+              </div>
+          )}
+          <p>{this.state.validateTicketErrorResponse}</p>
       </div>
     );
   }
