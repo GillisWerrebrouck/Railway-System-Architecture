@@ -59,6 +59,12 @@ public class ConnectionRestController extends RouteRestController implements Upd
 	@PostMapping
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
 	public void connectStations(@RequestBody Connection connection) throws SelfReferentialNodeException, QueryFailedException {
+		if (connection.getStationX() == null || connection.getStationX().getStationId().isEmpty() || 
+				connection.getStationY() == null || connection.getStationY().getStationId().isEmpty()) {
+			String errorMessage = "Two stations are required";
+			throw new SelfReferentialNodeException(errorMessage);
+		}
+		
 		if (connection.getStationX().getStationId().compareTo(connection.getStationY().getStationId()) == 0) {
 			String errorMessage = "Self-referential nodes are not allowed";
 			throw new SelfReferentialNodeException(errorMessage);

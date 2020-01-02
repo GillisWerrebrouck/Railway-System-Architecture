@@ -307,13 +307,27 @@ public class RouteRestController {
 	
 	// create a new route node
 	@PostMapping("/route")
-    @ResponseStatus(value = HttpStatus.NO_CONTENT)
-	public void createRoute(@RequestBody Route route) throws QueryFailedException {
+	public Route createRoute(@RequestBody Route route) throws QueryFailedException {
 		try {
 			if (route.getName().compareTo("") == 0) {
 				throw new Exception("Missing name attribute for route node");
 			}
-			this.routeRepository.save(route);
+
+			for(RouteConnection rc : route.routeConnections) {
+				if(rc.getStation() == null || rc.getStation().getId() == null) {
+					throw new Exception("Missing station id for routeConnection");
+				}
+			}
+			
+			Route createdRoute = this.routeRepository.createRoute(route.getName());
+			
+			for(RouteConnection rc : route.routeConnections) {
+				routeConnectionRepository.createRouteStationRelationship(createdRoute.getId(), rc.getStation().getId(), rc.getConnectionId(), rc.isStartOfRoute());
+			}
+			
+			this.routeRepository.save(createdRoute);
+			
+			return createdRoute;
 		} catch (Exception e) {
 			String errorMessage = "Route with name \"" + route.getName() + "\" could not be created: " + e.getMessage();
 			throw new QueryFailedException(errorMessage);
@@ -339,7 +353,7 @@ public class RouteRestController {
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
 	public void createRoutePart(@RequestBody RouteConnection routeConnection, @PathVariable Long id) throws QueryFailedException {
 		try {
-			this.routeConnectionRepository.createRouteStationRelationship(id, routeConnection.getStation().getId(), routeConnection.getConnectionId());
+			this.routeConnectionRepository.createRouteStationRelationship(id, routeConnection.getStation().getId(), routeConnection.getConnectionId(), routeConnection.isStartOfRoute());
 		} catch (Exception e) {
 			String errorMessage = "Route-station relationship between route \"" + id + "\" and station \""
 								  + routeConnection.getStation().getId() +"\" could not be created: " + e.getMessage();
