@@ -3,3 +3,9 @@ table, th, td {
     border-collapse: collapse;
     padding: 2px;
 }
+
+#clickable {
+    text-decoration: underline;
+    color: blue;
+    cursor: pointer;
+}

@@ -37,9 +37,23 @@ const endpoints = {
                 .catch(error => { reject(error); });
         });
     },
+    search: (startStationId, endStationId, fromDate, toDate) => {
+        return new Promise((resolve, reject) => {
+            axios.get(URL + `/timetable?startStationId=${startStationId}&endStationId=${endStationId}&fromDate=${fromDate}&toDate=${toDate}`, { responseType: 'json' })
+                .then(result => { resolve(result); })
+                .catch(error => { reject(error); });
+        });
+    },
     getRoutes: () => {
         return new Promise((resolve, reject) => {
             axios.get(URL + '/network/route/all', { responseType: 'json' })
+                .then(result => { resolve(result); })
+                .catch(error => { reject(error); });
+        });
+    },
+    getRouteDetails: (routeId) => {
+        return new Promise((resolve, reject) => {
+            axios.get(URL + `/timetable/${routeId}/route`, { responseType: 'json' })
                 .then(result => { resolve(result); })
                 .catch(error => { reject(error); });
         });
