@@ -7,10 +7,10 @@ export default class DamagePage extends Component {
 
     this.state = {
       damage: {
-	location: null,
+	      location: null,
         message: null,
       },
-      createErrorResponse: "",
+      notifyDamageErrorResponse: "",
     };
   }
 
@@ -26,13 +26,8 @@ export default class DamagePage extends Component {
   createDamage = (event) => {
     event.preventDefault();
     endpoints.postDamage(this.state.damage)
-      .then(result => { 
-        if(typeof result.data === "string") {
-          this.setState({ createErrorResponse: result.data });
-        } else {
-          window.location.reload();
-        }
-      });
+      .then(() => window.location.reload())
+      .catch((error) => { this.setState({ notifyDamageErrorResponse: error }); });
   }
 
   render() {
@@ -60,7 +55,7 @@ export default class DamagePage extends Component {
           />
         </form>
 
-        <p>{this.state.createErrorResponse}</p>
+        <p>{this.state.notifyDamageErrorResponse}</p>
       </div>
     );
   }

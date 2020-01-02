@@ -31,40 +31,39 @@ export default class TrainDetail extends Component {
   }
 
   renderScheduleItems() {
-	if (this.state.train.scheduleItems != null){
-    return this.state.train.scheduleItems.map((s, index) => {
-      const { timetableId, reservationType, startDateTime, endDateTime} = s;	
-      return (
-        <tr key={timetableId}>
-          <td>{timetableId}</td>
-          <td>{reservationType}</td>
-          <td>{startDateTime}</td>
-	  <td>{endDateTime}</td>
-        </tr>
-      );
-    });
-	}
-	else{
-		return null;
-	}
+    if (this.state.train.scheduleItems != null){
+      return this.state.train.scheduleItems.map((scheduleItem) => {
+        const { timetableId, reservationType, startDateTime, endDateTime} = scheduleItem;	
+        return (
+          <tr key={timetableId}>
+            <td>{timetableId ? timetableId : '---'}</td>
+            <td>{reservationType}</td>
+            <td>{startDateTime}</td>
+            <td>{endDateTime}</td>
+          </tr>
+        );
+      });
+    } else {
+      return null;
+    }
   }
 
   render() {
     return (
       <div>
-        <h2>Schedule items from train: {this.props.match.params.id}</h2>
-	{!this.state.isLoading ? (
-        <table id='scheduleItem'>
-          <tbody>
-            <tr>
-	      <th>timetableId</th>
-              <th>reservationType</th>
-              <th>startDateTime</th>
-              <th>endDateTime</th>
-            </tr>
-            { this.renderScheduleItems() }
-          </tbody>
-        </table>
+        <h2>Schedule items for train: {this.props.match.params.id}</h2>
+	      {!this.state.isLoading ? (
+          <table id='scheduleItem'>
+            <tbody>
+              <tr>
+                <th>Timetable ID</th>
+                <th>Reservation type</th>
+                <th>Start datetime</th>
+                <th>End datetime</th>
+              </tr>
+              { this.renderScheduleItems() }
+            </tbody>
+          </table>
         ) : (
           <p>Loading...</p>
         )}

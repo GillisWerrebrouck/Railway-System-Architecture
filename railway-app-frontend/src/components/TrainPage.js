@@ -10,32 +10,32 @@ export default class TrainPage extends Component {
       isLoading: true,
       trains: [],
       changeStatusRequest:{
-      trainId: null,
-      status: "ACTIVE",
-          },
-          train: {
-      id: null,
-            status: "ACTIVE",
-      type: "IC",
-      totalCapacity: 0,
-      groupCapacity: 0,
-      technicaldetails: {
-              fuel: "ELECTRIC",
-              lastCheck: null,
-              defects: null,
-            },
-      scheduleItems: null
-          },
-          maintenanceRequest: {
-      trainId: null,
-      maintenanceMessage: null,
-      maintenanceDate: null,
-          },
-          accidentRequest: {
-      timetableId: null,
-      trainId: null,
-      accidentMessage: null,
-      emergencyServicesRequired: false,
+        trainId: null,
+        status: "ACTIVE",
+      },
+      train: {
+        id: null,
+        status: "ACTIVE",
+        type: "IC",
+        totalCapacity: 0,
+        groupCapacity: 0,
+        technicaldetails: {
+          fuel: "ELECTRIC",
+          lastCheck: null,
+          defects: {},
+        },
+        scheduleItems: null
+      },
+      maintenanceRequest: {
+        trainId: null,
+        maintenanceMessage: null,
+        maintenanceDate: null,
+      },
+      accidentRequest: {
+        timetableId: null,
+        trainId: null,
+        accidentMessage: "",
+        emergencyServicesRequired: true,
       }
     };
   }
@@ -53,15 +53,15 @@ export default class TrainPage extends Component {
 
     let train = {...this.state.train};
 
-    if(name === "fuel" || name === "lastCheck"){
-	train["technicaldetails"][name] = value;
-    } else{
-	train[name] = value;
+    if(["fuel", "lastCheck"].includes(name)){
+      train["technicaldetails"][name] = value;
+    } else {
+	    train[name] = value;
     }
     this.setState({ train });
   }
 
-statusFormChangeHandler = (event) => {
+  statusFormChangeHandler = (event) => {
     const name = event.target.name;
     const value = event.target.value;
 
@@ -71,7 +71,7 @@ statusFormChangeHandler = (event) => {
     this.setState({ changeStatusRequest });
   }
 
-maintenanceFormChangeHandler = (event) => {
+  maintenanceFormChangeHandler = (event) => {
     const name = event.target.name;
     const value = event.target.value;
 
@@ -84,16 +84,10 @@ maintenanceFormChangeHandler = (event) => {
   changeStatus = (event) => {
     event.preventDefault();
     endpoints.postStatus(this.state.train)
-      .then(result => { 
-        if(typeof result.data === "string") {
-          this.setState({ createErrorResponse: result.data }); 
-        } else {
-          window.location.reload();
-        }
-      });
+      .then(() => window.location.reload());
   }
 
-accidentFormChangeHandler = (event) => {
+  accidentFormChangeHandler = (event) => {
     const name = event.target.name;
     const value = event.target.value;
 
@@ -106,49 +100,25 @@ accidentFormChangeHandler = (event) => {
   changeStatus = (event) => {
     event.preventDefault();
     endpoints.postStatus(this.state.changeStatusRequest)
-      .then(result => { 
-        if(typeof result.data === "string") {
-          this.setState({ createErrorResponse: result.data }); 
-        } else {
-          window.location.reload();
-        }
-      });
+      .then(() => window.location.reload());
   }
 
-addTrain = (event) => {
+  addTrain = (event) => {
     event.preventDefault();
     endpoints.postNewTrain(this.state.train)
-      .then(result => { 
-        if(typeof result.data === "string") {
-          this.setState({ createErrorResponse: result.data });
-        } else {
-          window.location.reload();
-        }
-      });
+      .then(() => window.location.reload());
   }
 
-requestMaintenance = (event) => {
+  requestMaintenance = (event) => {
     event.preventDefault();
     endpoints.postNewMaintenanceRequest(this.state.maintenanceRequest)
-      .then(result => { 
-        if(typeof result.data === "string") {
-          this.setState({ createErrorResponse: result.data });
-        } else {
-          window.location.reload();
-        }
-      });
+      .then(() => window.location.reload());
   }
 
-notifyAccident = (event) => {
+  notifyAccident = (event) => {
     event.preventDefault();
     endpoints.postNewAccidentRequest(this.state.accidentRequest)
-      .then(result => { 
-        if(typeof result.data === "string") {
-          this.setState({ createErrorResponse: result.data }); 
-        } else {
-          window.location.reload();
-        }
-      });
+      .then(() => window.location.reload());
   }
 
   renderTrains() {
@@ -256,10 +226,10 @@ notifyAccident = (event) => {
 
           <label>Last check: </label>
           <input
-            type='text'
+            type='Date'
             name='lastCheck'
             onChange={this.trainFormChangeHandler}
-          /> <span>&nbsp;format: yyyy-mm-ddThh:mm:00.000</span>
+          />
 	        <br/>
 
           <input
@@ -291,7 +261,7 @@ notifyAccident = (event) => {
             type='text'
             name='maintenanceDate'
             onChange={this.maintenanceFormChangeHandler}
-          />
+          /> <span>&nbsp;format: yyyy-mm-dd</span>
 	        <br/>
 
           <input
@@ -300,7 +270,7 @@ notifyAccident = (event) => {
           />
         </form>
 
-	      <h3>Notify Accident</h3>
+	      <h3>Notify accident</h3>
           <form onSubmit={this.notifyAccident}>
           <label>Timetable ID: </label>
           <input

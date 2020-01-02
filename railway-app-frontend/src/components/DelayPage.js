@@ -13,7 +13,7 @@ export default class DelayPage extends Component {
         delayInMinutes: null,
         reasonForDelay: null,
       },
-      createErrorResponse: "",
+      delayErrorResponse: "",
     };
   }
 
@@ -29,13 +29,8 @@ export default class DelayPage extends Component {
   createDelay = (event) => {
     event.preventDefault();
     endpoints.postDelay(this.state.delay)
-      .then(result => { 
-        if(typeof result.data === "string") {
-          this.setState({ createErrorResponse: result.data });
-        } else {
-          window.location.reload();
-        }
-      });
+      .then(() => window.location.reload())
+      .catch((error) => { this.setState({ delayErrorResponse: error }); });
   }
 
   render() {
@@ -51,7 +46,7 @@ export default class DelayPage extends Component {
           />
           <br />
 
-	  <label>Route ID: </label>
+	        <label>Route ID: </label>
           <input
             type='number'
             name='routeId'
@@ -59,7 +54,7 @@ export default class DelayPage extends Component {
           />
           <br />
 
-	  <label>Start Station ID: </label>
+	        <label>Start Station ID: </label>
           <input
             type='number'
             name='startStationId'
@@ -67,7 +62,7 @@ export default class DelayPage extends Component {
           />
           <br />
 
-	  <label>Delay in minutes: </label>
+	        <label>Delay in minutes: </label>
           <input
             type='number'
             name='delayInMinutes'
@@ -89,7 +84,7 @@ export default class DelayPage extends Component {
           />
         </form>
 
-        <p>{this.state.createErrorResponse}</p>
+        <p>{this.state.delayErrorResponse}</p>
       </div>
     );
   }

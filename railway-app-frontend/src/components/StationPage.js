@@ -10,19 +10,18 @@ export default class StationPage extends Component {
       stations: [],
       station: {
         name: null,
-	address: {
-		street: null,
-		city: null,
-		province: null,
-		country: null,	
-	},
+        address: {
+          street: null,
+          city: null,
+          province: null,
+          country: null,	
+        },
         platforms: [],
       },
       platform: {
-	platformNumber: null,
-	reservedSlots: null,
-	station: null,
-	stationID: null,
+        stationId: null,
+        platformNumber: null,
+        reservedSlots: null,
       },
       addStationErrorResponse: "",
       addPlatformErrorResponse: "",
@@ -60,7 +59,7 @@ export default class StationPage extends Component {
     let station = {...this.state.station};
     
     if(['street','city','province','country'].includes(name)){
-	station['address'][name] = value;
+	    station['address'][name] = value;
     } else{
     	station[name] = value;
     }
@@ -70,13 +69,8 @@ export default class StationPage extends Component {
   addStation = (event) => {
     event.preventDefault();
     endpoints.postNewStation(this.state.station)
-      .then(result => { 
-        if(typeof result.data === "string") {
-          this.setState({ addStationErrorResponse: result.data });
-        } else {
-          window.location.reload();
-        }
-      });
+      .then(() => window.location.reload())
+      .catch((error) => { this.setState({ addStationErrorResponse: error }); });
   }
 
   addPlatformFormChangeHandler = (event) => {
@@ -93,13 +87,8 @@ export default class StationPage extends Component {
   addPlatform = (event) => {
     event.preventDefault();
     endpoints.postNewPlatform(this.state.platform)
-      .then(result => { 
-        if(typeof result.data === "string") {
-          this.setState({ addPlatformErrorResponse: result.data });
-        } else {
-          window.location.reload();
-        }
-      });
+      .then(() => window.location.reload())
+      .catch((error) => { this.setState({ addPlatformErrorResponse: error }); });
   }
 
   render() {
@@ -112,11 +101,11 @@ export default class StationPage extends Component {
           <tbody>
             <tr>
               <th>ID</th>
-              <th>name</th>
-              <th>street</th>
-              <th>city</th>
-              <th>province</th>
-              <th>country</th>
+              <th>Name</th>
+              <th>Street</th>
+              <th>City</th>
+              <th>Province</th>
+              <th>Country</th>
             </tr>
             { this.renderStation() }
           </tbody>
@@ -125,9 +114,9 @@ export default class StationPage extends Component {
           <p>Loading...</p>
         )}
 
-        <h3>add station</h3>
+        <h3>Add station</h3>
         <form onSubmit={this.addStation}>
-          <label>name: </label>
+          <label>Name: </label>
           <input
             type='text'
             name='name'
@@ -135,7 +124,7 @@ export default class StationPage extends Component {
           />
           <br />
 
-          <label>street: </label>
+          <label>Street: </label>
           <input
             type='text'
             name='street'
@@ -143,7 +132,7 @@ export default class StationPage extends Component {
           />
           <br />
 
-          <label>city: </label>
+          <label>City: </label>
           <input
             type='text'
             name='city'
@@ -151,7 +140,7 @@ export default class StationPage extends Component {
           />
           <br />
 
-          <label>province: </label>
+          <label>Province: </label>
           <input
             type='text'
             name='province'
@@ -159,7 +148,7 @@ export default class StationPage extends Component {
           />
           <br />
 
-          <label>country: </label>
+          <label>Country: </label>
           <input
             type='text'
             name='country'
@@ -172,20 +161,19 @@ export default class StationPage extends Component {
             value='CREATE'
           />
         </form>
-
         <p>{this.state.addStationErrorResponse}</p>
 
-	<h3>add platform to station</h3>
+	      <h3>Add platform to station</h3>
         <form onSubmit={this.addPlatform}>
-	  <label>station id: </label>
+          <label>Station id: </label>
           <input
             type='text'
-            name='stationID'
+            name='stationId'
             onChange={this.addPlatformFormChangeHandler}
           />
           <br />
 
-          <label>platform number: </label>
+          <label>Platform number: </label>
           <input
             type='number'
             name='platformNumber'
@@ -198,9 +186,7 @@ export default class StationPage extends Component {
             value='CREATE'
           />
         </form>
-
         <p>{this.state.addPlatformErrorResponse}</p>
-
       </div>
     );
   }

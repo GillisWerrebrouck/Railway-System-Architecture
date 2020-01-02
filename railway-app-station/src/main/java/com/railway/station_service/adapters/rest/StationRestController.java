@@ -97,27 +97,28 @@ public class StationRestController {
 			throw new BadRequestException("Could not create given station: " + e.getMessage());
 		}
 	}
-	
-	@PostMapping("/{id}")
+
+	@PostMapping("/{stationId}")
 	@ResponseStatus(HttpStatus.CREATED)
-	public Platform AddPlatformToStation (@RequestBody Platform p, @PathVariable UUID id) {
-		if (p.getPlatformNumber() == 0) {
-			throw new BadRequestException("Missing platformnumber property for platform");
+	public Platform AddPlatformToStation (@PathVariable UUID stationId, @RequestBody Platform platform) {
+		if (platform.getPlatformNumber() == 0) {
+			throw new BadRequestException("Missing platform number property for platform");
 		}
 		try {
-			Station s = stationRepository.getStationById(id);
-			s.getPlatforms().forEach((plat) -> {
-				if(plat.getPlatformNumber() == p.getPlatformNumber()) {
-					throw new BadRequestException("platformNumber already exists");
+			Station station = stationRepository.getStationById(stationId);
+			station.getPlatforms().forEach((p) -> {
+				if(platform.getPlatformNumber() == p.getPlatformNumber()) {
+					throw new BadRequestException("Platform number already exists");
 				}
 			});
-			p.setStation(s);
-			Platform pWithid = platformRepository.save(p);
-			s.addPlatform(pWithid);
-			stationRepository.save(s);
-			return pWithid;
+			platform.setStation(station);
+			
+			Platform platformWithid = platformRepository.save(platform);
+			station.addPlatform(platformWithid);
+			stationRepository.save(station);
+			return platformWithid;
 		} catch (Exception e) {
-			throw new BadRequestException("Could not create given platform: " + e.getMessage());
+			throw new BadRequestException("Could not create platform: " + e.getMessage());
 		}
 	}
 	
