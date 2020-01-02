@@ -56,7 +56,6 @@ export default class TicketPage extends Component {
                   newTicket.endStationId = this.state.endStations[0].stationId;
                   newTicket.startDateTime = timetable.startDateTime;
                   this.setState({newTicket});
-                  console.log(newTicket);
               });
           });
       }
@@ -98,7 +97,6 @@ export default class TicketPage extends Component {
       let newTicket = {...this.state.newTicket};
       newTicket.startDateTime = day;
       this.setState({ newTicket });
-      console.log(newTicket);
   };
 
   onValidationCodeChange = (event) => {
@@ -120,8 +118,7 @@ export default class TicketPage extends Component {
               this.setState({timetable: result.data});
 
               endpoints.getRoutes().then((result)=> {
-                  this.setState({routes: result.data, isLoading: false})
-                  console.log(this.state.routes);
+                  this.setState({routes: result.data, isLoading: false});
               })
           });
         });
@@ -324,7 +321,7 @@ export default class TicketPage extends Component {
           {this.state.validatedTicket != null && (
               <div>
               <h4 style={{color: this.state.validatedTicket.valid ? 'green' : 'red'}}>Ticket
-                  {this.state.validatedTicket.valid ? ( <span> valid</span>) : (<span> unValid</span>)}
+                  {this.state.validatedTicket.valid ? ( <span> valid</span>) : (<span> unvalid</span>)}
               </h4>
                   startStation: {this.state.validatedTicket.startStation}<br/>
                   endStation: {this.state.validatedTicket.endStation}<br/>

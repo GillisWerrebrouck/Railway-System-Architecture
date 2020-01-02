@@ -35,9 +35,7 @@ public class Ticket {
         this.amountOfSeats = amountOfSeats;
         this.validationCode = validationCode;
     }
-
-    private static Logger logger = LoggerFactory.getLogger(TicketValidationEventHandler.class);
-
+    
     public Long getId() {
         return id;
     }
