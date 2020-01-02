@@ -22,7 +22,8 @@ export default class StationPage extends Component {
 	platformNumber: null,
 	reservedSlots: null,
 	station: null,
-      }
+	stationID: null,
+      },
       addStationErrorResponse: "",
       addPlatformErrorResponse: "",
     };
@@ -84,12 +85,7 @@ export default class StationPage extends Component {
 
     let platform = {...this.state.platform};
 
-    if(name === "stationID"){
-	let station = this.state.stations.filter((s) => { return s.id == value});
-	platform["station"] = station;
-    } else{
-    	platform[name] = value;
-    }
+    platform[name] = value;
  
     this.setState({ platform });
   }
@@ -183,7 +179,7 @@ export default class StationPage extends Component {
         <form onSubmit={this.addPlatform}>
 	  <label>station id: </label>
           <input
-            type='number'
+            type='text'
             name='stationID'
             onChange={this.addPlatformFormChangeHandler}
           />

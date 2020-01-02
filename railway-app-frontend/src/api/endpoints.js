@@ -124,7 +124,7 @@ const endpoints = {
     },
     postNewPlatform: (platform) => {
         return new Promise((resolve, reject) => {
-            axios.post(URL + '/platform', platform, { headers: { 'Content-Type': 'application/json' } })
+            axios.post(URL + '/station/' + platform.stationID, platform, { headers: { 'Content-Type': 'application/json' } })
                 .then(result => { resolve(result); })
                 .catch(error => { reject(error); });
         });

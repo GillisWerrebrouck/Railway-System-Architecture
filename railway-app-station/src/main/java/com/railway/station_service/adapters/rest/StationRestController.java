@@ -22,6 +22,7 @@ import com.railway.station_service.domain.Platform;
 import com.railway.station_service.domain.ScheduleItemResponse;
 import com.railway.station_service.domain.Station;
 import com.railway.station_service.domain.exception.BadRequestException;
+import com.railway.station_service.persistence.PlatformRepository;
 import com.railway.station_service.persistence.ScheduleItemRepository;
 import com.railway.station_service.persistence.StationRepository;
 
@@ -30,12 +31,14 @@ import com.railway.station_service.persistence.StationRepository;
 public class StationRestController {
 	private final StationRepository stationRepository;
 	private final ScheduleItemRepository scheduleItemRepository;
+	private final PlatformRepository platformRepository;
 	private MessageGateway gateway;
 
 	@Autowired
-	public StationRestController(StationRepository stationRepository, ScheduleItemRepository scheduleItemRepository, MessageGateway gateway) {
+	public StationRestController(StationRepository stationRepository, ScheduleItemRepository scheduleItemRepository, PlatformRepository platformRepository, MessageGateway gateway) {
 		this.stationRepository = stationRepository;
 		this.scheduleItemRepository = scheduleItemRepository;
+		this.platformRepository = platformRepository;
 		this.gateway = gateway;
 	}
 
@@ -92,6 +95,29 @@ public class StationRestController {
 			return station;
 		} catch (Exception e) {
 			throw new BadRequestException("Could not create given station: " + e.getMessage());
+		}
+	}
+	
+	@PostMapping("/{id}")
+	@ResponseStatus(HttpStatus.CREATED)
+	public Platform AddPlatformToStation (@RequestBody Platform p, @PathVariable UUID id) {
+		if (p.getPlatformNumber() == 0) {
+			throw new BadRequestException("Missing platformnumber property for platform");
+		}
+		try {
+			Station s = stationRepository.getStationById(id);
+			s.getPlatforms().forEach((plat) -> {
+				if(plat.getPlatformNumber() == p.getPlatformNumber()) {
+					throw new BadRequestException("platformNumber already exists");
+				}
+			});
+			p.setStation(s);
+			Platform pWithid = platformRepository.save(p);
+			s.addPlatform(pWithid);
+			stationRepository.save(s);
+			return pWithid;
+		} catch (Exception e) {
+			throw new BadRequestException("Could not create given platform: " + e.getMessage());
 		}
 	}
 	
