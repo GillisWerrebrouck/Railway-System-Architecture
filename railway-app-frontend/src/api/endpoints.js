@@ -122,7 +122,13 @@ const endpoints = {
                 .catch(error => { reject(error); });
         });
     },
-
+    postNewPlatform: (platform) => {
+        return new Promise((resolve, reject) => {
+            axios.post(URL + '/platform', platform, { headers: { 'Content-Type': 'application/json' } })
+                .then(result => { resolve(result); })
+                .catch(error => { reject(error); });
+        });
+    },
 }
 
 export default endpoints;

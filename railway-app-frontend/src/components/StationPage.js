@@ -16,9 +16,15 @@ export default class StationPage extends Component {
 		province: null,
 		country: null,	
 	},
-        platforms: null,
+        platforms: [],
       },
+      platform: {
+	platformNumber: null,
+	reservedSlots: null,
+	station: null,
+      }
       addStationErrorResponse: "",
+      addPlatformErrorResponse: "",
     };
   }
 
@@ -66,6 +72,34 @@ export default class StationPage extends Component {
       .then(result => { 
         if(typeof result.data === "string") {
           this.setState({ addStationErrorResponse: result.data });
+        } else {
+          window.location.reload();
+        }
+      });
+  }
+
+  addPlatformFormChangeHandler = (event) => {
+    const name = event.target.name;
+    const value = event.target.value;
+
+    let platform = {...this.state.platform};
+
+    if(name === "stationID"){
+	let station = this.state.stations.filter((s) => { return s.id == value});
+	platform["station"] = station;
+    } else{
+    	platform[name] = value;
+    }
+ 
+    this.setState({ platform });
+  }
+
+  addPlatform = (event) => {
+    event.preventDefault();
+    endpoints.postNewPlatform(this.state.platform)
+      .then(result => { 
+        if(typeof result.data === "string") {
+          this.setState({ addPlatformErrorResponse: result.data });
         } else {
           window.location.reload();
         }
@@ -144,6 +178,33 @@ export default class StationPage extends Component {
         </form>
 
         <p>{this.state.addStationErrorResponse}</p>
+
+	<h3>add platform to station</h3>
+        <form onSubmit={this.addPlatform}>
+	  <label>station id: </label>
+          <input
+            type='number'
+            name='stationID'
+            onChange={this.addPlatformFormChangeHandler}
+          />
+          <br />
+
+          <label>platform number: </label>
+          <input
+            type='number'
+            name='platformNumber'
+            onChange={this.addPlatformFormChangeHandler}
+          />
+          <br />
+
+          <input
+            type='submit'
+            value='CREATE'
+          />
+        </form>
+
+        <p>{this.state.addPlatformErrorResponse}</p>
+
       </div>
     );
   }
