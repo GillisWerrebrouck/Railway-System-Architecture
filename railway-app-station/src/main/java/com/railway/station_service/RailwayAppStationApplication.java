@@ -9,10 +9,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.context.annotation.Bean;
-
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
-
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -38,7 +36,7 @@ public class RailwayAppStationApplication {
 	
 	@Bean
 	JedisConnectionFactory jedisConnectionFactory() {
-	    RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration("localhost", 6379);
+	    RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration("delay-request-db", 6379);
 	    return new JedisConnectionFactory(redisStandaloneConfiguration);
 	}
 	 

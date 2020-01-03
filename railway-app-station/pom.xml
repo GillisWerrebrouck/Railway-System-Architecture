@@ -75,8 +75,13 @@
 		    <artifactId>jedis</artifactId>
 		    <type>jar</type>
 		</dependency>
-	</dependencies>
-
+		<dependency>
+			<groupId>redis.clients</groupId>
+			<artifactId>jedis</artifactId>
+			<type>jar</type>
+		</dependency>
+  	</dependencies>
+  
 	<build>
 		<plugins>
 			<plugin>
