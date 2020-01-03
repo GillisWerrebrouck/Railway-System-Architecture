@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -14,6 +15,7 @@ import com.railway.maintenance_service.adapters.messaging.InfrastructureDamageRe
 import com.railway.maintenance_service.adapters.messaging.ChangeStatusRequest;
 import com.railway.maintenance_service.domain.MaintenanceService;
 import com.railway.maintenance_service.domain.ScheduleItem;
+import com.railway.maintenance_service.domain.Status;
 import com.railway.maintenance_service.persistence.MaintenanceRepository;
 
 @RestController
@@ -36,6 +38,14 @@ public class MaintenanceController {
 	@GetMapping("/{id}")
 	public ScheduleItem getMaintenanceById(@PathVariable("id") Long id) {
 		return maintenanceRepository.findById(id).orElse(null);
+	}
+	
+	@PutMapping("/{id}/{status}")
+	public ScheduleItem updateMaintenanceStatus(@PathVariable("id") Long id, @PathVariable Status status) {
+		ScheduleItem scheduleItem = maintenanceRepository.findById(id).orElse(null);
+		scheduleItem.setStatus(status);
+		maintenanceRepository.save(scheduleItem);
+		return scheduleItem;
 	}
 	
 	@PostMapping("/infrastructure_damage")

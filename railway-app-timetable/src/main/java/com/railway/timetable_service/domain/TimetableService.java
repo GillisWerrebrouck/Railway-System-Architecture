@@ -192,6 +192,10 @@ public class TimetableService {
 			throw new NullPointerException();
 		}
 	}
+	
+	public void discardAll(TimetableItem timetableItem) {
+		createTimetableItemSaga.discardAll(timetableItem);
+	}
 
 	public void reserveGroupSeats(GroupSeatsRequest groupSeatsRequest) throws NotEnoughGroupSeatsException {
 		TimetableItem timetableItem = timetableItemRepository.findById(groupSeatsRequest.getTimeTableId()).orElse(null);

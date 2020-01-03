@@ -10,7 +10,7 @@ import com.railway.route_management_service.helpers.Constants;
 @Repository
 public interface RouteConnectionRepository extends Neo4jRepository<RouteConnection, Long> {
 	@Query("MATCH (r:Route),(s:Station) WHERE ID(r)={routeId} AND ID(s)={stationId}\r\n" + 
-			"CREATE p=(r)-[u:" + Constants.ROUTE_STATION_RELATIONSHIP + " {connectionId: {connectionId}}]->(s)\r\n" + 
+			"CREATE p=(r)-[u:" + Constants.ROUTE_STATION_RELATIONSHIP + " {connectionId: {connectionId}, isStartOfRoute: {isStartOfRoute}}]->(s)\r\n" + 
 			"RETURN COUNT(u)")
-	int createRouteStationRelationship(Long routeId, Long stationId, Long connectionId);
+	int createRouteStationRelationship(Long routeId, Long stationId, Long connectionId, boolean isStartOfRoute);
 }

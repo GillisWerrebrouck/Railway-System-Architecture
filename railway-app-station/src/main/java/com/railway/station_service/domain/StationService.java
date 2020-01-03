@@ -3,9 +3,7 @@ package com.railway.station_service.domain;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import org.slf4j.Logger;
@@ -22,6 +20,7 @@ import com.railway.station_service.adapters.messaging.RoutePart;
 import com.railway.station_service.adapters.messaging.RouteRequest;
 import com.railway.station_service.adapters.messaging.StationOnRoute;
 import com.railway.station_service.adapters.messaging.UpdateDelayRequest;
+import com.railway.station_service.persistence.DelayRequestRepository;
 import com.railway.station_service.persistence.PlatformRepository;
 import com.railway.station_service.persistence.ScheduleItemRepository;
 import com.railway.station_service.persistence.StationRepository;
@@ -31,18 +30,18 @@ public class StationService {
 	StationRepository stationRepository;
 	PlatformRepository platformRepository;
 	ScheduleItemRepository scheduleItemRepository;
-	private Map<UUID, DelayRequest> requests;
+	DelayRequestRepository delayRequestRepository;
 	private final MessageGateway gateway;
 	private static Logger logger = LoggerFactory.getLogger(StationService.class);
 	int requestDelay = 0;
 	
 	@Autowired
-	public StationService(StationRepository stationRepository, PlatformRepository platformRepository, ScheduleItemRepository scheduleItemRepository, MessageGateway gateway) {
+	public StationService(StationRepository stationRepository, PlatformRepository platformRepository, ScheduleItemRepository scheduleItemRepository, DelayRequestRepository delayRequestRepository, MessageGateway gateway) {
 		this.stationRepository = stationRepository;
 		this.platformRepository = platformRepository;
 		this.scheduleItemRepository = scheduleItemRepository;
+		this.delayRequestRepository = delayRequestRepository;
 		this.gateway = gateway;
-		this.requests =  new HashMap<>();
 	}
 	
 	public boolean reserveStation(UUID stationId, Long timetableId, LocalDateTime arrivalDateTime, LocalDateTime departureDateTime) {
@@ -83,16 +82,21 @@ public class StationService {
 	
 	public void processDelay(DelayRequest delayRequest) {
 		RouteRequest request = new RouteRequest(delayRequest.getTimetableId(), delayRequest.getRouteId());
-		//to later check if received route fetched event is for this delayRequest
+		// to later check if received route fetched event is for this delayRequest
 		delayRequest.setRouteRequestId(request.getRequestId());
-		requests.put(delayRequest.getRouteRequestId(), delayRequest);
+		
+		// save the delay request in the key-value store
+		delayRequestRepository.save(delayRequest);
+		
 		gateway.getRoute(request);
 	}
 
-	//fetching routes to get all the stations on that route that will be affected by the delay
+	// fetching routes to get all the stations on that route that will be affected by the delay
 	public void routeFetched(RouteFetchedResponse routeFetchedResponse) {
-		//get delayrequest corresponding to this route fetch call
-		DelayRequest dr = requests.containsKey(routeFetchedResponse.getRequestId()) ? requests.get(routeFetchedResponse.getRequestId()) : null;
+		// get the delay request in the key-value store and delete it
+		DelayRequest dr = delayRequestRepository.findByRouteRequestId(routeFetchedResponse.getRequestId());
+		delayRequestRepository.deleteById(routeFetchedResponse.getRequestId());
+		
 		if(dr != null) {
 			//find first station of route that will be affected by delay 
 			//if no start station is present in delay request then all stations on the given route are notified of the delay

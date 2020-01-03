@@ -30,6 +30,11 @@ public class RouteCommandHandler {
 		logger.info("[Route Command Handler] get route command received");
 		Collection<Connection> routeConnections = routeService.getRouteConnections(request.getRouteId());
 		Route route = routeService.getRoute(request.getRouteId());
+		
+		if (!routeService.areConnectionsActive(route.getRouteConnections())) {
+			routeConnections.clear();
+		}
+		
 		RouteResponse response = new RouteResponse(request.getRouteId(), request.getTimetableId(), request.getRequestId(), routeConnections, route);
 		logger.info("[Route Command Handler] route fetched");
 		return response;
@@ -43,9 +48,9 @@ public class RouteCommandHandler {
 		if(routeDetails != null && routeDetails.getDistance() > 0){
 			logger.info("[Route Command Handler] route details fetched");
 			return new RouteDetailResponse(routeDetails.getArrivalStation(), routeDetails.getDepartureStation(),
-					routeDetails.getDistance(), request.getTicketId(), request.getRouteDetailRequestId());
+					routeDetails.getDistance(), request.getTicketIds(), request.getRouteDetailRequestId());
 		}else{
-			return new RouteDetailResponse(null, null, 0, request.getTicketId(), request.getRouteDetailRequestId());
+			return new RouteDetailResponse(null, null, 0, request.getTicketIds(), request.getRouteDetailRequestId());
 		}
 
 	}

@@ -4,16 +4,20 @@ import java.util.UUID;
 
 public class RouteDetailRequest {
 
-    private Long ticketId;
+    private Long[] ticketIds;
     private UUID startStationId;
     private UUID endStationId;
     private UUID routeDetailRequestId;
 
-    public RouteDetailRequest(Long ticketId, UUID startStationId, UUID endStationId) {
-        this.ticketId = ticketId;
+    public RouteDetailRequest(Long[] ticketIds, UUID startStationId, UUID endStationId) {
+        this.ticketIds = ticketIds;
         this.startStationId = startStationId;
         this.endStationId = endStationId;
         this.routeDetailRequestId = UUID.randomUUID();
+    }
+
+    public RouteDetailRequest(Long ticketId, UUID startStationId, UUID endStationId) {
+        this(new Long[]{ticketId}, startStationId, endStationId);
     }
 
     public UUID getStartStationId() {
@@ -32,12 +36,12 @@ public class RouteDetailRequest {
         this.endStationId = endStationId;
     }
 
-    public Long getTicketId() {
-        return ticketId;
+    public Long[] getTicketIds() {
+        return ticketIds;
     }
 
-    public void setTicketId(Long ticketId) {
-        this.ticketId = ticketId;
+    public void setTicketIds(Long[] ticketIds) {
+        this.ticketIds = ticketIds;
     }
 
     public UUID getRouteDetailRequestId() {

@@ -40,6 +40,17 @@ public class RouteService {
 	public Route getRoute(Long routeId) {
 		return routeRepository.findById(routeId).orElse(null);
 	}
+	
+	public boolean areConnectionsActive(Collection<RouteConnection> routeConnections) {
+		for(RouteConnection rc : routeConnections) {
+			if(rc.getConnectionId() == null) continue;
+			Connection con = connectionRepository.findById(rc.getConnectionId()).orElse(null);
+			if(con == null || !con.isActive()) {
+				return false;
+			}
+		}
+		return true;
+	}
 
 	public RouteDetails getRouteDetails(UUID stationX, UUID stationY){
 		return routeRepository.getRouteDetails(stationX, stationY);
