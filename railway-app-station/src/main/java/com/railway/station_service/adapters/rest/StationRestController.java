@@ -1,6 +1,5 @@
 package com.railway.station_service.adapters.rest;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
@@ -143,6 +142,30 @@ public class StationRestController {
 			return station;
 		} catch (Exception e) {
 			throw new BadRequestException("Could not create given station: " + e.getMessage());
+		}
+	}
+
+	@PostMapping("/{stationId}")
+	@ResponseStatus(HttpStatus.CREATED)
+	public Platform AddPlatformToStation (@PathVariable UUID stationId, @RequestBody Platform platform) {
+		if (platform.getPlatformNumber() == 0) {
+			throw new BadRequestException("Missing platform number property for platform");
+		}
+		try {
+			Station station = stationRepository.getStationById(stationId);
+			station.getPlatforms().forEach((p) -> {
+				if(platform.getPlatformNumber() == p.getPlatformNumber()) {
+					throw new BadRequestException("Platform number already exists");
+				}
+			});
+			platform.setStation(station);
+			
+			Platform platformWithid = platformRepository.save(platform);
+			station.addPlatform(platformWithid);
+			stationRepository.save(station);
+			return platformWithid;
+		} catch (Exception e) {
+			throw new BadRequestException("Could not create platform: " + e.getMessage());
 		}
 	}
 	

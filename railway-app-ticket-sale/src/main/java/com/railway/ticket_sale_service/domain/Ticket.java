@@ -49,6 +49,11 @@ public class Ticket {
         this.ticketCreationId = ticketCreationId;
     }
 
+    public Ticket(LocalDateTime validOn, int amountOfSeats, UUID ticketCreationId){
+        this(null, null, validOn, null, 0, amountOfSeats);
+        this.ticketCreationId = ticketCreationId;
+    }
+
     public Long getId() {
         return id;
     }

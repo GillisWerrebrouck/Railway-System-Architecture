@@ -54,7 +54,7 @@ public class TicketRestController implements BookTicketListener {
 
         if(!isValidTicketRequest(ticketRequest)){
             deferredResult.setErrorResult("Request must contain the following fields in the body; \"startStationId\", \"endStationId\"" +
-                    ", \"timeTableId\", \"amountOfSeats\" and \"ticketType\"");
+                    ",\"amountOfSeats\",  \"ticketType\", \"startDateTime\" and \"routeId\" or \"timetableId\" for group.");
         }
 
         deferredResult.onTimeout(() -> {
@@ -67,7 +67,10 @@ public class TicketRestController implements BookTicketListener {
     }
 
     private boolean isValidTicketRequest(TicketRequest ticketRequest){
-        return ticketRequest.getStartStationId() != null && ticketRequest.getStartDateTime() != null && ticketRequest.getEndStationId() != null && ticketRequest.getTimetableId() != null;
+        return ticketRequest.getStartStationId() != null
+                && ticketRequest.getEndStationId() != null
+                && ticketRequest.getStartDateTime() != null
+                && (ticketRequest.getTicketType() == TicketType.SINGLE || ticketRequest.getTimetableId() != null);
     }
 
     private void performResponse(List<Ticket> tickets){

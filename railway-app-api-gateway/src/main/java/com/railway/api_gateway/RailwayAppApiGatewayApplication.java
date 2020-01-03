@@ -27,6 +27,8 @@ public class RailwayAppApiGatewayApplication {
 				.route(r -> r.host("*").and().path("/staff/**").uri("http://staff-service:2006"))
 				//station service
 				.route(r -> r.host("*").and().path("/station/**").uri("http://station-service:2002"))
+				//station service
+				.route(r -> r.host("*").and().path("/platform/**").uri("http://station-service:2002"))
 				//ticket sale service
 				.route(r -> r.host("*").and().path("/ticket/**").uri("http://ticket-sale-service:2007"))
 				//ticket validation service

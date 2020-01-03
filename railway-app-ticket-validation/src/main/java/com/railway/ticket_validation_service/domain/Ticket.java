@@ -1,8 +1,13 @@
 package com.railway.ticket_validation_service.domain;
 
+import com.railway.ticket_validation_service.adapters.messaging.TicketValidationEventHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.text.MessageFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -14,6 +19,7 @@ public class Ticket {
     private String endStation;
     private LocalDateTime validOn;
     private int amountOfSeats;
+    @org.hibernate.annotations.Type(type="org.hibernate.type.UUIDCharType")
     private UUID validationCode;
     private boolean isUsed;
     private boolean isValid;
@@ -29,7 +35,7 @@ public class Ticket {
         this.amountOfSeats = amountOfSeats;
         this.validationCode = validationCode;
     }
-
+    
     public Long getId() {
         return id;
     }
@@ -82,18 +88,14 @@ public class Ticket {
         return isUsed;
     }
 
-    public void setUsed(boolean used) {
-        isUsed = used;
-    }
+    public boolean isValid() { return isValid; }
 
-    // check if the due date of the ticket hasn't passed and that the ticket hasn't been used before
-    public boolean isValid() {	
-        return !isUsed && validOn.compareTo(LocalDateTime.now()) <= 0;
-    }
-
-    public void validate(){	
-        if(isValid) {
+    public void validate() {
+        if(!isUsed && LocalDate.now().compareTo(LocalDate.from(validOn)) == 0) {
             isUsed = true;
+            isValid = true;
+        }else if(isValid == true && isUsed == true){
+            isValid = false;
         }
     }
 
