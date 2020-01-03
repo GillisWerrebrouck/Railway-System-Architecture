@@ -49,8 +49,10 @@ public class TicketService {
                 }
         }else{
             List<Ticket> singleTickets = new ArrayList<>();
+            logger.info("amountofseats: " + ticketRequest.getAmountOfSeats());
+            logger.info("startdatetime: " + ticketRequest.getStartDateTime());
             for(int i = 0; i < ticketRequest.getAmountOfSeats(); i++){
-                singleTickets.add(new Ticket(ticketRequest.getStartDateTime(), ticketRequest.getTimetableId(), 1, ticketRequest.getTicketCreationId()));
+                singleTickets.add(new Ticket(ticketRequest.getStartDateTime(), 1, ticketRequest.getTicketCreationId()));
             }
             this.ticketRepository.saveAll(singleTickets);
             this.bookTicketSaga.startBookTicketSaga(singleTickets, UUID.fromString(ticketRequest.getEndStationId()),

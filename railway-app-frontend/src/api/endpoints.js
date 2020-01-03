@@ -160,12 +160,33 @@ const endpoints = {
                 .catch(error => { reject(error); });
         });
     },
+    postNewTicket: (ticket) => {
+        return new Promise((resolve, reject) => {
+            axios.post(URL + '/ticket', ticket, { headers: { 'Content-Type': 'application/json' } })
+                .then(result => { resolve(result); })
+                .catch(error => { reject(error); });
+        })
+    },
+    validateTicket: (validationCode) => {
+        return new Promise((resolve, reject) => {
+            axios.get(URL + `/ticket-validation/validate/${validationCode}`, { responseType: 'json' })
+                .then(result => { resolve(result); })
+                .catch(error => { reject(error); });
+        });
+    },
     putChangeConnectionState: (connection) => {
         return new Promise((resolve, reject) => {
             axios.put(URL + '/network/connection', connection, { headers: { 'Content-Type': 'application/json' } })
                 .then(result => { resolve(result); })
                 .catch(error => { reject(error); });
         });
+    },
+    getTickets: () => {
+        return new Promise((resolve, reject) => {
+            axios.get(URL + '/ticket', { responseType: 'json' })
+                .then(result => { resolve(result); })
+                .catch(error => { reject(error); })
+        })
     },
     postDelay: (delay) => {
         return new Promise((resolve, reject) => {
