@@ -65,9 +65,17 @@
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<scope>runtime</scope>
+		<dependency>
+      <groupId>org.springframework.data</groupId>
+      <artifactId>spring-data-redis</artifactId>
 		</dependency>
-	</dependencies>
-
+		<dependency>
+      <groupId>redis.clients</groupId>
+      <artifactId>jedis</artifactId>
+      <type>jar</type>
+		</dependency>
+  </dependencies>
+  
 	<build>
 		<plugins>
 			<plugin>
