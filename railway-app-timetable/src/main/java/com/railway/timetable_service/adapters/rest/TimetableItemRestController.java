@@ -145,12 +145,12 @@ public class TimetableItemRestController implements CreateTimetableItemListener 
 			timetableRequest.getRequestedTrainType(), 
 			timetableRequest.getAmountOfTrainConductors()
 		);
-		timetableItemRepository.save(timetableItem);
-		
+    
 		deferredResult.onTimeout(() -> {
 			timetableItem.setStaffIds(new ArrayList<>());
 			timetableItemRepository.save(timetableItem);
-			timetableItemRepository.delete(timetableItem);
+			this.timetableService.discardAll(timetableItem);
+      
 			deferredResult.setErrorResult("Request timeout occurred");
 		});
 		
@@ -158,9 +158,13 @@ public class TimetableItemRestController implements CreateTimetableItemListener 
 			timetableItem.setStaffIds(new ArrayList<>());
 			timetableItemRepository.save(timetableItem);
 			timetableItemRepository.delete(timetableItem);
+      
 			deferredResult.setErrorResult("Request must contain the following fields in the body; \"routeId\", \"startDateTime\", \"requestedTrainType\" and \"amountOfTrainConductors\"");
 		} else {
+			timetableItemRepository.save(timetableItem);
+      
 			this.deferredResults.put(timetableItem.getId(), deferredResult);
+      
 			this.timetableService.createTimetableItem(timetableItem, timetableRequest);
 		}
 
