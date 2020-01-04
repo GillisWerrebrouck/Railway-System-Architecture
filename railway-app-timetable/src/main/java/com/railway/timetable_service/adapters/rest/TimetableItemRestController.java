@@ -142,7 +142,7 @@ public class TimetableItemRestController implements CreateTimetableItemListener 
 	private DeferredResult<TimetableItem> createTimetableItem(@RequestBody TimetableRequest timetableRequest) {
 		logger.info("[Timetable Item Rest Controller] create timetable item");
 		
-		DeferredResult<TimetableItem> deferredResult = new DeferredResult<>(10000l);
+		DeferredResult<TimetableItem> deferredResult = new DeferredResult<>(12000l);
 		
 		TimetableItem timetableItem = new TimetableItem(
 			timetableRequest.getRouteId(), 
