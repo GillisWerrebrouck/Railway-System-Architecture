@@ -266,15 +266,4 @@ public class CreateTimetableItemSaga {
 		logger.info("[Create Timetable Item Saga] successfully created a timetable item");
 		this.listeners.forEach(l -> l.onCreateTimetableItemResult(timetableItem));
 	}
-	
-	public void discardAll(TimetableItem timetableItem) {
-		discardStationReservations(timetableItem.getId());
-		discardTrainReservation(timetableItem.getId());
-		discardStaffReservations(timetableItem.getTrainOperatorRequestId());
-		discardStaffReservations(timetableItem.getTrainConductorRequestId());
-		
-//		timetableItem.setStaffIds(new ArrayList<>());
-//		timetableItemRepository.save(timetableItem);
-//		timetableItemRepository.delete(timetableItem);
-	}
 }

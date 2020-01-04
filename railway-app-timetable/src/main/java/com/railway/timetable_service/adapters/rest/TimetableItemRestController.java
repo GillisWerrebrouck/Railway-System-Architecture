@@ -151,9 +151,7 @@ public class TimetableItemRestController implements CreateTimetableItemListener 
 			timetableRequest.getAmountOfTrainConductors()
 		);
     
-		deferredResult.onTimeout(() -> {
-			this.timetableService.discardAll(timetableItem);
-      
+		deferredResult.onTimeout(() -> {      
 			deferredResult.setErrorResult("Request timeout occurred");
 		});
 		
