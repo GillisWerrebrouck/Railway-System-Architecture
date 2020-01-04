@@ -152,10 +152,16 @@ services:
       - kafka-container
       - zookeeper-container
       - timetable-db
+      - route-service
+      - station-service
+      - train-service
     depends_on:
       - kafka-container
       - zookeeper-container
       - timetable-db
+      - route-service
+      - station-service
+      - train-service
   train-service:
     build: ./railway-app-train
     volumes: 

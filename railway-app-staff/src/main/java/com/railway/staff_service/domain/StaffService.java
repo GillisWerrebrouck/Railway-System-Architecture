@@ -83,7 +83,7 @@ public class StaffService {
 			Iterator<ScheduleItem> schedule = staffMember.getScheduleItems().iterator();
 			while(schedule.hasNext()) {
 				ScheduleItem scheduleItem = schedule.next();
-				if(scheduleItem.getRequestId().compareTo(requestId) == 0) {
+				if(scheduleItem != null && scheduleItem.getRequestId() != null && requestId != null && scheduleItem.getRequestId().compareTo(requestId) == 0) {
 					schedule.remove();
 					staffMembersRepository.save(staffMember);
 				}

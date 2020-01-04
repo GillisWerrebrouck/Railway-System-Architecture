@@ -1,6 +1,7 @@
 package com.railway.timetable_service.domain;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -271,6 +272,9 @@ public class CreateTimetableItemSaga {
 		discardTrainReservation(timetableItem.getId());
 		discardStaffReservations(timetableItem.getTrainOperatorRequestId());
 		discardStaffReservations(timetableItem.getTrainConductorRequestId());
-		timetableItemRepository.delete(timetableItem);
+		
+//		timetableItem.setStaffIds(new ArrayList<>());
+//		timetableItemRepository.save(timetableItem);
+//		timetableItemRepository.delete(timetableItem);
 	}
 }
