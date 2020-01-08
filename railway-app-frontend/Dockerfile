@@ -3,7 +3,9 @@ FROM node:12.2.0-alpine AS build
 
 WORKDIR /app
 
-RUN npm install --silent
+COPY package*.json ./
+
+RUN npm install
 
 COPY . .
 
