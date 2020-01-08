@@ -18,7 +18,7 @@ public class StationEventHandler {
 		this.stationService = stationService;
 	}
 	
-	@StreamListener(Channels.ROUTE_FETCHED)
+	@StreamListener(Channels.ROUTE_FETCHED_D)
 	public void processFetchedRoute(RouteFetchedResponse response) {
 		if(response.getRouteConnections().size() != 0) {
 			logger.info("[Station Event Handler] successfully fetched route");
