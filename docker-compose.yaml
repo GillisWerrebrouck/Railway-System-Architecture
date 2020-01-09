@@ -60,8 +60,10 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=timetabledatabase
       - MYSQL_DATABASE=Timetable
+
   delay-service:
     build: ./railway-app-delay
+    image: gilliswerrebrouck/railway-app-delay-service
     volumes: 
       - ./railway-app-delay/target:/app
     links:
@@ -72,6 +74,7 @@ services:
       - zookeeper-container
   maintenance-service:
     build: ./railway-app-maintenance
+    image: gilliswerrebrouck/railway-app-maintenance-service
     volumes: 
       - ./railway-app-maintenance/target:/app
     links:
@@ -84,6 +87,7 @@ services:
       - maintenance-db
   route-service:
     build: ./railway-app-route-management
+    image: gilliswerrebrouck/railway-app-route-management-service
     volumes: 
       - ./railway-app-route-management/target:/app
     links:
@@ -96,6 +100,7 @@ services:
       - route-db
   staff-service:
     build: ./railway-app-staff
+    image: gilliswerrebrouck/railway-app-staff-service
     volumes: 
       - ./railway-app-staff/target:/app
     links:
@@ -108,6 +113,7 @@ services:
       - staff-db
   station-service:
     build: ./railway-app-station
+    image: gilliswerrebrouck/railway-app-station-service
     volumes: 
       - ./railway-app-station/target:/app
     links:
@@ -122,6 +128,7 @@ services:
       - delay-request-db
   ticket-sale-service:
     build: ./railway-app-ticket-sale
+    image: gilliswerrebrouck/railway-app-ticket-sale-service
     volumes: 
       - ./railway-app-ticket-sale/target:/app
     links:
@@ -134,6 +141,7 @@ services:
       - ticket-sale-db
   ticket-validation-service:
     build: ./railway-app-ticket-validation
+    image: gilliswerrebrouck/railway-app-ticket-validation-service
     volumes: 
       - ./railway-app-ticket-validation/target:/app
     links:
@@ -146,6 +154,7 @@ services:
       - ticket-validation-db
   timetable-service:
     build: ./railway-app-timetable
+    image: gilliswerrebrouck/railway-app-timetable-service
     volumes: 
       - ./railway-app-timetable/target:/app
     links:
@@ -164,6 +173,7 @@ services:
       - train-service
   train-service:
     build: ./railway-app-train
+    image: gilliswerrebrouck/railway-app-train-service
     volumes: 
       - ./railway-app-train/target:/app
     links:
@@ -176,6 +186,7 @@ services:
       - train-db
   apigateway:
     build: ./railway-app-api-gateway
+    image: gilliswerrebrouck/railway-app-api-gateway-service
     volumes:
       - ./railway-app-api-gateway/target:/app
     links:
@@ -207,6 +218,7 @@ services:
 
   frontend:
     build: ./railway-app-frontend
+    image: gilliswerrebrouck/railway-app-frontend
     volumes:
       - ./railway-app-frontend/target:/app
     links:
