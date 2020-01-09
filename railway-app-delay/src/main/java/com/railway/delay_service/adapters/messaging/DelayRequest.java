@@ -6,12 +6,12 @@ public class DelayRequest {
 
 	private Long timetableId;
 	private Long routeId; 
-	private Long startStationId;
+	private UUID startStationId;
 	private int delayInMinutes;
 	private String reasonForDelay;
 	private UUID routeRequestId;
 
-	public DelayRequest(Long timetableId, Long routeId, Long startStationId, int delayInMinutes, String reasonForDelay) {
+	public DelayRequest(Long timetableId, Long routeId, UUID startStationId, int delayInMinutes, String reasonForDelay) {
 		this.timetableId = timetableId;
 		this.routeId = routeId;
 		this.startStationId = startStationId;
@@ -39,12 +39,12 @@ public class DelayRequest {
 	}
 
 
-	public Long getStartStationId() {
+	public UUID getStartStationId() {
 		return startStationId;
 	}
 
 
-	public void setStartStationId(Long startStationId) {
+	public void setStartStationId(UUID startStationId) {
 		this.startStationId = startStationId;
 	}
 

@@ -22,7 +22,7 @@ public class StaffCommandHandler {
 	@StreamListener(Channels.RESERVE_STAFF)
 	@SendTo(Channels.STAFF_RESERVED)
 	public StaffResponse reserveStaff(StaffRequest request) {
-		logger.info("[Staff Command Handler] reserve staff command received");
+		logger.info("[Staff Command Handler] reserve staff (timetable) command received");
 		
 		StaffResponse response = staffService.reserveStaff(request.getRequestId(), request.getAmount(), request.getStaffMemberType(), request.getStartDate(), request.getEndDate());
 		return response;
@@ -31,7 +31,7 @@ public class StaffCommandHandler {
 	@StreamListener(Channels.RESERVE_STAFF_M)
 	@SendTo(Channels.STAFF_RESERVED_M)
 	public StaffResponse reserveStaffMaintenance(StaffRequest request) {
-		logger.info("[Staff Command Handler] reserve staff command received");
+		logger.info("[Staff Command Handler] reserve staff (maintenance) command received");
 		
 		StaffResponse response = staffService.reserveStaff(request.getRequestId(), request.getAmount(), request.getStaffMemberType(), request.getStartDate(), request.getEndDate());
 		return response;

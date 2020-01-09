@@ -9,5 +9,5 @@ import com.railway.station_service.adapters.messaging.DelayRequest;
 
 @Repository
 public interface DelayRequestRepository extends CrudRepository<DelayRequest, UUID> {
-	DelayRequest findByRouteRequestId(UUID routeRequestId);
+
 }
