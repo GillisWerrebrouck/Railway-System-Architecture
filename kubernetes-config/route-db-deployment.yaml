@@ -1,0 +1,33 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f ../docker-compose.yaml --volumes hostPath
+    kompose.version: 1.20.0 (f3d54d784)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: route-db
+  name: route-db
+spec:
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f ../docker-compose.yaml --volumes hostPath
+        kompose.version: 1.20.0 (f3d54d784)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: route-db
+    spec:
+      containers:
+      - env:
+        - name: NEO4J_AUTH
+          value: neo4j/route
+        image: neo4j:3.5.6
+        name: route-db
+        ports:
+        - containerPort: 7687
+        resources: {}
+      restartPolicy: Always
+status: {}

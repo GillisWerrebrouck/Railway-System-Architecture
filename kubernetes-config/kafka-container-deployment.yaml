@@ -1,0 +1,37 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f ../docker-compose.yaml --volumes hostPath
+    kompose.version: 1.20.0 (f3d54d784)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: kafka-container
+  name: kafka-container
+spec:
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f ../docker-compose.yaml --volumes hostPath
+        kompose.version: 1.20.0 (f3d54d784)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: kafka-container
+    spec:
+      containers:
+      - env:
+        - name: KAFKA_ADVERTISED_LISTENERS
+          value: PLAINTEXT://kafka-container:9092
+        - name: KAFKA_BROKER_ID
+          value: "1"
+        - name: KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR
+          value: "1"
+        - name: KAFKA_ZOOKEEPER_CONNECT
+          value: zookeeper-container:2181
+        image: confluentinc/cp-kafka
+        name: kafka-container
+        resources: {}
+      restartPolicy: Always
+status: {}
