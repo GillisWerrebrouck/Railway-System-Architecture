@@ -1,3 +1,3 @@
-from openjdk:8
-CMD ["java", "-jar", "app/railway-app-station-0.0.1-SNAPSHOT.jar"]
-
+FROM openjdk:8
+COPY ./target/railway-app-station-0.0.1-SNAPSHOT.jar .
+CMD ["java", "-jar", "railway-app-station-0.0.1-SNAPSHOT.jar"]
