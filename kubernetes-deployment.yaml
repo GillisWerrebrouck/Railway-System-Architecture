@@ -72,6 +72,9 @@ items:
       io.kompose.service: apigateway
     name: apigateway
   spec:
+    selector:
+      matchLabels:
+        io.kompose.service: apigateway
     replicas: 1
     strategy:
       type: Recreate
@@ -112,6 +115,9 @@ items:
       io.kompose.service: delay-request-db
     name: delay-request-db
   spec:
+    selector:
+      matchLabels:
+        io.kompose.service: delay-request-db
     replicas: 1
     strategy: {}
     template:
@@ -142,6 +148,9 @@ items:
       io.kompose.service: delay-service
     name: delay-service
   spec:
+    selector:
+      matchLabels:
+        io.kompose.service: delay-service
     replicas: 1
     strategy:
       type: Recreate
@@ -180,6 +189,9 @@ items:
       io.kompose.service: frontend
     name: frontend
   spec:
+    selector:
+      matchLabels:
+        io.kompose.service: frontend
     replicas: 1
     strategy:
       type: Recreate
@@ -220,6 +232,9 @@ items:
       io.kompose.service: kafka-container
     name: kafka-container
   spec:
+    selector:
+      matchLabels:
+        io.kompose.service: kafka-container
     replicas: 1
     strategy: {}
     template:
@@ -259,6 +274,9 @@ items:
       io.kompose.service: maintenance-db
     name: maintenance-db
   spec:
+    selector:
+      matchLabels:
+        io.kompose.service: maintenance-db
     replicas: 1
     strategy: {}
     template:
@@ -296,6 +314,9 @@ items:
       io.kompose.service: maintenance-service
     name: maintenance-service
   spec:
+    selector:
+      matchLabels:
+        io.kompose.service: maintenance-service
     replicas: 1
     strategy:
       type: Recreate
@@ -334,6 +355,9 @@ items:
       io.kompose.service: route-db
     name: route-db
   spec:
+    selector:
+      matchLabels:
+        io.kompose.service: route-db
     replicas: 1
     strategy: {}
     template:
@@ -369,6 +393,9 @@ items:
       io.kompose.service: route-service
     name: route-service
   spec:
+    selector:
+      matchLabels:
+        io.kompose.service: route-service
     replicas: 1
     strategy:
       type: Recreate
@@ -407,6 +434,9 @@ items:
       io.kompose.service: staff-db
     name: staff-db
   spec:
+    selector:
+      matchLabels:
+        io.kompose.service: staff-db
     replicas: 1
     strategy: {}
     template:
@@ -437,6 +467,9 @@ items:
       io.kompose.service: staff-service
     name: staff-service
   spec:
+    selector:
+      matchLabels:
+        io.kompose.service: staff-service
     replicas: 1
     strategy:
       type: Recreate
@@ -475,6 +508,9 @@ items:
       io.kompose.service: station-db
     name: station-db
   spec:
+    selector:
+      matchLabels:
+        io.kompose.service: station-db
     replicas: 1
     strategy: {}
     template:
@@ -512,6 +548,9 @@ items:
       io.kompose.service: station-service
     name: station-service
   spec:
+    selector:
+      matchLabels:
+        io.kompose.service: station-service
     replicas: 1
     strategy:
       type: Recreate
@@ -550,6 +589,9 @@ items:
       io.kompose.service: ticket-sale-db
     name: ticket-sale-db
   spec:
+    selector:
+      matchLabels:
+        io.kompose.service: ticket-sale-db
     replicas: 1
     strategy: {}
     template:
@@ -587,6 +629,9 @@ items:
       io.kompose.service: ticket-sale-service
     name: ticket-sale-service
   spec:
+    selector:
+      matchLabels:
+        io.kompose.service: ticket-sale-service
     replicas: 1
     strategy:
       type: Recreate
@@ -625,6 +670,9 @@ items:
       io.kompose.service: ticket-validation-db
     name: ticket-validation-db
   spec:
+    selector:
+      matchLabels:
+        io.kompose.service: ticket-validation-db
     replicas: 1
     strategy: {}
     template:
@@ -662,6 +710,9 @@ items:
       io.kompose.service: ticket-validation-service
     name: ticket-validation-service
   spec:
+    selector:
+      matchLabels:
+        io.kompose.service: ticket-validation-service
     replicas: 1
     strategy:
       type: Recreate
@@ -700,6 +751,9 @@ items:
       io.kompose.service: timetable-db
     name: timetable-db
   spec:
+    selector:
+      matchLabels:
+        io.kompose.service: timetable-db
     replicas: 1
     strategy: {}
     template:
@@ -737,6 +791,9 @@ items:
       io.kompose.service: timetable-service
     name: timetable-service
   spec:
+    selector:
+      matchLabels:
+        io.kompose.service: timetable-service
     replicas: 1
     strategy:
       type: Recreate
@@ -775,6 +832,9 @@ items:
       io.kompose.service: train-db
     name: train-db
   spec:
+    selector:
+      matchLabels:
+        io.kompose.service: train-db
     replicas: 1
     strategy: {}
     template:
@@ -805,6 +865,9 @@ items:
       io.kompose.service: train-service
     name: train-service
   spec:
+    selector:
+      matchLabels:
+        io.kompose.service: train-service
     replicas: 1
     strategy:
       type: Recreate
@@ -843,6 +906,9 @@ items:
       io.kompose.service: zookeeper-container
     name: zookeeper-container
   spec:
+    selector:
+      matchLabels:
+        io.kompose.service: zookeeper-container
     replicas: 1
     strategy: {}
     template:
