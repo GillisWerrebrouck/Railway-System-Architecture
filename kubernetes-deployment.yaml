@@ -314,7 +314,6 @@ items:
       io.kompose.service: maintenance-db
     name: maintenance-db
   spec:
-    hostname: maintenance-db
     selector:
       matchLabels:
         io.kompose.service: maintenance-db
