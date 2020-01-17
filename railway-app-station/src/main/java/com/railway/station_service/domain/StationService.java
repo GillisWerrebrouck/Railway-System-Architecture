@@ -107,14 +107,15 @@ public class StationService {
 			List<StationOnRoute> stations = new ArrayList<>();
 			StationOnRoute previous = startStation;
 			
+			boolean partOfDelay = false;
 			if(dr.getStartStationId() == null) {
 				stations.add(startStation);
+				partOfDelay = true;
 			}
 			
 			StationOnRoute current = null;
 			Collection<RoutePart> allRouteConnections = routeFetchedResponse.getRouteConnections();
 			
-			boolean partOfDelay = false;
 			
 			while(allRouteConnections.size() > 0) {
 				RoutePart routePart = getNextRoutePart(allRouteConnections, UUID.fromString(previous.getStationId()));
