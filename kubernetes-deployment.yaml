@@ -316,6 +316,8 @@ items:
         - image: redis
           name: delay-request-db
           resources: {}
+          ports:
+          - containerPort: 6379
         restartPolicy: Always
   status: {}
 - apiVersion: apps/v1
@@ -480,7 +482,7 @@ items:
           - name: MYSQL_ROOT_PASSWORD
             value: maintenancedatabase
           ports:
-            - containerPort: 3306
+          - containerPort: 3306
           image: mysql:5.7
           name: maintenance-db
           resources: {}
@@ -637,7 +639,7 @@ items:
         - image: mongo
           name: staff-db
           ports:
-            - containerPort: 27017
+          - containerPort: 27017
           resources: {}
         restartPolicy: Always
   status: {}
@@ -718,7 +720,7 @@ items:
           - name: MYSQL_ROOT_PASSWORD
             value: stationdatabase
           ports:
-            - containerPort: 3306
+          - containerPort: 3306
           image: mysql:5.7
           name: station-db
           resources: {}
@@ -801,7 +803,7 @@ items:
           - name: MYSQL_ROOT_PASSWORD
             value: ticketsaledatabase
           ports:
-            - containerPort: 3306
+          - containerPort: 3306
           image: mysql:5.7
           name: ticket-sale-db
           resources: {}
@@ -884,7 +886,7 @@ items:
           - name: MYSQL_ROOT_PASSWORD
             value: ticketvalidationdatabase
           ports:
-            - containerPort: 3306
+          - containerPort: 3306
           image: mysql:5.7
           name: ticket-validation-db
           resources: {}
@@ -967,7 +969,7 @@ items:
           - name: MYSQL_ROOT_PASSWORD
             value: timetabledatabase
           ports:
-            - containerPort: 3306
+          - containerPort: 3306
           image: mysql:5.7
           name: timetable-db
           resources: {}
