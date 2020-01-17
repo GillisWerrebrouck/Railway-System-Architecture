@@ -231,6 +231,168 @@ items:
       kompose.version: 1.20.0 (f3d54d784)
     creationTimestamp: null
     labels:
+      io.kompose.service: maintenance-service
+    name: maintenance-service
+  spec:
+    ports:
+      - port: 2005
+    selector:
+      io.kompose.service: maintenance-service
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kompose.cmd: kompose convert -f docker-compose.yaml --volumes hostPath --out
+        kubernetes-deployment.yaml
+      kompose.version: 1.20.0 (f3d54d784)
+    creationTimestamp: null
+    labels:
+      io.kompose.service: route-service
+    name: route-service
+  spec:
+    ports:
+      - port: 2000
+    selector:
+      io.kompose.service: route-service
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kompose.cmd: kompose convert -f docker-compose.yaml --volumes hostPath --out
+        kubernetes-deployment.yaml
+      kompose.version: 1.20.0 (f3d54d784)
+    creationTimestamp: null
+    labels:
+      io.kompose.service: staff-service
+    name: staff-service
+  spec:
+    ports:
+      - port: 2006
+    selector:
+      io.kompose.service: staff-service
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kompose.cmd: kompose convert -f docker-compose.yaml --volumes hostPath --out
+        kubernetes-deployment.yaml
+      kompose.version: 1.20.0 (f3d54d784)
+    creationTimestamp: null
+    labels:
+      io.kompose.service: station-service
+    name: station-service
+  spec:
+    ports:
+      - port: 2002
+    selector:
+      io.kompose.service: station-service
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kompose.cmd: kompose convert -f docker-compose.yaml --volumes hostPath --out
+        kubernetes-deployment.yaml
+      kompose.version: 1.20.0 (f3d54d784)
+    creationTimestamp: null
+    labels:
+      io.kompose.service: ticket-sale-service
+    name: ticket-sale-service
+  spec:
+    ports:
+      - port: 2007
+    selector:
+      io.kompose.service: ticket-sale-service
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kompose.cmd: kompose convert -f docker-compose.yaml --volumes hostPath --out
+        kubernetes-deployment.yaml
+      kompose.version: 1.20.0 (f3d54d784)
+    creationTimestamp: null
+    labels:
+      io.kompose.service: ticket-validation-service
+    name: ticket-validation-service
+  spec:
+    ports:
+      - port: 2008
+    selector:
+      io.kompose.service: ticket-validation-service
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kompose.cmd: kompose convert -f docker-compose.yaml --volumes hostPath --out
+        kubernetes-deployment.yaml
+      kompose.version: 1.20.0 (f3d54d784)
+    creationTimestamp: null
+    labels:
+      io.kompose.service: timetable-service
+    name: timetable-service
+  spec:
+    ports:
+      - port: 2001
+    selector:
+      io.kompose.service: timetable-service
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kompose.cmd: kompose convert -f docker-compose.yaml --volumes hostPath --out
+        kubernetes-deployment.yaml
+      kompose.version: 1.20.0 (f3d54d784)
+    creationTimestamp: null
+    labels:
+      io.kompose.service: train-service
+    name: train-service
+  spec:
+    ports:
+      - port: 2003
+    selector:
+      io.kompose.service: train-service
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kompose.cmd: kompose convert -f docker-compose.yaml --volumes hostPath --out
+        kubernetes-deployment.yaml
+      kompose.version: 1.20.0 (f3d54d784)
+    creationTimestamp: null
+    labels:
+      io.kompose.service: delay-service
+    name: delay-service
+  spec:
+    ports:
+      - port: 2004
+    selector:
+      io.kompose.service: delay-service
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kompose.cmd: kompose convert -f docker-compose.yaml --volumes hostPath --out
+        kubernetes-deployment.yaml
+      kompose.version: 1.20.0 (f3d54d784)
+    creationTimestamp: null
+    labels:
       io.kompose.service: frontend
     name: frontend
   spec:
