@@ -96,6 +96,8 @@ public class StationService {
 		// get the delay request in the key-value store and delete it
 		DelayRequest dr = delayRequestRepository.findById(routeFetchedResponse.getRequestId()).orElse(null);
 		delayRequestRepository.deleteById(routeFetchedResponse.getRequestId());
+
+		logger.debug("START STATION ID: "+ dr.getStartStationId().toString());
 		
 		if(dr != null) {
 			// find first station of route that will be affected by delay 
@@ -105,7 +107,7 @@ public class StationService {
 			// get following stations on that route
 			List<StationOnRoute> stations = new ArrayList<>();
 			StationOnRoute previous = startStation;
-			logger.info("START STATION ID: "+ dr.getStartStationId().toString());
+			
 			boolean partOfDelay = false;
 			if(dr.getStartStationId() == null || 
 					startStation.getStationId().compareTo(dr.getStartStationId().toString()) == 0) {
@@ -140,6 +142,7 @@ public class StationService {
 				}
 				previous=current;
 			}
+			logger.debug("STATIONS COUNT: "+ stations.size());
 			getStationsFromDatabase(stations, dr);
 		}
 	}
