@@ -434,6 +434,7 @@ items:
       spec:
         containers:
         - image: gilliswerrebrouck/railway-app-api-gateway-service
+          imagePullPolicy: Always
           name: apigateway
           ports:
           - containerPort: 8080
@@ -512,6 +513,7 @@ items:
       spec:
         containers:
         - image: gilliswerrebrouck/railway-app-delay-service
+          imagePullPolicy: Always
           name: delay-service
           resources: {}
           volumeMounts:
@@ -553,6 +555,7 @@ items:
       spec:
         containers:
         - image: gilliswerrebrouck/railway-app-frontend
+          imagePullPolicy: Always
           name: frontend
           ports:
           - containerPort: 80
@@ -680,6 +683,7 @@ items:
       spec:
         containers:
         - image: gilliswerrebrouck/railway-app-maintenance-service
+          imagePullPolicy: Always
           name: maintenance-service
           resources: {}
           volumeMounts:
@@ -759,6 +763,7 @@ items:
       spec:
         containers:
         - image: gilliswerrebrouck/railway-app-route-management-service
+          imagePullPolicy: Always
           name: route-service
           resources: {}
           volumeMounts:
@@ -835,6 +840,7 @@ items:
       spec:
         containers:
         - image: gilliswerrebrouck/railway-app-staff-service
+          imagePullPolicy: Always
           name: staff-service
           resources: {}
           volumeMounts:
@@ -918,6 +924,7 @@ items:
       spec:
         containers:
         - image: gilliswerrebrouck/railway-app-station-service
+          imagePullPolicy: Always
           name: station-service
           resources: {}
           volumeMounts:
@@ -1001,6 +1008,7 @@ items:
       spec:
         containers:
         - image: gilliswerrebrouck/railway-app-ticket-sale-service
+          imagePullPolicy: Always
           name: ticket-sale-service
           resources: {}
           volumeMounts:
@@ -1084,6 +1092,7 @@ items:
       spec:
         containers:
         - image: gilliswerrebrouck/railway-app-ticket-validation-service
+          imagePullPolicy: Always
           name: ticket-validation-service
           resources: {}
           volumeMounts:
@@ -1167,6 +1176,7 @@ items:
       spec:
         containers:
         - image: gilliswerrebrouck/railway-app-timetable-service
+          imagePullPolicy: Always
           name: timetable-service
           resources: {}
           volumeMounts:
@@ -1241,6 +1251,7 @@ items:
       spec:
         containers:
         - image: gilliswerrebrouck/railway-app-train-service
+          imagePullPolicy: Always
           name: train-service
           resources: {}
           volumeMounts:
