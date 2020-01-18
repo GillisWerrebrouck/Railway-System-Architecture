@@ -22,6 +22,7 @@ public class ScheduleItem {
 	
 	@ElementCollection
 	private Collection<String> staffIds;
+	@org.hibernate.annotations.Type(type="org.hibernate.type.UUIDCharType")
 	private UUID requestId;
 	private String staffReservationMessage;
 	private Status status;

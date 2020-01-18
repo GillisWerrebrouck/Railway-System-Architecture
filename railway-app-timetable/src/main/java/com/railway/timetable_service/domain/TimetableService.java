@@ -125,38 +125,47 @@ public class TimetableService {
 			this.createTimetableItemSaga.onTrainReserved(timetableItem);
 		}
 	}
-
+	
 	public synchronized void staffReserved(StaffResponse response) {
-		// get the timetable item that contains the requestId
-		TimetableItem timetableItem = timetableItemRepository.findByStaffRequestId(response.getRequestId());
-		if(timetableItem != null) {
-			// if the response has no staff ids it means that the reservation failed
-			if (response.getStaffIds().size() == 0 || 
-					timetableItem.getTrainReservationStatus() == Status.FAILED || 
-					timetableItem.getStationsReservationStatus() == Status.FAILED || 
-					timetableItem.getStaffReservationStatus() == Status.FAILED) {
-				this.createTimetableItemSaga.discardTrainReservation(timetableItem.getId());
-				this.createTimetableItemSaga.discardStationReservations(timetableItem.getId());
-				this.createTimetableItemSaga.discardStaffReservations(timetableItem.getTrainOperatorRequestId());
-				this.createTimetableItemSaga.discardStaffReservations(timetableItem.getTrainConductorRequestId());
-				return;
-			}
-			
-			// save all staff ids
-			for (String staffId : response.getStaffIds()) {
-				synchronized (timetableItem) {
-					timetableItem = timetableItemRepository.findByStaffRequestId(response.getRequestId());
+		// get the timetable item that contains the requestId		
+		TimetableItem timetableItem = timetableItemRepository.findByTrainOperatorRequestId(response.getRequestId());
+		if(timetableItem == null) {
+			timetableItem = timetableItemRepository.findByTrainConductorRequestId(response.getRequestId());
+		}
+		
+		if(timetableItem == null) {
+			return;
+		}
+		
+		// if the response has no staff ids it means that the reservation failed
+		if (response.getStaffIds().size() == 0 || 
+				timetableItem.getTrainReservationStatus() == Status.FAILED || 
+				timetableItem.getStationsReservationStatus() == Status.FAILED || 
+				timetableItem.getStaffReservationStatus() == Status.FAILED) {
+			this.createTimetableItemSaga.discardTrainReservation(timetableItem.getId());
+			this.createTimetableItemSaga.discardStationReservations(timetableItem.getId());
+			this.createTimetableItemSaga.discardStaffReservations(timetableItem.getTrainOperatorRequestId());
+			this.createTimetableItemSaga.discardStaffReservations(timetableItem.getTrainConductorRequestId());
+			return;
+		}
+		
+		// save all staff ids
+		for (String staffId : response.getStaffIds()) {
+			synchronized (timetableItem) {
+				timetableItem = timetableItemRepository.findByStaffRequestId(response.getRequestId());
+				
+				if(timetableItem != null) {
 					timetableItem.addStaffId(staffId);
-					timetableItemRepository.save(timetableItem);
+					timetableItem = timetableItemRepository.save(timetableItem);
 				}
 			}
-			
-			// if all staff is reserved (train operator[1] train conductor(s)[<requested amount>])
-			if (timetableItem.getStaffIds().size() == timetableItem.getRequestedTrainConductorsAmount()+1) {
-				timetableItem.setStaffReservationStatus(Status.SUCCESSFUL);
-				timetableItemRepository.save(timetableItem);
-				this.createTimetableItemSaga.onStaffReserved(timetableItem);
-			}
+		}
+
+		// if all staff is reserved (train operator[1] train conductor(s)[<requested amount>])
+		if (timetableItem.getStaffIds().size() == timetableItem.getRequestedTrainConductorsAmount()+1) {
+			timetableItem.setStaffReservationStatus(Status.SUCCESSFUL);
+			timetableItemRepository.save(timetableItem);
+			this.createTimetableItemSaga.onStaffReserved(timetableItem);
 		}
 	}
 	
@@ -191,10 +200,6 @@ public class TimetableService {
 		} else {
 			throw new NullPointerException();
 		}
-	}
-	
-	public void discardAll(TimetableItem timetableItem) {
-		createTimetableItemSaga.discardAll(timetableItem);
 	}
 
 	public void reserveGroupSeats(GroupSeatsRequest groupSeatsRequest) throws NotEnoughGroupSeatsException {

@@ -25,7 +25,7 @@ public class TimetableItemRestAdapter {
 	
 	public String getRouteName(Long routeId) {
 		RestTemplate restTemplate = new RestTemplate();
-		String url = "http://localhost:2000/network/route";
+		String url = "http://route-service:2000/network/route";
 		ResponseEntity<String> routeResponse = restTemplate.getForEntity(url + "/" + routeId.toString(), String.class);
 		String routeName = null;
 		
@@ -44,7 +44,7 @@ public class TimetableItemRestAdapter {
 	
 	public Collection<Route> getRoutes(UUID startStationId, UUID endStationId) {
 		RestTemplate restTemplate = new RestTemplate();
-		String url = "http://localhost:2000/network/route";
+		String url = "http://route-service:2000/network/route";
 		String endpoint = "?startStationId=" + startStationId.toString() + "&endStationId=" + endStationId.toString();
 		ResponseEntity<List<Route>> routesResponse = restTemplate.exchange(url + endpoint, HttpMethod.GET, null, new ParameterizedTypeReference<List<Route>>() {});
 		
@@ -58,7 +58,7 @@ public class TimetableItemRestAdapter {
 	
 	public Collection<ScheduleItemResponse> getStationsByTimetableItemId(Long timetableId) {
 		RestTemplate restTemplate = new RestTemplate();
-		String url = "http://localhost:2002/station/timetable";
+		String url = "http://station-service:2002/station/timetable";
 		ResponseEntity<List<ScheduleItemResponse>> scheduleItemResponse = restTemplate.exchange(url + "/" + timetableId.toString(), HttpMethod.GET, null, new ParameterizedTypeReference<List<ScheduleItemResponse>>() {});
 		
 		if(scheduleItemResponse != null && scheduleItemResponse.getStatusCode().compareTo(HttpStatus.OK) == 0 && scheduleItemResponse.hasBody()) {
@@ -71,7 +71,7 @@ public class TimetableItemRestAdapter {
 
 	public SpecificsResponse getSpecifics(String trainId) {
 		RestTemplate restTemplate = new RestTemplate();
-		String url = "http://localhost:2003/train";
+		String url = "http://train-service:2003/train";
 		ResponseEntity<String> trainResponse = restTemplate.getForEntity(url + "/" + trainId, String.class);
 		
 		if(trainResponse != null && trainResponse.getStatusCode().compareTo(HttpStatus.OK) == 0) {

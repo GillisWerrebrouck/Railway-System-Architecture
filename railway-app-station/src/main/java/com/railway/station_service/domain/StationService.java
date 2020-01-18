@@ -94,32 +94,35 @@ public class StationService {
 	// fetching routes to get all the stations on that route that will be affected by the delay
 	public void routeFetched(RouteFetchedResponse routeFetchedResponse) {
 		// get the delay request in the key-value store and delete it
-		DelayRequest dr = delayRequestRepository.findByRouteRequestId(routeFetchedResponse.getRequestId());
+		DelayRequest dr = delayRequestRepository.findById(routeFetchedResponse.getRequestId()).orElse(null);
 		delayRequestRepository.deleteById(routeFetchedResponse.getRequestId());
 		
 		if(dr != null) {
-			//find first station of route that will be affected by delay 
-			//if no start station is present in delay request then all stations on the given route are notified of the delay
-			StationOnRoute startStation = null;
-			if(dr.getStartStationId() != null) {
-				for(RouteConnection rc : routeFetchedResponse.getRoute().getRouteConnections()) {
-					if(rc.getStation().getId() == dr.getStartStationId()) {
-						startStation = rc.getStation();
-						break;
-					}
-				}
-			} else {
-				startStation = getStart(routeFetchedResponse.getRoute());
-			}
+			// find first station of route that will be affected by delay 
+			// if no start station is present in delay request then all stations on the given route are notified of the delay
+			StationOnRoute startStation = getStart(routeFetchedResponse.getRoute());
 			
-			//get following stations on that route
+			// get following stations on that route
 			List<StationOnRoute> stations = new ArrayList<>();
 			StationOnRoute previous = startStation;
-			stations.add(startStation);
+			
+			boolean partOfDelay = false;
+			if(dr.getStartStationId() == null ||
+					startStation.getStationId().compareTo(dr.getStartStationId().toString()) == 0) {
+				dr.setStartStationId(UUID.fromString(startStation.getStationId()));
+				stations.add(startStation);
+				partOfDelay = true;
+			}
+			
 			StationOnRoute current = null;
 			Collection<RoutePart> allRouteConnections = routeFetchedResponse.getRouteConnections();
+			
 			while(allRouteConnections.size() > 0) {
 				RoutePart routePart = getNextRoutePart(allRouteConnections, UUID.fromString(previous.getStationId()));
+				if(routePart == null) {
+					break;
+				}
+				
 				// remove route part for next iteration
 				allRouteConnections.removeIf(r -> r.getId() == routePart.getId());
 		
@@ -128,12 +131,19 @@ public class StationService {
 				} else {
 					current = routePart.getStationX();
 				}
-				stations.add(current);
+				
+				if(current.getStationId().compareTo(dr.getStartStationId().toString()) == 0) {
+					partOfDelay = true;
+				}
+				
+				if(partOfDelay) {
+					stations.add(current);
+				}
 				previous=current;
 			}
+			
 			getStationsFromDatabase(stations, dr);
 		}
-		
 	}
 	
 	private StationOnRoute getStart(Route route) {
@@ -161,9 +171,9 @@ public class StationService {
 	
 	private void getStationsFromDatabase(List<StationOnRoute> stations, DelayRequest request) {
 		for (StationOnRoute s : stations) {
-			requestDelay = request.getDelayInMinutes();
 			UUID id = UUID.fromString(s.getStationId());
-			Station station = stationRepository.findById(id).get();
+			requestDelay = request.getDelayInMinutes();
+			Station station = stationRepository.findById(id).orElse(null);
 			if (station != null) {
 				logger.info("[getStationsFromDatabase] station found in db " + station.getName());
 				iteratePlatforms(station, request);
@@ -191,10 +201,10 @@ public class StationService {
 	}
 	
 	private void addDelay(ScheduleItem item, DelayRequest request, Station station, Platform p) {
-		logger.info("[getStationsFromDatabase] scheduleItem found ");
+		logger.info("[getStationsFromDatabase] scheduleItem found");
 		//original scheduleitem can already have delay -> so total delay is calculated
 		int totalDelay = item.getDelayInMinutes() + requestDelay;
-		requestDelay = 0;
+		int requestDelay = 0;
 		LocalDateTime newArrivalTime = item.getArrivalDateTime().plusMinutes(totalDelay);
 		//check if the new arrivaltime causes a conflict with another train on the same platform
 		boolean overlap = newArrivalTimeOverlaps(p, newArrivalTime, item.getId());
@@ -202,9 +212,7 @@ public class StationService {
 		if(!overlap) {
 			item.setDelayInMinutes(totalDelay);
 			scheduleItemRepository.save(item);
-			
-		}
-		else {
+		} else {
 			//search new platform starting on time = newArrivalTime 
 			Object[] pair = searchNewTimeSlot(station, newArrivalTime,0, item.getId());
 			//found platform, arrivaltime and additional delay when nothing was available on newArrivalTime

@@ -54,6 +54,10 @@ export default class NetworkPage extends Component {
     .then((result) => {
       this.setState({ routes: result.data });
 
+      if(this.state.routes.length === 0) {
+        this.setState({ isRoutesLoading: false });
+      }
+
       this.state.routes.forEach((route, routeIndex) => {
         endpoints.getStationsOnRoute(route.id)
           .then((result) => {

@@ -78,6 +78,11 @@ public class TimetableItemRestController implements CreateTimetableItemListener 
 		return response;
 	}
 	
+	@GetMapping("/all/raw")
+	private Iterable<TimetableItem> getAllRawTimetableItems() {
+		return timetableItemRepository.findAll();
+	}
+	
 	@GetMapping("/{id}")
 	private TimetableItem getTimetableItemById(@PathVariable Long id) {
 		TimetableItem timetableItem = timetableItemRepository.findById(id).orElse(null);
@@ -137,7 +142,7 @@ public class TimetableItemRestController implements CreateTimetableItemListener 
 	private DeferredResult<TimetableItem> createTimetableItem(@RequestBody TimetableRequest timetableRequest) {
 		logger.info("[Timetable Item Rest Controller] create timetable item");
 		
-		DeferredResult<TimetableItem> deferredResult = new DeferredResult<>(10000l);
+		DeferredResult<TimetableItem> deferredResult = new DeferredResult<>(12000l);
 		
 		TimetableItem timetableItem = new TimetableItem(
 			timetableRequest.getRouteId(), 
@@ -146,19 +151,11 @@ public class TimetableItemRestController implements CreateTimetableItemListener 
 			timetableRequest.getAmountOfTrainConductors()
 		);
     
-		deferredResult.onTimeout(() -> {
-			timetableItem.setStaffIds(new ArrayList<>());
-			timetableItemRepository.save(timetableItem);
-			this.timetableService.discardAll(timetableItem);
-      
+		deferredResult.onTimeout(() -> {      
 			deferredResult.setErrorResult("Request timeout occurred");
 		});
 		
-		if(!isValidTimetableRequest(timetableRequest)) {
-			timetableItem.setStaffIds(new ArrayList<>());
-			timetableItemRepository.save(timetableItem);
-			timetableItemRepository.delete(timetableItem);
-      
+		if(!isValidTimetableRequest(timetableRequest)) {      
 			deferredResult.setErrorResult("Request must contain the following fields in the body; \"routeId\", \"startDateTime\", \"requestedTrainType\" and \"amountOfTrainConductors\"");
 		} else {
 			timetableItemRepository.save(timetableItem);

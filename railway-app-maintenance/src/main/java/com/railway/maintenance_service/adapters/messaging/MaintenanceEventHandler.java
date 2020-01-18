@@ -19,14 +19,17 @@ public class MaintenanceEventHandler {
 		this.maintenanceRepository = maintenanceRepository;
 	}
 	
-	@StreamListener(Channels.STAFF_RESERVED)
+	@StreamListener(Channels.STAFF_RESERVED_M)
 	public void requestMaintenance(StaffResponse response) {
 		logger.info("[Maintenance Event Handler] staff reserved event received");
 		
 		ScheduleItem scheduleItem = maintenanceRepository.findByRequestId(response.getRequestId());
-		scheduleItem.setStaffIds(response.getStaffIds());
-		scheduleItem.setStaffReservationMessage(response.getResponseMessage());
 		
-		maintenanceRepository.save(scheduleItem);
+		if(scheduleItem != null) {
+			scheduleItem.setStaffIds(response.getStaffIds());
+			scheduleItem.setStaffReservationMessage(response.getResponseMessage());
+			
+			maintenanceRepository.save(scheduleItem);
+		}
 	}
 }

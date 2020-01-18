@@ -7,7 +7,7 @@ export default class DelayPage extends Component {
 
     this.state = {
       delay: {
-	timetableId: null,
+	      timetableId: null,
         routeId: null,
         startStationId: null,
         delayInMinutes: null,
@@ -56,7 +56,7 @@ export default class DelayPage extends Component {
 
 	        <label>Start Station ID: </label>
           <input
-            type='number'
+            type='text'
             name='startStationId'
             onChange={this.createDelayFormChangeHandler}
           />

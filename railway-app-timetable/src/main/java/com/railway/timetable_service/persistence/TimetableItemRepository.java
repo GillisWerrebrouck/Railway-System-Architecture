@@ -18,6 +18,9 @@ public interface TimetableItemRepository extends CrudRepository<TimetableItem, L
   
 	@Query("SELECT t FROM TimetableItem t WHERE t.trainOperatorRequestId=?1 OR t.trainConductorRequestId=?1")
 	TimetableItem findByStaffRequestId(UUID staffRequestId);
+
+	TimetableItem findByTrainOperatorRequestId(UUID trainOperatorRequestId);
+	TimetableItem findByTrainConductorRequestId(UUID trainConductorRequestId);
 	
 	List<TimetableItem> findByRouteIdAndStartDateTimeBetweenOrderByStartDateTime(Long routeId, LocalDateTime fromDate, LocalDateTime toDate);
 }

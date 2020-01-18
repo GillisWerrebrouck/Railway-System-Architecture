@@ -11,14 +11,15 @@ import org.springframework.data.redis.core.RedisHash;
 public class DelayRequest implements Serializable {
 	private Long timetableId;
 	private Long routeId;
-	private Long startStationId;
+	@org.hibernate.annotations.Type(type="org.hibernate.type.UUIDCharType")
+	private UUID startStationId;
 	private int delayInMinutes;
 	private String reasonForDelay;
 	// routeRequestId is the property that will be used to identify a request in the key-value store
 	@Id
-	private UUID routeRequestId;
+	private String routeRequestId;
 	
-	public DelayRequest(Long timetableId, Long routeId, Long startStationId, int delayInMinutes, String reasonForDelay) {
+	public DelayRequest(Long timetableId, Long routeId, UUID startStationId, int delayInMinutes, String reasonForDelay) {
 		this.timetableId = timetableId;
 		this.routeId = routeId;
 		this.startStationId = startStationId;
@@ -42,11 +43,11 @@ public class DelayRequest implements Serializable {
 		this.routeId = routeId;
 	}
 
-	public Long getStartStationId() {
+	public UUID getStartStationId() {
 		return startStationId;
 	}
 
-	public void setStartStationId(Long startStationId) {
+	public void setStartStationId(UUID startStationId) {
 		this.startStationId = startStationId;
 	}
 
@@ -66,11 +67,15 @@ public class DelayRequest implements Serializable {
 		this.reasonForDelay = reasonForDelay;
 	}
 
-	public UUID getRouteRequestId() {
+	public String getRouteRequestId() {
 		return routeRequestId;
 	}
 
 	public void setRouteRequestId(UUID routeRequestId) {
+		this.routeRequestId = routeRequestId.toString();
+	}
+
+	public void setRouteRequestId(String routeRequestId) {
 		this.routeRequestId = routeRequestId;
 	}
 }
