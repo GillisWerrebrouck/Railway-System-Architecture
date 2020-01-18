@@ -98,17 +98,16 @@ public class StationService {
 		delayRequestRepository.deleteById(routeFetchedResponse.getRequestId());
 		
 		if(dr != null) {
-			//find first station of route that will be affected by delay 
-			//if no start station is present in delay request then all stations on the given route are notified of the delay
+			// find first station of route that will be affected by delay 
+			// if no start station is present in delay request then all stations on the given route are notified of the delay
 			StationOnRoute startStation = getStart(routeFetchedResponse.getRoute());
 			
-			//get following stations on that route
+			// get following stations on that route
 			List<StationOnRoute> stations = new ArrayList<>();
 			StationOnRoute previous = startStation;
-			
+			logger.info("START STATION ID: "+ dr.getStartStationId().toString());
 			boolean partOfDelay = false;
 			if(dr.getStartStationId() == null || 
-					dr.getStartStationId().toString().isBlank() || 
 					startStation.getStationId().compareTo(dr.getStartStationId().toString()) == 0) {
 				stations.add(startStation);
 				partOfDelay = true;
