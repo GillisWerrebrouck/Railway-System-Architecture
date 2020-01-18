@@ -458,6 +458,7 @@ items:
     creationTimestamp: null
     labels:
       io.kompose.service: delay-request-db
+      chaos: immune
     name: delay-request-db
   spec:
     selector:
@@ -474,6 +475,7 @@ items:
         creationTimestamp: null
         labels:
           io.kompose.service: delay-request-db
+          chaos: immune
       spec:
         containers:
         - image: redis
@@ -535,6 +537,7 @@ items:
     creationTimestamp: null
     labels:
       io.kompose.service: frontend
+      chaos: immune
     name: frontend
   spec:
     selector:
@@ -552,6 +555,7 @@ items:
         creationTimestamp: null
         labels:
           io.kompose.service: frontend
+          chaos: immune
       spec:
         containers:
         - image: gilliswerrebrouck/railway-app-frontend
@@ -579,6 +583,7 @@ items:
     creationTimestamp: null
     labels:
       io.kompose.service: kafka-container
+      chaos: immune
     name: kafka-container
   spec:
     selector:
@@ -595,6 +600,7 @@ items:
         creationTimestamp: null
         labels:
           io.kompose.service: kafka-container
+          chaos: immune
       spec:
         containers:
         - env:
@@ -621,6 +627,7 @@ items:
     creationTimestamp: null
     labels:
       io.kompose.service: maintenance-db
+      chaos: immune
     name: maintenance-db
   spec:
     selector:
@@ -637,6 +644,7 @@ items:
         creationTimestamp: null
         labels:
           io.kompose.service: maintenance-db
+          chaos: immune
       spec:
         containers:
         - args:
@@ -705,6 +713,7 @@ items:
     creationTimestamp: null
     labels:
       io.kompose.service: route-db
+      chaos: immune
     name: route-db
   spec:
     selector:
@@ -721,6 +730,7 @@ items:
         creationTimestamp: null
         labels:
           io.kompose.service: route-db
+          chaos: immune
       spec:
         containers:
         - env:
@@ -785,6 +795,7 @@ items:
     creationTimestamp: null
     labels:
       io.kompose.service: staff-db
+      chaos: immune
     name: staff-db
   spec:
     selector:
@@ -801,6 +812,7 @@ items:
         creationTimestamp: null
         labels:
           io.kompose.service: staff-db
+          chaos: immune
       spec:
         containers:
         - image: mongo
@@ -862,6 +874,7 @@ items:
     creationTimestamp: null
     labels:
       io.kompose.service: station-db
+      chaos: immune
     name: station-db
   spec:
     selector:
@@ -878,6 +891,7 @@ items:
         creationTimestamp: null
         labels:
           io.kompose.service: station-db
+          chaos: immune
       spec:
         containers:
         - args:
@@ -946,6 +960,7 @@ items:
     creationTimestamp: null
     labels:
       io.kompose.service: ticket-sale-db
+      chaos: immune
     name: ticket-sale-db
   spec:
     selector:
@@ -962,6 +977,7 @@ items:
         creationTimestamp: null
         labels:
           io.kompose.service: ticket-sale-db
+          chaos: immune
       spec:
         containers:
         - args:
@@ -1030,6 +1046,7 @@ items:
     creationTimestamp: null
     labels:
       io.kompose.service: ticket-validation-db
+      chaos: immune
     name: ticket-validation-db
   spec:
     selector:
@@ -1046,6 +1063,7 @@ items:
         creationTimestamp: null
         labels:
           io.kompose.service: ticket-validation-db
+          chaos: immune
       spec:
         containers:
         - args:
@@ -1114,6 +1132,7 @@ items:
     creationTimestamp: null
     labels:
       io.kompose.service: timetable-db
+      chaos: immune
     name: timetable-db
   spec:
     selector:
@@ -1130,6 +1149,7 @@ items:
         creationTimestamp: null
         labels:
           io.kompose.service: timetable-db
+          chaos: immune
       spec:
         containers:
         - args:
@@ -1198,6 +1218,7 @@ items:
     creationTimestamp: null
     labels:
       io.kompose.service: train-db
+      chaos: immune
     name: train-db
   spec:
     selector:
@@ -1214,6 +1235,7 @@ items:
         creationTimestamp: null
         labels:
           io.kompose.service: train-db
+          chaos: immune
       spec:
         containers:
         - image: mongo
@@ -1273,6 +1295,7 @@ items:
     creationTimestamp: null
     labels:
       io.kompose.service: zookeeper-container
+      chaos: immune
     name: zookeeper-container
   spec:
     selector:
@@ -1289,6 +1312,7 @@ items:
         creationTimestamp: null
         labels:
           io.kompose.service: zookeeper-container
+          chaos: immune
       spec:
         containers:
         - env:
