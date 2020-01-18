@@ -23,7 +23,7 @@ export default class StaffSchedulePage extends Component {
       const { id, requestId, startDate, endDate } = scheduleItem;
       return (
         <tr key={id}>
-            <td>{id}</td>
+            <td>{requestId}</td>
             <td>{startDate} - {endDate}</td>
         </tr>
       );
@@ -33,12 +33,12 @@ export default class StaffSchedulePage extends Component {
   render() {
     return (
     <div>
-      <h2>Staff Schedules</h2>
+    <h2>Staff Schedules for staff id {this.props.match.params.id}</h2>
       {!this.state.isLoading ? (
         <table id='staff'>
         <tbody>
           <tr>
-          <th>Staff ID</th>
+          <th>Request ID</th>
           <th>Schedule datetime</th>
           </tr>
         { this.renderStaff() }

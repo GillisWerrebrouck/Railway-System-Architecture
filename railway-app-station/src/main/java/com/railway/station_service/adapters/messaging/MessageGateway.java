@@ -13,7 +13,7 @@ public interface MessageGateway {
 	@Gateway(requestChannel = Channels.STATION_DELETED)
 	public void stationDeleted(Station station);
 	
-	@Gateway(requestChannel = Channels.GET_ROUTE)
+	@Gateway(requestChannel = Channels.GET_ROUTE_D)
 	public void getRoute(RouteRequest routeRequest);
 	
 	@Gateway(requestChannel = Channels.NOTIFY_EXTRA_DELAY)

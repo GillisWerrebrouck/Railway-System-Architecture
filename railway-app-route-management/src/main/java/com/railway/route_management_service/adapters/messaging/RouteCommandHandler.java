@@ -27,6 +27,16 @@ public class RouteCommandHandler {
 	@StreamListener(Channels.GET_ROUTE)
 	@SendTo(Channels.ROUTE_FETCHED)
 	public RouteResponse getRoute(RouteRequest request) {
+		return getRouteResponse(request);
+	}
+
+	@StreamListener(Channels.GET_ROUTE_D)
+	@SendTo(Channels.ROUTE_FETCHED_D)
+	public RouteResponse getRouteForDelay(RouteRequest request) {
+		return getRouteResponse(request);
+	}
+	
+	public RouteResponse getRouteResponse(RouteRequest request) {
 		logger.info("[Route Command Handler] get route command received");
 		Collection<Connection> routeConnections = routeService.getRouteConnections(request.getRouteId());
 		Route route = routeService.getRoute(request.getRouteId());

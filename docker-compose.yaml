@@ -1,0 +1,231 @@
+version: "3"
+services:
+  zookeeper-container:
+    image: confluentinc/cp-zookeeper
+    environment:
+      - ZOOKEEPER_CLIENT_PORT=2181
+  kafka-container:
+    image: confluentinc/cp-kafka
+    depends_on: 
+      - zookeeper-container
+    environment: 
+      - KAFKA_BROKER_ID=1
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper-container:2181
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka-container:9092
+      - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1
+
+  route-db:
+    image: neo4j:3.5.6
+    environment:
+      - NEO4J_AUTH=neo4j/route
+    ports:
+      - 7687:7687
+# not good to expose a database port but this is just for the purpose of the frontend (graph visualisation)
+
+  delay-request-db:
+    image: redis
+
+  staff-db:
+    image: mongo
+  train-db:
+    image: mongo
+
+  maintenance-db:
+    image: mysql:5.7
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      - MYSQL_ROOT_PASSWORD=maintenancedatabase
+      - MYSQL_DATABASE=Maintenance
+  station-db:
+    image: mysql:5.7
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      - MYSQL_ROOT_PASSWORD=stationdatabase
+      - MYSQL_DATABASE=Station
+  ticket-sale-db:
+    image: mysql:5.7
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      - MYSQL_ROOT_PASSWORD=ticketsaledatabase
+      - MYSQL_DATABASE=TicketSale
+  ticket-validation-db:
+    image: mysql:5.7
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      - MYSQL_ROOT_PASSWORD=ticketvalidationdatabase
+      - MYSQL_DATABASE=TicketValidation
+  timetable-db:
+    image: mysql:5.7
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      - MYSQL_ROOT_PASSWORD=timetabledatabase
+      - MYSQL_DATABASE=Timetable
+
+  delay-service:
+    build: ./railway-app-delay
+    image: gilliswerrebrouck/railway-app-delay-service
+    volumes: 
+      - ./railway-app-delay/target:/app
+    links:
+      - kafka-container
+      - zookeeper-container
+    depends_on:
+      - kafka-container
+      - zookeeper-container
+  maintenance-service:
+    build: ./railway-app-maintenance
+    image: gilliswerrebrouck/railway-app-maintenance-service
+    volumes: 
+      - ./railway-app-maintenance/target:/app
+    links:
+      - kafka-container
+      - zookeeper-container
+      - maintenance-db
+    depends_on:
+      - kafka-container
+      - zookeeper-container
+      - maintenance-db
+  route-service:
+    build: ./railway-app-route-management
+    image: gilliswerrebrouck/railway-app-route-management-service
+    volumes: 
+      - ./railway-app-route-management/target:/app
+    links:
+      - kafka-container
+      - zookeeper-container
+      - route-db
+    depends_on:
+      - kafka-container
+      - zookeeper-container
+      - route-db
+  staff-service:
+    build: ./railway-app-staff
+    image: gilliswerrebrouck/railway-app-staff-service
+    volumes: 
+      - ./railway-app-staff/target:/app
+    links:
+      - kafka-container
+      - zookeeper-container
+      - staff-db
+    depends_on:
+      - kafka-container
+      - zookeeper-container
+      - staff-db
+  station-service:
+    build: ./railway-app-station
+    image: gilliswerrebrouck/railway-app-station-service
+    volumes: 
+      - ./railway-app-station/target:/app
+    links:
+      - kafka-container
+      - zookeeper-container
+      - station-db
+      - delay-request-db
+    depends_on:
+      - kafka-container
+      - zookeeper-container
+      - station-db
+      - delay-request-db
+  ticket-sale-service:
+    build: ./railway-app-ticket-sale
+    image: gilliswerrebrouck/railway-app-ticket-sale-service
+    volumes: 
+      - ./railway-app-ticket-sale/target:/app
+    links:
+      - kafka-container
+      - zookeeper-container
+      - ticket-sale-db
+    depends_on:
+      - kafka-container
+      - zookeeper-container
+      - ticket-sale-db
+  ticket-validation-service:
+    build: ./railway-app-ticket-validation
+    image: gilliswerrebrouck/railway-app-ticket-validation-service
+    volumes: 
+      - ./railway-app-ticket-validation/target:/app
+    links:
+      - kafka-container
+      - zookeeper-container
+      - ticket-validation-db
+    depends_on:
+      - kafka-container
+      - zookeeper-container
+      - ticket-validation-db
+  timetable-service:
+    build: ./railway-app-timetable
+    image: gilliswerrebrouck/railway-app-timetable-service
+    volumes: 
+      - ./railway-app-timetable/target:/app
+    links:
+      - kafka-container
+      - zookeeper-container
+      - timetable-db
+      - route-service
+      - station-service
+      - train-service
+    depends_on:
+      - kafka-container
+      - zookeeper-container
+      - timetable-db
+      - route-service
+      - station-service
+      - train-service
+  train-service:
+    build: ./railway-app-train
+    image: gilliswerrebrouck/railway-app-train-service
+    volumes: 
+      - ./railway-app-train/target:/app
+    links:
+      - kafka-container
+      - zookeeper-container
+      - train-db
+    depends_on:
+      - kafka-container
+      - zookeeper-container
+      - train-db
+  apigateway:
+    build: ./railway-app-api-gateway
+    image: gilliswerrebrouck/railway-app-api-gateway-service
+    volumes:
+      - ./railway-app-api-gateway/target:/app
+    links:
+      - kafka-container
+      - zookeeper-container
+      - delay-service
+      - maintenance-service
+      - route-service
+      - staff-service
+      - station-service
+      - ticket-sale-service
+      - ticket-validation-service
+      - timetable-service
+      - train-service
+    depends_on:
+      - kafka-container
+      - zookeeper-container
+      - delay-service
+      - maintenance-service
+      - route-service
+      - staff-service
+      - station-service
+      - ticket-sale-service
+      - ticket-validation-service
+      - timetable-service
+      - train-service
+    ports:
+      - 8080:8080
+
+  frontend:
+    build: ./railway-app-frontend
+    image: gilliswerrebrouck/railway-app-frontend
+    volumes:
+      - ./railway-app-frontend/target:/app
+    links:
+      - apigateway
+      - route-db
+    depends_on:
+      - apigateway
+      - route-db
+    ports:
+      - 80:80

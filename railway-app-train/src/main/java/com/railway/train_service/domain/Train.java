@@ -15,7 +15,7 @@ public class Train {
 	private int groupCapacity;
 	private TrainStatus status;
 	private TechnicalDetails technicaldetails;
-	private List<ScheduleItem> scheduleItems;
+	private List<ScheduleItem> scheduleItems = new ArrayList<>();
 	
 	@SuppressWarnings("unused")
 	private Train() {}
@@ -27,7 +27,7 @@ public class Train {
 		this.groupCapacity = groupCapacity;
 		this.status = status;
 		this.technicaldetails = technicaldetails;
-		this.scheduleItems = scheduleItems;
+		this.scheduleItems = scheduleItems == null ? new ArrayList<>() : scheduleItems;
 	}
 	
 	public Train(TrainType type, int totalCapacity, int groupCapacity, TechnicalDetails technicaldetails) {

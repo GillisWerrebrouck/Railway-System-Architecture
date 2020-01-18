@@ -38,7 +38,9 @@ public class TimetableItem {
 	
 	private UUID stationsRequestId;
   
+	@org.hibernate.annotations.Type(type="org.hibernate.type.UUIDCharType")
 	private UUID trainOperatorRequestId;
+	@org.hibernate.annotations.Type(type="org.hibernate.type.UUIDCharType")
 	private UUID trainConductorRequestId;
 	private int requestedTrainConductorsAmount;
   

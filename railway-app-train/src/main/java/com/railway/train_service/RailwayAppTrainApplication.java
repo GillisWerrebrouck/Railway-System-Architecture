@@ -26,28 +26,26 @@ public class RailwayAppTrainApplication {
 	
 	@Bean
 	public CommandLineRunner populateDatabase(TrainRepository trainRepository) {
-		return (args) -> {
-			trainRepository.deleteAll();
-			
-			TechnicalDetails technicalDetails01 = new TechnicalDetails(FuelType.DIESEL);
-			TechnicalDetails technicalDetails02 = new TechnicalDetails(FuelType.HYBRID);
-			TechnicalDetails technicalDetails03 = new TechnicalDetails(FuelType.HYBRID);
-			TechnicalDetails technicalDetails04 = new TechnicalDetails(FuelType.ELECTRIC);
-
-			Train train01 = new Train(TrainType.IC, 150, 60, technicalDetails01);
-			Train train02 = new Train(TrainType.IR, 150, 60, technicalDetails02);
-			Train train03 = new Train(TrainType.IR, 140, 50, technicalDetails03);
-			Train train04 = new Train(TrainType.P, 100, 30, technicalDetails04);
-
-			trainRepository.save(train01);
-			trainRepository.save(train02);
-			trainRepository.save(train03);
-			trainRepository.save(train04);
-
-			logger.info("Train01: " + train01.toString());
-			logger.info("Train02: " + train02.toString());
-			logger.info("Train03: " + train03.toString());
-			logger.info("Train04: " + train04.toString());
+		return (args) -> {			
+//			TechnicalDetails technicalDetails01 = new TechnicalDetails(FuelType.DIESEL);
+//			TechnicalDetails technicalDetails02 = new TechnicalDetails(FuelType.HYBRID);
+//			TechnicalDetails technicalDetails03 = new TechnicalDetails(FuelType.HYBRID);
+//			TechnicalDetails technicalDetails04 = new TechnicalDetails(FuelType.ELECTRIC);
+//
+//			Train train01 = new Train(TrainType.IC, 150, 60, technicalDetails01);
+//			Train train02 = new Train(TrainType.IR, 150, 60, technicalDetails02);
+//			Train train03 = new Train(TrainType.IR, 140, 50, technicalDetails03);
+//			Train train04 = new Train(TrainType.P, 100, 30, technicalDetails04);
+//
+//			trainRepository.save(train01);
+//			trainRepository.save(train02);
+//			trainRepository.save(train03);
+//			trainRepository.save(train04);
+//
+//			logger.info("Train01: " + train01.toString());
+//			logger.info("Train02: " + train02.toString());
+//			logger.info("Train03: " + train03.toString());
+//			logger.info("Train04: " + train04.toString());
 		};
 	}
 }

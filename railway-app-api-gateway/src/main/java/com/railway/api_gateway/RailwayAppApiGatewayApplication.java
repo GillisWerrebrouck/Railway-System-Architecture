@@ -20,25 +20,25 @@ public class RailwayAppApiGatewayApplication {
 	public RouteLocator customRouteLocator(RouteLocatorBuilder builder) {
 		return builder.routes()
 				//maintenance service
-				.route(r -> r.host("*").and().path("/maintenance/**").uri("http://localhost:2005"))
+				.route(r -> r.host("*").and().path("/maintenance/**").uri("http://maintenance-service:2005"))
 				//route management service
-				.route(r -> r.host("*").and().path("/network/**").uri("http://localhost:2000"))
+				.route(r -> r.host("*").and().path("/network/**").uri("http://route-service:2000"))
 				//staff service
-				.route(r -> r.host("*").and().path("/staff/**").uri("http://localhost:2006"))
+				.route(r -> r.host("*").and().path("/staff/**").uri("http://staff-service:2006"))
 				//station service
-				.route(r -> r.host("*").and().path("/station/**").uri("http://localhost:2002"))
+				.route(r -> r.host("*").and().path("/station/**").uri("http://station-service:2002"))
 				//station service
-				.route(r -> r.host("*").and().path("/platform/**").uri("http://localhost:2002"))
+				.route(r -> r.host("*").and().path("/platform/**").uri("http://station-service:2002"))
 				//ticket sale service
-				.route(r -> r.host("*").and().path("/ticket/**").uri("http://localhost:2007"))
+				.route(r -> r.host("*").and().path("/ticket/**").uri("http://ticket-sale-service:2007"))
 				//ticket validation service
-				.route(r -> r.host("*").and().path("/ticket-validation/**").uri("http://localhost:2008"))
+				.route(r -> r.host("*").and().path("/ticket-validation/**").uri("http://ticket-validation-service:2008"))
 				//timetable service
-				.route(r -> r.host("*").and().path("/timetable/**").uri("http://localhost:2001"))
+				.route(r -> r.host("*").and().path("/timetable/**").uri("http://timetable-service:2001"))
 				//train service
-				.route(r -> r.host("*").and().path("/train/**").uri("http://localhost:2003"))
+				.route(r -> r.host("*").and().path("/train/**").uri("http://train-service:2003"))
 				//delay service
-				.route(r -> r.host("*").and().path("/delay/**").uri("http://localhost:2004"))
+				.route(r -> r.host("*").and().path("/delay/**").uri("http://delay-service:2004"))
 				.build();
 	}
 }

@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @SpringBootApplication
 @EnableBinding(Channels.class)
 public class RailwayAppTicketSaleApplication {
-	private static Logger logger = LoggerFactory.getLogger(RailwayAppTicketSaleApplication.class);
+//	private static Logger logger = LoggerFactory.getLogger(RailwayAppTicketSaleApplication.class);
 
 	public static void main(String[] args) {
 		SpringApplication.run(RailwayAppTicketSaleApplication.class, args);
@@ -25,17 +25,17 @@ public class RailwayAppTicketSaleApplication {
 	@Bean
 	public CommandLineRunner populateDatabase(TicketRepository ticketRepository) {
 		return (args) -> {
-			logger.info("Create some tickets to test the repository ...");
-
-			ticketRepository.deleteAll();
-
-			Ticket singleTicket1 = new Ticket("Gent", "Brussel", LocalDateTime.now(), 1L, 9.70, 1);
-			Ticket groupTicket1 = new Ticket("Oudenaarde", "Kortrijk", LocalDateTime.now(), 2L, 153.40, 16);
-
-			ticketRepository.save(singleTicket1);
-			ticketRepository.save(groupTicket1);
-
-			ticketRepository.findAll().forEach(ticket -> logger.info(ticket.toString()));
+//			logger.info("Create some tickets to test the repository ...");
+//
+//			ticketRepository.deleteAll();
+//
+//			Ticket singleTicket1 = new Ticket("Gent", "Brussel", LocalDateTime.now(), 1L, 9.70, 1);
+//			Ticket groupTicket1 = new Ticket("Oudenaarde", "Kortrijk", LocalDateTime.now(), 2L, 153.40, 16);
+//
+//			ticketRepository.save(singleTicket1);
+//			ticketRepository.save(groupTicket1);
+//
+//			ticketRepository.findAll().forEach(ticket -> logger.info(ticket.toString()));
 		};
 	}
 }

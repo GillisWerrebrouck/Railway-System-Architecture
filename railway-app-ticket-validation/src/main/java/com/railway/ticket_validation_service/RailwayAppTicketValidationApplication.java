@@ -17,7 +17,7 @@ import java.util.UUID;
 @SpringBootApplication
 @EnableBinding(Channels.class)
 public class RailwayAppTicketValidationApplication {
-	private static Logger logger = LoggerFactory.getLogger(TicketRepository.class);
+//	private static Logger logger = LoggerFactory.getLogger(TicketRepository.class);
 
 	public static void main(String[] args) {
 		SpringApplication.run(RailwayAppTicketValidationApplication.class, args);
@@ -26,17 +26,17 @@ public class RailwayAppTicketValidationApplication {
 	@Bean
 	public CommandLineRunner populateDatabase(TicketRepository ticketRepository) {
 		return (args) -> {
-			logger.info("Create some tickets to test the repository ...");
-
-			ticketRepository.deleteAll();
-
-			Ticket singleTicket = new Ticket(92L, "Gent", "Brussel", LocalDateTime.now(), 1, UUID.randomUUID());
-			Ticket groupTicket = new Ticket(99L, "Oudenaarde", "Brussel", LocalDateTime.now(), 16, UUID.randomUUID());
-
-			ticketRepository.save(singleTicket);
-			ticketRepository.save(groupTicket);
-
-			ticketRepository.findAll().forEach(ticket -> logger.info(ticket.toString()));
+//			logger.info("Create some tickets to test the repository ...");
+//
+//			ticketRepository.deleteAll();
+//
+//			Ticket singleTicket = new Ticket(92L, "Gent", "Brussel", LocalDateTime.now(), 1, UUID.randomUUID());
+//			Ticket groupTicket = new Ticket(99L, "Oudenaarde", "Brussel", LocalDateTime.now(), 16, UUID.randomUUID());
+//
+//			ticketRepository.save(singleTicket);
+//			ticketRepository.save(groupTicket);
+//
+//			ticketRepository.findAll().forEach(ticket -> logger.info(ticket.toString()));
 		};
 	}
 }

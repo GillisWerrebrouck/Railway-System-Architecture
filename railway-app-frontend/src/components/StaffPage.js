@@ -117,6 +117,7 @@ export default class StaffPage extends Component {
             name='birthdate'
             onChange={this.createStaffFormChangeHandler}
           />
+          <span>&nbsp;format: yyyy-mm-dd</span>
           <br />
 
           <label>Staff type: </label>
