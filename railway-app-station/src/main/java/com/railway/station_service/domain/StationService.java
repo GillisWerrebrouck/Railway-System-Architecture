@@ -100,22 +100,22 @@ public class StationService {
 		if(dr != null) {
 			//find first station of route that will be affected by delay 
 			//if no start station is present in delay request then all stations on the given route are notified of the delay
-			StationOnRoute startStation = null;
-			startStation = getStart(routeFetchedResponse.getRoute());
+			StationOnRoute startStation = getStart(routeFetchedResponse.getRoute());
 			
 			//get following stations on that route
 			List<StationOnRoute> stations = new ArrayList<>();
 			StationOnRoute previous = startStation;
 			
 			boolean partOfDelay = false;
-			if(dr.getStartStationId() == null) {
+			if(dr.getStartStationId() == null || 
+					dr.getStartStationId().toString().isBlank() || 
+					startStation.getStationId().compareTo(dr.getStartStationId().toString()) == 0) {
 				stations.add(startStation);
 				partOfDelay = true;
 			}
 			
 			StationOnRoute current = null;
 			Collection<RoutePart> allRouteConnections = routeFetchedResponse.getRouteConnections();
-			
 			
 			while(allRouteConnections.size() > 0) {
 				RoutePart routePart = getNextRoutePart(allRouteConnections, UUID.fromString(previous.getStationId()));
