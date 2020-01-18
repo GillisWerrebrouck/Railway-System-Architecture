@@ -107,7 +107,7 @@ public class StationService {
 			StationOnRoute previous = startStation;
 			
 			boolean partOfDelay = false;
-			if(dr.getStartStationId() == null || 
+			if(dr.getStartStationId() == null || dr.getStartStationId().compareTo(UUID.fromString(null)) == 0 ||
 					startStation.getStationId().compareTo(dr.getStartStationId().toString()) == 0) {
 				stations.add(startStation);
 				partOfDelay = true;
